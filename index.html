@@ -426,107 +426,108 @@
 
     <script>
         // Dados do questionário
-        const questions = [
-            {
-                question: "Qual sua área de maior interesse?",
-                options: [
-                    { text: "Ciências da Saúde", emoji: "🏥", value: "saude" },
-                    { text: "Tecnologia e Computação", emoji: "💻", value: "tecnologia" },
-                    { text: "Ciências Exatas e Engenharias", emoji: "🔬", value: "exatas" },
-                    { text: "Negócios e Gestão", emoji: "📊", value: "negocios" },
-                    { text: "Artes e Comunicação", emoji: "🎨", value: "artes" },
-                    { text: "Ciências Humanas", emoji: "👥", value: "humanas" },
-                    { text: "Ciências Ambientais e Biológicas", emoji: "🌿", value: "ambiental" }
-                ]
-            },
-            {
-                question: "Como você descreveria seus talentos naturais?",
-                options: [
-                    { text: "Analítico - bom com números e lógica", emoji: "🔢", value: "analitico" },
-                    { text: "Criativo - ideias inovadoras e arte", emoji: "✨", value: "criativo" },
-                    { text: "Social - comunicação e trabalho em equipe", emoji: "💬", value: "social" },
-                    { text: "Prático - mãos na massa e resultados", emoji: "🔧", value: "pratico" },
-                    { text: "Científico - pesquisa e curiosidade", emoji: "🧪", value: "cientifico" }
-                ]
-            },
-            {
-                question: "Qual seu objetivo profissional principal?",
-                options: [
-                    { text: "Alto impacto social - ajudar pessoas", emoji: "❤️", value: "impacto-social" },
-                    { text: "Inovação tecnológica - soluções futuras", emoji: "🚀", value: "inovacao" },
-                    { text: "Estabilidade financeira - carreira sólida", emoji: "💰", value: "estabilidade" },
-                    { text: "Liberdade criativa - expressar ideias", emoji: "🎭", value: "liberdade" },
-                    { text: "Pesquisa científica - descobrir conhecimentos", emoji: "🔍", value: "pesquisa" }
-                ]
-            },
-            {
-                question: "Prefere trabalhar principalmente:",
-                options: [
-                    { text: "Em equipe - colaborando com várias pessoas", emoji: "👥", value: "equipe" },
-                    { text: "Sozinho - com foco individual", emoji: "🧘", value: "sozinho" },
-                    { text: "Ambiente dinâmico - variando entre equipe e individual", emoji: "🔄", value: "dinamico" },
-                    { text: "Com público - atendimento direto", emoji: "🙋", value: "publico" }
-                ]
-            },
-            {
-                question: "Qual seu nível de conforto com matemática?",
-                options: [
-                    { text: "Alto - adoro matemática", emoji: "🧮", value: "alto-matematica" },
-                    { text: "Médio - me viro bem", emoji: "✅", value: "medio-matematica" },
-                    { text: "Básico - prefiro áreas com menos matemática", emoji: "📝", value: "basico-matematica" },
-                    { text: "Nenhum - quero evitar cálculos complexos", emoji: "🚫", value: "nenhum-matematica" }
-                ]
-            },
-            {
-                question: "Interesse por tecnologia e inovação:",
-                options: [
-                    { text: "Muito alto - quero trabalhar na vanguarda", emoji: "💡", value: "muito-alto-tech" },
-                    { text: "Alto - usar tecnologia como ferramenta principal", emoji: "📱", value: "alto-tech" },
-                    { text: "Moderado - tecnologia como suporte", emoji: "💻", value: "moderado-tech" },
-                    { text: "Baixo - prefiro áreas mais tradicionais", emoji: "📚", value: "baixo-tech" }
-                ]
-            },
-            {
-                question: "Preferência de ambiente de trabalho:",
-                options: [
-                    { text: "Escritório/empresarial", emoji: "🏢", value: "escritorio" },
-                    { text: "Laboratório", emoji: "🧪", value: "laboratorio" },
-                    { text: "Campo/externo", emoji: "🌳", value: "campo" },
-                    { text: "Clínica/hospital", emoji: "🏥", value: "clinica" },
-                    { text: "Home office/remoto", emoji: "🏠", value: "remoto" },
-                    { text: "Sala de aula", emoji: "👨‍🏫", value: "sala-aula" }
-                ]
-            },
-            {
-                question: "Horário de trabalho preferido:",
-                options: [
-                    { text: "Horário comercial - 9h às 18h", emoji: "🕘", value: "comercial" },
-                    { text: "Flexível - horários variados", emoji: "⏰", value: "flexivel" },
-                    { text: "Plantões/scale - trabalhar em turnos", emoji: "🔄", value: "plantao" },
-                    { text: "Autônomo - definir meus próprios horários", emoji: "🗓️", value: "autonomo" }
-                ]
-            },
-            {
-                question: "Importância do salário:",
-                options: [
-                    { text: "Muito importante - busco alta remuneração", emoji: "💎", value: "muito-importante" },
-                    { text: "Importante - equilíbrio entre salário e realização", emoji: "⚖️", value: "importante" },
-                    { text: "Moderada - realização profissional é mais importante", emoji: "🌟", value: "moderada" },
-                    { text: "Pouco importante - priorizo outros aspectos", emoji: "🌱", value: "pouco-importante" }
-                ]
-            },
-            {
-                question: "Tempo de formação desejado:",
-                options: [
-                    { text: "4-5 anos - graduação mais rápida", emoji: "⚡", value: "curto" },
-                    { text: "5-6 anos - tempo padrão de graduação", emoji: "📅", value: "medio" },
-                    { text: "6+ anos - não me importo com tempo", emoji: "∞", value: "longo" }
-                ]
-            }
-        ];
+        // Dados do questionário (mantido igual)
+const questions = [
+    {
+        question: "Qual sua área de maior interesse?",
+        options: [
+            { text: "Ciências da Saúde", emoji: "🏥", value: "saude" },
+            { text: "Tecnologia e Computação", emoji: "💻", value: "tecnologia" },
+            { text: "Ciências Exatas e Engenharias", emoji: "🔬", value: "exatas" },
+            { text: "Negócios e Gestão", emoji: "📊", value: "negocios" },
+            { text: "Artes e Comunicação", emoji: "🎨", value: "artes" },
+            { text: "Ciências Humanas", emoji: "👥", value: "humanas" },
+            { text: "Ciências Ambientais e Biológicas", emoji: "🌿", value: "ambiental" }
+        ]
+    },
+    {
+        question: "Como você descreveria seus talentos naturais?",
+        options: [
+            { text: "Analítico - bom com números e lógica", emoji: "🔢", value: "analitico" },
+            { text: "Criativo - ideias inovadoras e arte", emoji: "✨", value: "criativo" },
+            { text: "Social - comunicação e trabalho em equipe", emoji: "💬", value: "social" },
+            { text: "Prático - mãos na massa e resultados", emoji: "🔧", value: "pratico" },
+            { text: "Científico - pesquisa e curiosidade", emoji: "🧪", value: "cientifico" }
+        ]
+    },
+    {
+        question: "Qual seu objetivo profissional principal?",
+        options: [
+            { text: "Alto impacto social - ajudar pessoas", emoji: "❤️", value: "impacto-social" },
+            { text: "Inovação tecnológica - soluções futuras", emoji: "🚀", value: "inovacao" },
+            { text: "Estabilidade financeira - carreira sólida", emoji: "💰", value: "estabilidade" },
+            { text: "Liberdade criativa - expressar ideias", emoji: "🎭", value: "liberdade" },
+            { text: "Pesquisa científica - descobrir conhecimentos", emoji: "🔍", value: "pesquisa" }
+        ]
+    },
+    {
+        question: "Prefere trabalhar principalmente:",
+        options: [
+            { text: "Em equipe - colaborando com várias pessoas", emoji: "👥", value: "equipe" },
+            { text: "Sozinho - com foco individual", emoji: "🧘", value: "sozinho" },
+            { text: "Ambiente dinâmico - variando entre equipe e individual", emoji: "🔄", value: "dinamico" },
+            { text: "Com público - atendimento direto", emoji: "🙋", value: "publico" }
+        ]
+    },
+    {
+        question: "Qual seu nível de conforto com matemática?",
+        options: [
+            { text: "Alto - adoro matemática", emoji: "🧮", value: "alto-matematica" },
+            { text: "Médio - me viro bem", emoji: "✅", value: "medio-matematica" },
+            { text: "Básico - prefiro áreas com menos matemática", emoji: "📝", value: "basico-matematica" },
+            { text: "Nenhum - quero evitar cálculos complexos", emoji: "🚫", value: "nenhum-matematica" }
+        ]
+    },
+    {
+        question: "Interesse por tecnologia e inovação:",
+        options: [
+            { text: "Muito alto - quero trabalhar na vanguarda", emoji: "💡", value: "muito-alto-tech" },
+            { text: "Alto - usar tecnologia como ferramenta principal", emoji: "📱", value: "alto-tech" },
+            { text: "Moderado - tecnologia como suporte", emoji: "💻", value: "moderado-tech" },
+            { text: "Baixo - prefiro áreas mais tradicionais", emoji: "📚", value: "baixo-tech" }
+        ]
+    },
+    {
+        question: "Preferência de ambiente de trabalho:",
+        options: [
+            { text: "Escritório/empresarial", emoji: "🏢", value: "escritorio" },
+            { text: "Laboratório", emoji: "🧪", value: "laboratorio" },
+            { text: "Campo/externo", emoji: "🌳", value: "campo" },
+            { text: "Clínica/hospital", emoji: "🏥", value: "clinica" },
+            { text: "Home office/remoto", emoji: "🏠", value: "remoto" },
+            { text: "Sala de aula", emoji: "👨‍🏫", value: "sala-aula" }
+        ]
+    },
+    {
+        question: "Horário de trabalho preferido:",
+        options: [
+            { text: "Horário comercial - 9h às 18h", emoji: "🕘", value: "comercial" },
+            { text: "Flexível - horários variados", emoji: "⏰", value: "flexivel" },
+            { text: "Plantões/scale - trabalhar em turnos", emoji: "🔄", value: "plantao" },
+            { text: "Autônomo - definir meus próprios horários", emoji: "🗓️", value: "autonomo" }
+        ]
+    },
+    {
+        question: "Importância do salário:",
+        options: [
+            { text: "Muito importante - busco alta remuneração", emoji: "💎", value: "muito-importante" },
+            { text: "Importante - equilíbrio entre salário e realização", emoji: "⚖️", value: "importante" },
+            { text: "Moderada - realização profissional é mais importante", emoji: "🌟", value: "moderada" },
+            { text: "Pouco importante - priorizo outros aspectos", emoji: "🌱", value: "pouco-importante" }
+        ]
+    },
+    {
+        question: "Tempo de formação desejado:",
+        options: [
+            { text: "4-5 anos - graduação mais rápida", emoji: "⚡", value: "curto" },
+            { text: "5-6 anos - tempo padrão de graduação", emoji: "📅", value: "medio" },
+            { text: "6+ anos - não me importo com tempo", emoji: "∞", value: "longo" }
+        ]
+    }
+];
 
-        // Base de dados completa com todos os cursos
-        const courses = {
+// Base de dados de cursos (mantida igual)
+       const courses = {
             "Administração": {
                 area: "negocios",
                 descricao: "Gestão de organizações, recursos e pessoas para maximizar resultados e eficiência.",
@@ -1201,357 +1202,583 @@
             }
         };
 
-        // Sistema de Pontuação Avançado
-        const scoringRules = {
-            'saude': {
-                cursos: ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Farmácia', 'Fisioterapia', 'Fonoaudiologia', 'Medicina Veterinária', 'Nutrição', 'Obstetrícia', 'Terapia Ocupacional'],
-                pontos: 15
-            },
-            'tecnologia': {
-                cursos: ['Ciência da Computação', 'Engenharia de Computação', 'Sistemas de Informação', 'Ciência de Dados', 'Engenharia Mecatrônica', 'Informática Biomédica'],
-                pontos: 15
-            },
-            'exatas': {
-                cursos: ['Engenharia Civil', 'Engenharia Elétrica', 'Engenharia Mecânica', 'Matemática', 'Física', 'Química', 'Estatística', 'Engenharia Química'],
-                pontos: 15
-            },
-            'negocios': {
-                cursos: ['Administração', 'Economia', 'Ciências Contábeis', 'Marketing', 'Finanças e Negócios'],
-                pontos: 15
-            },
-            'artes': {
-                cursos: ['Design', 'Arquitetura e urbanismo', 'Publicidade e Propaganda', 'Jornalismo', 'Artes Visuais', 'Artes Cênicas'],
-                pontos: 15
-            },
-            'humanas': {
-                cursos: ['Direito', 'Pedagogia', 'História', 'Letras', 'Filosofia', 'Relações Internacionais'],
-                pontos: 15
-            },
-            'ambiental': {
-                cursos: ['Ciências Biológicas', 'Gestão Ambiental', 'Oceanografia', 'Zootecnia', 'Engenharia Ambiental'],
-                pontos: 15
+// ======================
+// SISTEMA DE PESOS AVANÇADO
+// ======================
+
+const questionWeights = {
+    0: 2.0,  // Área de interesse - MAIS IMPORTANTE
+    1: 1.5,  // Talentos naturais
+    2: 1.3,  // Objetivo profissional
+    3: 1.0,  // Estilo de trabalho
+    4: 1.4,  // Conforto com matemática
+    5: 1.2,  // Interesse por tecnologia
+    6: 1.1,  // Ambiente de trabalho
+    7: 0.9,  // Horário preferido
+    8: 0.8,  // Importância do salário
+    9: 0.7   // Tempo de formação
+};
+
+// ======================
+// MATRIZ DE COMPATIBILIDADE DETALHADA
+// ======================
+
+const compatibilityMatrix = {
+    // PERGUNTA 1: Área de interesse
+    'saude': {
+        cursos: {
+            'Medicina': 25, 'Enfermagem': 22, 'Psicologia': 20, 'Odontologia': 23,
+            'Farmácia': 21, 'Fisioterapia': 19, 'Fonoaudiologia': 18, 'Medicina Veterinária': 20,
+            'Nutrição': 17, 'Obstetrícia': 19, 'Terapia Ocupacional': 16, 'Gerontologia': 15,
+            'Saúde Pública': 18, 'Educação Física e Esporte': 14
+        }
+    },
+    'tecnologia': {
+        cursos: {
+            'Ciências da Computação': 25, 'Engenharia de Computação': 24, 'Sistemas de Informação': 22,
+            'Ciência de Dados': 23, 'Engenharia Mecatrônica': 21, 'Informática Biomédica': 20,
+            'Física Computacional': 19, 'Matemática Aplicada e Computação Científica': 18
+        }
+    },
+    'exatas': {
+        cursos: {
+            'Engenharia Civil': 22, 'Engenharia Elétrica': 23, 'Engenharia Mecânica': 22,
+            'Matemática': 21, 'Física': 22, 'Química': 20, 'Estatística': 19,
+            'Engenharia Química': 21, 'Engenharia de Produção': 18, 'Ciências Atuariais': 19
+        }
+    },
+    'negocios': {
+        cursos: {
+            'Administração': 24, 'Economia': 22, 'Ciências Contábeis': 21,
+            'Marketing': 20, 'Finanças e Negócios': 22, 'Gestão de Políticas Públicas': 16
+        }
+    },
+    'artes': {
+        cursos: {
+            'Design': 23, 'Arquitetura e urbanismo': 22, 'Publicidade e Propaganda': 21,
+            'Jornalismo': 20, 'Artes Visuais': 19, 'Artes Cênicas': 18,
+            'Música': 17, 'Audiovisual': 19, 'Editoração': 16
+        }
+    },
+    'humanas': {
+        cursos: {
+            'Direito': 23, 'Pedagogia': 20, 'História': 19, 'Letras': 18,
+            'Filosofia': 17, 'Relações Internacionais': 19, 'Ciências Sociais': 18,
+            'Geografia': 16, 'Relações Públicas': 15
+        }
+    },
+    'ambiental': {
+        cursos: {
+            'Ciências Biológicas': 22, 'Gestão Ambiental': 21, 'Oceanografia': 20,
+            'Zootecnia': 19, 'Engenharia Ambiental': 21, 'Engenharia Florestal': 18,
+            'Geologia': 19, 'Ciências Agrárias': 17
+        }
+    },
+
+    // PERGUNTA 2: Talentos naturais
+    'analitico': {
+        cursos: {
+            'Matemática': 15, 'Estatística': 16, 'Ciências Atuariais': 17, 'Física': 15,
+            'Engenharia Civil': 14, 'Engenharia Elétrica': 15, 'Ciência de Dados': 18,
+            'Economia': 13, 'Ciências da Computação': 16
+        }
+    },
+    'criativo': {
+        cursos: {
+            'Design': 16, 'Arquitetura e urbanismo': 15, 'Publicidade e Propaganda': 16,
+            'Artes Visuais': 17, 'Jornalismo': 14, 'Música': 15, 'Audiovisual': 14
+        }
+    },
+    'social': {
+        cursos: {
+            'Psicologia': 16, 'Pedagogia': 15, 'Medicina': 14, 'Enfermagem': 13,
+            'Relações Internacionais': 12, 'Direito': 13, 'Marketing': 12
+        }
+    },
+    'pratico': {
+        cursos: {
+            'Engenharia Civil': 14, 'Engenharia Mecânica': 15, 'Medicina Veterinária': 13,
+            'Odontologia': 12, 'Farmácia': 11, 'Engenharia de Alimentos': 13
+        }
+    },
+    'cientifico': {
+        cursos: {
+            'Medicina': 14, 'Ciências Biológicas': 15, 'Física': 16, 'Química': 15,
+            'Engenharia Química': 14, 'Farmácia': 13, 'Biotecnologia': 16
+        }
+    },
+
+    // PERGUNTA 3: Objetivo profissional
+    'impacto-social': {
+        cursos: {
+            'Medicina': 12, 'Enfermagem': 13, 'Psicologia': 14, 'Pedagogia': 15,
+            'Serviço Social': 16, 'Saúde Pública': 14, 'Gerontologia': 13
+        }
+    },
+    'inovacao': {
+        cursos: {
+            'Engenharias': 12, 'Ciências da Computação': 14, 'Design': 13,
+            'Biotecnologia': 15, 'Engenharia de Computação': 14, 'Ciência de Dados': 13
+        }
+    },
+    'estabilidade': {
+        cursos: {
+            'Medicina': 10, 'Direito': 11, 'Engenharia Civil': 9, 'Administração': 10,
+            'Ciências Contábeis': 12, 'Odontologia': 9
+        }
+    },
+    'liberdade': {
+        cursos: {
+            'Design': 13, 'Artes': 14, 'Jornalismo': 12, 'Publicidade e Propaganda': 11,
+            'Música': 15, 'Arquitetura e urbanismo': 10
+        }
+    },
+    'pesquisa': {
+        cursos: {
+            'Ciências Biológicas': 15, 'Física': 16, 'Química': 15, 'Matemática': 14,
+            'Astronomia': 17, 'Geologia': 13, 'Oceanografia': 14
+        }
+    },
+
+    // PERGUNTA 4: Estilo de trabalho
+    'equipe': {
+        cursos: {
+            'Medicina': 8, 'Enfermagem': 9, 'Administração': 8, 'Psicologia': 7,
+            'Engenharia de Produção': 6, 'Publicidade e Propaganda': 7
+        }
+    },
+    'sozinho': {
+        cursos: {
+            'Programação': 8, 'Pesquisa': 9, 'Escrita': 8, 'Artes': 7,
+            'Matemática': 6, 'Estatística': 7
+        },
+        cursosEspecificos: {
+            'Ciências da Computação': 7, 'Matemática': 8, 'Estatística': 7,
+            'Letras': 9, 'Filosofia': 8, 'História': 7
+        }
+    },
+    'dinamico': {
+        cursos: {
+            'Jornalismo': 9, 'Marketing': 8, 'Publicidade e Propaganda': 7,
+            'Medicina': 6, 'Engenharias': 5
+        }
+    },
+    'publico': {
+        cursos: {
+            'Direito': 9, 'Psicologia': 8, 'Medicina': 7, 'Pedagogia': 9,
+            'Relações Públicas': 10, 'Turismo': 8
+        }
+    },
+
+    // PERGUNTA 5: Conforto com matemática
+    'alto-matematica': {
+        cursos: {
+            'Engenharias': 12, 'Matemática': 15, 'Física': 14, 'Estatística': 13,
+            'Ciências Atuariais': 14, 'Economia': 11, 'Ciência de Dados': 12
+        }
+    },
+    'medio-matematica': {
+        cursos: {
+            'Administração': 8, 'Economia': 7, 'Ciências Contábeis': 9,
+            'Engenharias': 6, 'Estatística': 5, 'Farmácia': 4
+        }
+    },
+    'basico-matematica': {
+        cursosEspecificos: {
+            'Psicologia': 8, 'Letras': 9, 'História': 10, 'Artes': 11,
+            'Pedagogia': 8, 'Filosofia': 10, 'Jornalismo': 7
+        }
+    },
+    'nenhum-matematica': {
+        cursosEspecificos: {
+            'Letras': 15, 'História': 14, 'Artes': 13, 'Filosofia': 14,
+            'Pedagogia': 12, 'Jornalismo': 11, 'Psicologia': 10
+        }
+    }
+};
+
+// ======================
+// FATORES CONTEXTUAIS ADICIONAIS
+// ======================
+
+const contextualFactors = {
+    // Compatibilidade com tecnologia
+    techCompatibility: {
+        'muito-alto-tech': ['Ciências da Computação', 'Engenharia de Computação', 'Sistemas de Informação', 'Ciência de Dados'],
+        'alto-tech': ['Engenharia Mecatrônica', 'Engenharia Elétrica', 'Design', 'Arquitetura e urbanismo', 'Informática Biomédica'],
+        'moderado-tech': ['Administração', 'Economia', 'Marketing', 'Medicina', 'Jornalismo'],
+        'baixo-tech': ['Letras', 'História', 'Filosofia', 'Artes', 'Pedagogia', 'Psicologia']
+    },
+    
+    // Ambiente de trabalho preferido
+    workEnvironment: {
+        'escritorio': ['Administração', 'Economia', 'Direito', 'Marketing', 'Ciências Contábeis'],
+        'laboratorio': ['Ciências Biológicas', 'Química', 'Farmácia', 'Biotecnologia', 'Engenharia Química'],
+        'campo': ['Geologia', 'Engenharia Florestal', 'Agronomia', 'Oceanografia', 'Zootecnia'],
+        'clinica': ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Fisioterapia'],
+        'remoto': ['Ciências da Computação', 'Design', 'Jornalismo', 'Tradução', 'Programação'],
+        'sala-aula': ['Pedagogia', 'Letras', 'História', 'Matemática', 'Física']
+    },
+    
+    // Potencial salarial (baseado em pesquisas de mercado)
+    salaryPotential: {
+        'alto': ['Medicina', 'Engenharia de Petróleo', 'Direito', 'Ciências da Computação', 'Odontologia'],
+        'medio-alto': ['Engenharias', 'Economia', 'Farmácia', 'Psicologia', 'Medicina Veterinária'],
+        'medio': ['Administração', 'Enfermagem', 'Design', 'Jornalismo', 'Arquitetura e urbanismo'],
+        'medio-baixo': ['Pedagogia', 'Letras', 'História', 'Artes', 'Serviço Social']
+    }
+};
+
+// ======================
+// ALGORITMO DE PONTUAÇÃO MELHORADO
+// ======================
+
+function calculateAdvancedScores() {
+    allCoursesWithScores = Object.keys(courses).map(courseName => {
+        let totalScore = 0;
+        const course = courses[courseName];
+        
+        // Calcular pontuação baseada em cada resposta
+        answers.forEach((answer, questionIndex) => {
+            const weight = questionWeights[questionIndex] || 1.0;
+            
+            if (compatibilityMatrix[answer]) {
+                // Verificar pontuação específica para o curso
+                if (compatibilityMatrix[answer].cursos && compatibilityMatrix[answer].cursos[courseName]) {
+                    totalScore += compatibilityMatrix[answer].cursos[courseName] * weight;
+                }
+                
+                // Verificar pontuação para categorias de cursos específicos
+                if (compatibilityMatrix[answer].cursosEspecificos && compatibilityMatrix[answer].cursosEspecificos[courseName]) {
+                    totalScore += compatibilityMatrix[answer].cursosEspecificos[courseName] * weight;
+                }
             }
+        });
+        
+        // Fatores contextuais adicionais
+        totalScore += calculateContextualFactors(courseName);
+        
+        // Ajuste baseado na área do curso
+        totalScore += calculateAreaBonus(course.area, answers[0]);
+        
+        // Normalizar para 0-100
+        const normalizedScore = Math.min(100, Math.max(0, totalScore));
+        
+        return {
+            name: courseName,
+            ...course,
+            score: Math.round(normalizedScore),
+            rawScore: Math.round(totalScore) // Manter para debug
         };
+    });
+    
+    // Ordenar por pontuação
+    allCoursesWithScores.sort((a, b) => b.score - a.score);
+}
 
-        const talentRules = {
-            'analitico': {
-                cursos: ['Matemática', 'Estatística', 'Ciências Atuariais', 'Física', 'Engenharias', 'Ciência de Dados'],
-                pontos: 12
-            },
-            'criativo': {
-                cursos: ['Design', 'Arquitetura e urbanismo', 'Publicidade e Propaganda', 'Artes', 'Jornalismo'],
-                pontos: 12
-            },
-            'social': {
-                cursos: ['Psicologia', 'Pedagogia', 'Medicina', 'Enfermagem', 'Relações Internacionais'],
-                pontos: 12
-            },
-            'pratico': {
-                cursos: ['Engenharias', 'Medicina Veterinária', 'Odontologia', 'Farmácia'],
-                pontos: 10
-            },
-            'cientifico': {
-                cursos: ['Medicina', 'Ciências Biológicas', 'Física', 'Química', 'Pesquisa'],
-                pontos: 12
-            }
-        };
+function calculateContextualFactors(courseName) {
+    let bonus = 0;
+    
+    // Compatibilidade tecnológica (pergunta 6)
+    const techAnswer = answers[5];
+    if (contextualFactors.techCompatibility[techAnswer]?.includes(courseName)) {
+        bonus += techAnswer === 'muito-alto-tech' ? 10 : 
+                 techAnswer === 'alto-tech' ? 7 :
+                 techAnswer === 'moderado-tech' ? 4 : 0;
+    }
+    
+    // Ambiente de trabalho (pergunta 7)
+    const environmentAnswer = answers[6];
+    if (contextualFactors.workEnvironment[environmentAnswer]?.includes(courseName)) {
+        bonus += 6;
+    }
+    
+    // Importância do salário (pergunta 9)
+    const salaryAnswer = answers[8];
+    if (salaryAnswer === 'muito-importante' && contextualFactors.salaryPotential.alto.includes(courseName)) {
+        bonus += 10;
+    } else if (salaryAnswer === 'importante' && contextualFactors.salaryPotential['medio-alto'].includes(courseName)) {
+        bonus += 6;
+    }
+    
+    return bonus;
+}
 
-        // Elementos da DOM
-        const startScreen = document.getElementById('start-screen');
-        const questionScreen = document.getElementById('question-screen');
-        const loadingScreen = document.getElementById('loading-screen');
-        const resultScreen = document.getElementById('result-screen');
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const nextBtn = document.getElementById('next-btn');
-        const startBtn = document.getElementById('start-btn');
-        const restartBtn = document.getElementById('restart-btn');
-        const progressBar = document.getElementById('progress');
-        const questionCounter = document.getElementById('question-counter');
-        const resultsContainer = document.getElementById('results-container');
-        const searchInput = document.getElementById('search-input');
-        const resultsCount = document.getElementById('results-count');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const viewAllBtn = document.getElementById('view-all-btn');
+function calculateAreaBonus(courseArea, userAreaInterest) {
+    // Bônus extra se a área do curso corresponder à área de interesse principal
+    const areaMapping = {
+        'saude': ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Farmácia', 'Fisioterapia', 'Fonoaudiologia', 'Medicina Veterinária', 'Nutrição', 'Obstetrícia', 'Terapia Ocupacional', 'Gerontologia', 'Saúde Pública', 'Educação Física e Esporte'],
+        'tecnologia': ['Ciências da Computação', 'Engenharia de Computação', 'Sistemas de Informação', 'Ciência de Dados', 'Engenharia Mecatrônica', 'Informática Biomédica', 'Física Computacional', 'Matemática Aplicada e Computação Científica'],
+        'exatas': ['Engenharia Civil', 'Engenharia Elétrica', 'Engenharia Mecânica', 'Matemática', 'Física', 'Química', 'Estatística', 'Engenharia Química', 'Engenharia de Produção', 'Ciências Atuariais', 'Engenharia Aeronáutica', 'Engenharia Agronômica', 'Engenharia Ambiental', 'Engenharia Bioquímica', 'Engenharia de Alimentos', 'Engenharia de Biossistemas', 'Engenharia de Materiais', 'Engenharia de Minas', 'Engenharia de Petróleo', 'Engenharia Física', 'Engenharia Florestal', 'Engenharia Metalúrgica', 'Engenharia Naval', 'Engenharia Mecatrônica'],
+        'negocios': ['Administração', 'Economia', 'Ciências Contábeis', 'Marketing', 'Finanças e Negócios', 'Gestão de Políticas Públicas'],
+        'artes': ['Design', 'Arquitetura e urbanismo', 'Publicidade e Propaganda', 'Jornalismo', 'Artes Visuais', 'Artes Cênicas', 'Música', 'Audiovisual', 'Editoração', 'Relações Públicas', 'Têxtil e Moda'],
+        'humanas': ['Direito', 'Pedagogia', 'História', 'Letras', 'Filosofia', 'Relações Internacionais', 'Ciências Sociais', 'Geografia', 'Relações Públicas', 'Turismo', 'Lazer e Turismo', 'Educomunicação', 'Biblioteconomia'],
+        'ambiental': ['Ciências Biológicas', 'Gestão Ambiental', 'Oceanografia', 'Zootecnia', 'Engenharia Ambiental', 'Engenharia Florestal', 'Geologia', 'Ciências Agrárias', 'Ciências da Natureza', 'Geociências e Educação Ambiental', 'Geofísica']
+    };
+    
+    // Verificar se o curso está na lista da área de interesse do usuário
+    if (areaMapping[userAreaInterest]?.includes(courseArea)) {
+        return 15; // Bônus significativo por compatibilidade de área principal
+    }
+    
+    return 0;
+}
 
-        // Estado do questionário
-        let currentQuestion = 0;
-        let answers = [];
-        let selectedOption = null;
-        let allCoursesWithScores = [];
-        let currentFilter = 'all';
-        let currentSearch = '';
+// ======================
+// ELEMENTOS DA DOM E ESTADO (mantido igual)
+// ======================
 
-        // Inicialização
-        startBtn.addEventListener('click', startQuiz);
-        nextBtn.addEventListener('click', nextQuestion);
-        restartBtn.addEventListener('click', restartQuiz);
+const startScreen = document.getElementById('start-screen');
+const questionScreen = document.getElementById('question-screen');
+const loadingScreen = document.getElementById('loading-screen');
+const resultScreen = document.getElementById('result-screen');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+const nextBtn = document.getElementById('next-btn');
+const startBtn = document.getElementById('start-btn');
+const restartBtn = document.getElementById('restart-btn');
+const progressBar = document.getElementById('progress');
+const questionCounter = document.getElementById('question-counter');
+const resultsContainer = document.getElementById('results-container');
+const searchInput = document.getElementById('search-input');
+const resultsCount = document.getElementById('results-count');
+const filterBtns = document.querySelectorAll('.filter-btn');
+const viewAllBtn = document.getElementById('view-all-btn');
 
-        function startQuiz() {
-            startScreen.classList.add('hidden');
-            questionScreen.classList.remove('hidden');
-            showQuestion();
-        }
+// Estado do questionário
+let currentQuestion = 0;
+let answers = [];
+let selectedOption = null;
+let allCoursesWithScores = [];
+let currentFilter = 'all';
+let currentSearch = '';
 
-        function showQuestion() {
-            const question = questions[currentQuestion];
-            questionText.textContent = question.question;
-            optionsContainer.innerHTML = '';
-            
-            // Atualizar contador e barra de progresso
-            questionCounter.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
-            progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-            
-            // Criar opções
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                optionElement.innerHTML = `
-                    <span class="emoji">${option.emoji}</span>
-                    <span>${option.text}</span>
-                `;
-                
-                optionElement.addEventListener('click', () => selectOption(optionElement, index));
-                optionsContainer.appendChild(optionElement);
+// ======================
+// FUNÇÕES PRINCIPAIS (mantidas com pequenas alterações)
+// ======================
+
+// Inicialização
+startBtn.addEventListener('click', startQuiz);
+nextBtn.addEventListener('click', nextQuestion);
+restartBtn.addEventListener('click', restartQuiz);
+
+function startQuiz() {
+    startScreen.classList.add('hidden');
+    questionScreen.classList.remove('hidden');
+    showQuestion();
+}
+
+function showQuestion() {
+    const question = questions[currentQuestion];
+    questionText.textContent = question.question;
+    optionsContainer.innerHTML = '';
+    
+    // Atualizar contador e barra de progresso
+    questionCounter.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+    progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+    
+    // Criar opções
+    question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        optionElement.innerHTML = `
+            <span class="emoji">${option.emoji}</span>
+            <span>${option.text}</span>
+        `;
+        
+        optionElement.addEventListener('click', () => selectOption(optionElement, index));
+        optionsContainer.appendChild(optionElement);
+    });
+    
+    // Resetar seleção e botão
+    selectedOption = null;
+    nextBtn.disabled = true;
+}
+
+function selectOption(optionElement, index) {
+    // Remover seleção anterior
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('selected');
+    });
+    
+    // Selecionar nova opção
+    optionElement.classList.add('selected');
+    selectedOption = index;
+    nextBtn.disabled = false;
+}
+
+function nextQuestion() {
+    if (selectedOption === null) return;
+    
+    // Salvar resposta
+    answers.push(questions[currentQuestion].options[selectedOption].value);
+    
+    // Avançar para próxima pergunta ou mostrar resultados
+    currentQuestion++;
+    
+    if (currentQuestion < questions.length) {
+        showQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function showResults() {
+    questionScreen.classList.add('hidden');
+    loadingScreen.classList.remove('hidden');
+    
+    setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+        resultScreen.classList.remove('hidden');
+        calculateCourseScores();
+        displayRecommendations();
+    }, 1500);
+}
+
+// SUBSTITUIR A FUNÇÃO calculateCourseScores ORIGINAL
+function calculateCourseScores() {
+    calculateAdvancedScores();
+    
+    // Debug: mostrar top 5 cursos com pontuação bruta
+    console.log("Top 5 cursos com novo algoritmo:");
+    allCoursesWithScores.slice(0, 5).forEach(course => {
+        console.log(`${course.name}: ${course.score}% (raw: ${course.rawScore})`);
+    });
+}
+
+// Funções de display e filtros (mantidas iguais)
+function displayRecommendations() {
+    resultsContainer.innerHTML = '';
+    
+    const filteredCourses = filterAndSearchCourses();
+    const displayedCourses = currentFilter === 'all' ? 
+        filteredCourses.slice(0, 8) : filteredCourses;
+    
+    if (filteredCourses.length === 0) {
+        resultsContainer.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #666;">
+                <h3>Nenhum curso encontrado</h3>
+                <p>Tente alterar os filtros ou termos da pesquisa.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    displayedCourses.forEach(course => {
+        const courseElement = createCourseElement(course);
+        resultsContainer.appendChild(courseElement);
+    });
+    
+    // Atualizar contador
+    resultsCount.textContent = `${filteredCourses.length} cursos encontrados`;
+    
+    // Mostrar botão "Ver Todos" se necessário
+    viewAllBtn.style.display = filteredCourses.length > 8 && currentFilter === 'all' ? 
+        'block' : 'none';
+}
+
+function createCourseElement(course) {
+    const courseElement = document.createElement('div');
+    courseElement.className = 'course-card';
+    
+    const compatibilityText = course.score >= 70 ? 'Alta' : 
+                            course.score >= 50 ? 'Média' : 'Baixa';
+    const compatibilityClass = course.score >= 70 ? 'high' : 
+                             course.score >= 50 ? 'medium' : 'low';
+    
+    courseElement.innerHTML = `
+        <div class="course-header">
+            <div class="course-title">${course.name}</div>
+            <div class="compatibility-score ${compatibilityClass}">
+                ${compatibilityText} Compatibilidade (${course.score}%)
+            </div>
+        </div>
+        <div class="course-info">
+            <strong>Descrição:</strong> ${course.descricao}
+        </div>
+        <div class="course-info">
+            <strong>Carreiras:</strong> ${course.carreiras}
+        </div>
+        <div class="course-info">
+            <strong>Nota de Corte Média USP:</strong> ${course.notaCorte} pontos
+        </div>
+        <div class="course-tags">
+            ${course.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+        </div>
+    `;
+    
+    return courseElement;
+}
+
+function filterAndSearchCourses() {
+    let filtered = allCoursesWithScores;
+    
+    // Aplicar busca
+    if (currentSearch) {
+        filtered = filtered.filter(course => 
+            course.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+            course.descricao.toLowerCase().includes(currentSearch.toLowerCase()) ||
+            course.tags.some(tag => tag.toLowerCase().includes(currentSearch.toLowerCase()))
+        );
+    }
+    
+    // Aplicar filtros
+    switch (currentFilter) {
+        case 'high':
+            filtered = filtered.filter(course => course.score >= 70);
+            break;
+        case 'medium':
+            filtered = filtered.filter(course => course.score >= 50 && course.score < 70);
+            break;
+        case 'notes':
+            filtered = [...filtered].sort((a, b) => {
+                const noteA = parseInt(a.notaCorte.split('-')[0]);
+                const noteB = parseInt(b.notaCorte.split('-')[0]);
+                return noteB - noteA;
             });
-            
-            // Resetar seleção e botão
-            selectedOption = null;
-            nextBtn.disabled = true;
-        }
+            break;
+    }
+    
+    return filtered;
+}
 
-        function selectOption(optionElement, index) {
-            // Remover seleção anterior
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            // Selecionar nova opção
-            optionElement.classList.add('selected');
-            selectedOption = index;
-            nextBtn.disabled = false;
-        }
+// Event Listeners para novos elementos
+searchInput.addEventListener('input', (e) => {
+    currentSearch = e.target.value;
+    displayRecommendations();
+});
 
-        function nextQuestion() {
-            if (selectedOption === null) return;
-            
-            // Salvar resposta
-            answers.push(questions[currentQuestion].options[selectedOption].value);
-            
-            // Avançar para próxima pergunta ou mostrar resultados
-            currentQuestion++;
-            
-            if (currentQuestion < questions.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
-        }
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        displayRecommendations();
+    });
+});
 
-        function showResults() {
-            questionScreen.classList.add('hidden');
-            loadingScreen.classList.remove('hidden');
-            
-            setTimeout(() => {
-                loadingScreen.classList.add('hidden');
-                resultScreen.classList.remove('hidden');
-                calculateCourseScores();
-                displayRecommendations();
-            }, 1500);
-        }
+viewAllBtn.addEventListener('click', () => {
+    const filteredCourses = filterAndSearchCourses();
+    resultsContainer.innerHTML = '';
+    filteredCourses.forEach(course => {
+        const courseElement = createCourseElement(course);
+        resultsContainer.appendChild(courseElement);
+    });
+    viewAllBtn.style.display = 'none';
+});
 
-        function calculateCourseScores() {
-            allCoursesWithScores = Object.keys(courses).map(courseName => {
-                let score = 0;
-                const course = courses[courseName];
-                
-                // Pontuação baseada na área de interesse (1ª pergunta)
-                if (scoringRules[answers[0]] && scoringRules[answers[0]].cursos.includes(courseName)) {
-                    score += scoringRules[answers[0]].pontos;
-                }
-                
-                // Pontuação baseada em talentos (2ª pergunta)
-                if (talentRules[answers[1]] && talentRules[answers[1]].cursos.includes(courseName)) {
-                    score += talentRules[answers[1]].pontos;
-                }
-                
-                // Pontuação baseada em objetivo profissional (3ª pergunta)
-                if (answers[2] === 'impacto-social' && ['Medicina', 'Enfermagem', 'Psicologia', 'Pedagogia', 'Serviço Social'].includes(courseName)) {
-                    score += 10;
-                }
-                if (answers[2] === 'inovacao' && ['Engenharias', 'Ciência da Computação', 'Design'].includes(courseName)) {
-                    score += 10;
-                }
-                if (answers[2] === 'pesquisa' && ['Ciências Biológicas', 'Física', 'Química', 'Matemática'].includes(courseName)) {
-                    score += 10;
-                }
-                
-                // Pontuação baseada em matemática (5ª pergunta)
-                if (answers[4] === 'alto-matematica' && ['Engenharias', 'Matemática', 'Física', 'Estatística', 'Ciências Atuariais'].includes(courseName)) {
-                    score += 8;
-                } else if (answers[4] === 'nenhum-matematica' && !['Engenharias', 'Matemática', 'Física', 'Estatística'].includes(courseName)) {
-                    score += 6;
-                }
-                
-                // Pontuação baseada em tecnologia (6ª pergunta)
-                if (answers[5] === 'muito-alto-tech' && ['Ciência da Computação', 'Engenharia de Computação', 'Sistemas de Informação'].includes(courseName)) {
-                    score += 10;
-                }
-                
-                // Pontuação baseada em ambiente de trabalho (7ª pergunta)
-                if (answers[6] === 'clinica' && ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia'].includes(courseName)) {
-                    score += 8;
-                }
-                if (answers[6] === 'laboratorio' && ['Ciências Biológicas', 'Química', 'Farmácia'].includes(courseName)) {
-                    score += 8;
-                }
-                
-                // Pontuação randômica para variedade
-                score += Math.floor(Math.random() * 15);
-                
-                return {
-                    name: courseName,
-                    ...course,
-                    score: Math.min(100, score)
-                };
-            });
-            
-            // Ordenar por pontuação
-            allCoursesWithScores.sort((a, b) => b.score - a.score);
-        }
-
-        function displayRecommendations() {
-            resultsContainer.innerHTML = '';
-            
-            const filteredCourses = filterAndSearchCourses();
-            const displayedCourses = currentFilter === 'all' ? 
-                filteredCourses.slice(0, 8) : filteredCourses;
-            
-            if (filteredCourses.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #666;">
-                        <h3>Nenhum curso encontrado</h3>
-                        <p>Tente alterar os filtros ou termos da pesquisa.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            displayedCourses.forEach(course => {
-                const courseElement = createCourseElement(course);
-                resultsContainer.appendChild(courseElement);
-            });
-            
-            // Atualizar contador
-            resultsCount.textContent = `${filteredCourses.length} cursos encontrados`;
-            
-            // Mostrar botão "Ver Todos" se necessário
-            viewAllBtn.style.display = filteredCourses.length > 8 && currentFilter === 'all' ? 
-                'block' : 'none';
-        }
-
-        function createCourseElement(course) {
-            const courseElement = document.createElement('div');
-            courseElement.className = 'course-card';
-            
-            const compatibilityText = course.score >= 70 ? 'Alta' : 
-                                    course.score >= 50 ? 'Média' : 'Baixa';
-            const compatibilityClass = course.score >= 70 ? 'high' : 
-                                     course.score >= 50 ? 'medium' : 'low';
-            
-            courseElement.innerHTML = `
-                <div class="course-header">
-                    <div class="course-title">${course.name}</div>
-                    <div class="compatibility-score ${compatibilityClass}">
-                        ${compatibilityText} Compatibilidade (${course.score}%)
-                    </div>
-                </div>
-                <div class="course-info">
-                    <strong>Descrição:</strong> ${course.descricao}
-                </div>
-                <div class="course-info">
-                    <strong>Carreiras:</strong> ${course.carreiras}
-                </div>
-                <div class="course-info">
-                    <strong>Nota de Corte Média USP:</strong> ${course.notaCorte} pontos
-                </div>
-                <div class="course-tags">
-                    ${course.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                </div>
-            `;
-            
-            return courseElement;
-        }
-
-        function filterAndSearchCourses() {
-            let filtered = allCoursesWithScores;
-            
-            // Aplicar busca
-            if (currentSearch) {
-                filtered = filtered.filter(course => 
-                    course.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
-                    course.descricao.toLowerCase().includes(currentSearch.toLowerCase()) ||
-                    course.tags.some(tag => tag.toLowerCase().includes(currentSearch.toLowerCase()))
-                );
-            }
-            
-            // Aplicar filtros
-            switch (currentFilter) {
-                case 'high':
-                    filtered = filtered.filter(course => course.score >= 70);
-                    break;
-                case 'medium':
-                    filtered = filtered.filter(course => course.score >= 50 && course.score < 70);
-                    break;
-                case 'notes':
-                    filtered = [...filtered].sort((a, b) => {
-                        const noteA = parseInt(a.notaCorte.split('-')[0]);
-                        const noteB = parseInt(b.notaCorte.split('-')[0]);
-                        return noteB - noteA;
-                    });
-                    break;
-            }
-            
-            return filtered;
-        }
-
-        // Event Listeners para novos elementos
-        searchInput.addEventListener('input', (e) => {
-            currentSearch = e.target.value;
-            displayRecommendations();
-        });
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                displayRecommendations();
-            });
-        });
-
-        viewAllBtn.addEventListener('click', () => {
-            const filteredCourses = filterAndSearchCourses();
-            resultsContainer.innerHTML = '';
-            filteredCourses.forEach(course => {
-                const courseElement = createCourseElement(course);
-                resultsContainer.appendChild(courseElement);
-            });
-            viewAllBtn.style.display = 'none';
-        });
-
-        function restartQuiz() {
-            currentQuestion = 0;
-            answers = [];
-            selectedOption = null;
-            allCoursesWithScores = [];
-            currentFilter = 'all';
-            currentSearch = '';
-            searchInput.value = '';
-            
-            resultScreen.classList.add('hidden');
-            startScreen.classList.remove('hidden');
-        }
+function restartQuiz() {
+    currentQuestion = 0;
+    answers = [];
+    selectedOption = null;
+    allCoursesWithScores = [];
+    currentFilter = 'all';
+    currentSearch = '';
+    searchInput.value = '';
+    
+    resultScreen.classList.add('hidden');
+    startScreen.classList.remove('hidden');
+}
     </script>
 </body>
 </html>
