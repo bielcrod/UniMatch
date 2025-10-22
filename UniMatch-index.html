@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniMatch - Encontre Seu Curso Ideal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --success: #28A745;
+            --warning: #FFC107;
+            --danger: #DC3545;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: white;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .question-counter {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        h2 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 18px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background-color: rgba(46, 134, 171, 0.05);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background-color: rgba(46, 134, 171, 0.1);
+        }
+
+        .emoji {
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #236a8a;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-card {
+            text-align: center;
+        }
+
+        .result-badge {
+            background: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .course-card {
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .course-info {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .course-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: rgba(46, 134, 171, 0.1);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 5px solid rgba(46, 134, 171, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        /* NOVOS ESTILOS ADICIONADOS */
+        .search-bar {
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .results-count {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .compatibility-score {
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .compatibility-score.high {
+            background: var(--success);
+        }
+        
+        .compatibility-score.medium {
+            background: var(--warning);
+        }
+        
+        .compatibility-score.low {
+            background: var(--danger);
+        }
+        
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .view-all-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 12px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .view-all-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            .option {
+                padding: 15px;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filters {
+                justify-content: center;
+            }
+            
+            .course-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">UniMatch</div>
+            <div class="tagline">Encontre o curso perfeito para seu futuro</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress" style="width: 10%;"></div>
+        </div>
+
+        <div class="question-counter" id="question-counter">Pergunta 1 de 10</div>
+
+        <!-- Tela de Início -->
+        <div class="card" id="start-screen">
+            <h2>Encontre o Curso Ideal para Você!</h2>
+            <p style="margin-bottom: 20px; line-height: 1.6;">Responda algumas perguntas simples e receba recomendações personalizadas de cursos de graduação em universidades públicas.</p>
+            <p style="margin-bottom: 30px; line-height: 1.6;">Vamos descobrir juntos qual carreira combina mais com seu perfil!</p>
+            <button class="btn" id="start-btn">Começar Agora</button>
+        </div>
+
+        <!-- Questionário -->
+        <div class="card hidden" id="question-screen">
+            <h2 id="question-text">Qual sua área de maior interesse?</h2>
+            <div class="options" id="options-container">
+                <!-- Opções serão inseridas aqui via JavaScript -->
+            </div>
+            <button class="btn" id="next-btn" disabled>Próxima Pergunta</button>
+        </div>
+
+        <!-- Tela de Carregamento -->
+        <div class="card hidden" id="loading-screen">
+            <div class="loading">
+                <div class="spinner"></div>
+                <h2>Analisando suas respostas...</h2>
+                <p>Estamos encontrando os cursos mais compatíveis com seu perfil.</p>
+            </div>
+        </div>
+
+        <!-- Tela de Resultados MELHORADA -->
+        <div class="card hidden" id="result-screen">
+            <div class="result-badge">Recomendações para Você</div>
+            <h2>Descubra seus cursos ideais!</h2>
+            <p style="margin-bottom: 20px;">Com base nas suas respostas, encontramos os cursos mais compatíveis com seu perfil:</p>
+            
+            <!-- Barra de Pesquisa -->
+            <div class="search-bar">
+                <input type="text" class="search-input" id="search-input" placeholder="🔍 Pesquisar curso específico...">
+            </div>
+            
+            <!-- Filtros -->
+            <div class="results-header">
+                <div class="results-count" id="results-count">Carregando...</div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="high">Alta Compatibilidade</button>
+                    <button class="filter-btn" data-filter="medium">Média Compatibilidade</button>
+                    <button class="filter-btn" data-filter="notes">Maires Notas de Corte</button>
+                </div>
+            </div>
+            
+            <div id="results-container">
+                <!-- Resultados serão inseridos aqui via JavaScript -->
+            </div>
+            
+            <button class="view-all-btn" id="view-all-btn" style="display: none;">
+                Ver Todos os Cursos
+            </button>
+            
+            <button class="btn" id="restart-btn">Fazer Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        // Dados do questionário
+        const questions = [
+            {
+                question: "Qual sua área de maior interesse?",
+                options: [
+                    { text: "Ciências da Saúde", emoji: "🏥", value: "saude" },
+                    { text: "Tecnologia e Computação", emoji: "💻", value: "tecnologia" },
+                    { text: "Ciências Exatas e Engenharias", emoji: "🔬", value: "exatas" },
+                    { text: "Negócios e Gestão", emoji: "📊", value: "negocios" },
+                    { text: "Artes e Comunicação", emoji: "🎨", value: "artes" },
+                    { text: "Ciências Humanas", emoji: "👥", value: "humanas" },
+                    { text: "Ciências Ambientais e Biológicas", emoji: "🌿", value: "ambiental" }
+                ]
+            },
+            {
+                question: "Como você descreveria seus talentos naturais?",
+                options: [
+                    { text: "Analítico - bom com números e lógica", emoji: "🔢", value: "analitico" },
+                    { text: "Criativo - ideias inovadoras e arte", emoji: "✨", value: "criativo" },
+                    { text: "Social - comunicação e trabalho em equipe", emoji: "💬", value: "social" },
+                    { text: "Prático - mãos na massa e resultados", emoji: "🔧", value: "pratico" },
+                    { text: "Científico - pesquisa e curiosidade", emoji: "🧪", value: "cientifico" }
+                ]
+            },
+            {
+                question: "Qual seu objetivo profissional principal?",
+                options: [
+                    { text: "Alto impacto social - ajudar pessoas", emoji: "❤️", value: "impacto-social" },
+                    { text: "Inovação tecnológica - soluções futuras", emoji: "🚀", value: "inovacao" },
+                    { text: "Estabilidade financeira - carreira sólida", emoji: "💰", value: "estabilidade" },
+                    { text: "Liberdade criativa - expressar ideias", emoji: "🎭", value: "liberdade" },
+                    { text: "Pesquisa científica - descobrir conhecimentos", emoji: "🔍", value: "pesquisa" }
+                ]
+            },
+            {
+                question: "Prefere trabalhar principalmente:",
+                options: [
+                    { text: "Em equipe - colaborando com várias pessoas", emoji: "👥", value: "equipe" },
+                    { text: "Sozinho - com foco individual", emoji: "🧘", value: "sozinho" },
+                    { text: "Ambiente dinâmico - variando entre equipe e individual", emoji: "🔄", value: "dinamico" },
+                    { text: "Com público - atendimento direto", emoji: "🙋", value: "publico" }
+                ]
+            },
+            {
+                question: "Qual seu nível de conforto com matemática?",
+                options: [
+                    { text: "Alto - adoro matemática", emoji: "🧮", value: "alto-matematica" },
+                    { text: "Médio - me viro bem", emoji: "✅", value: "medio-matematica" },
+                    { text: "Básico - prefiro áreas com menos matemática", emoji: "📝", value: "basico-matematica" },
+                    { text: "Nenhum - quero evitar cálculos complexos", emoji: "🚫", value: "nenhum-matematica" }
+                ]
+            },
+            {
+                question: "Interesse por tecnologia e inovação:",
+                options: [
+                    { text: "Muito alto - quero trabalhar na vanguarda", emoji: "💡", value: "muito-alto-tech" },
+                    { text: "Alto - usar tecnologia como ferramenta principal", emoji: "📱", value: "alto-tech" },
+                    { text: "Moderado - tecnologia como suporte", emoji: "💻", value: "moderado-tech" },
+                    { text: "Baixo - prefiro áreas mais tradicionais", emoji: "📚", value: "baixo-tech" }
+                ]
+            },
+            {
+                question: "Preferência de ambiente de trabalho:",
+                options: [
+                    { text: "Escritório/empresarial", emoji: "🏢", value: "escritorio" },
+                    { text: "Laboratório", emoji: "🧪", value: "laboratorio" },
+                    { text: "Campo/externo", emoji: "🌳", value: "campo" },
+                    { text: "Clínica/hospital", emoji: "🏥", value: "clinica" },
+                    { text: "Home office/remoto", emoji: "🏠", value: "remoto" },
+                    { text: "Sala de aula", emoji: "👨‍🏫", value: "sala-aula" }
+                ]
+            },
+            {
+                question: "Horário de trabalho preferido:",
+                options: [
+                    { text: "Horário comercial - 9h às 18h", emoji: "🕘", value: "comercial" },
+                    { text: "Flexível - horários variados", emoji: "⏰", value: "flexivel" },
+                    { text: "Plantões/scale - trabalhar em turnos", emoji: "🔄", value: "plantao" },
+                    { text: "Autônomo - definir meus próprios horários", emoji: "🗓️", value: "autonomo" }
+                ]
+            },
+            {
+                question: "Importância do salário:",
+                options: [
+                    { text: "Muito importante - busco alta remuneração", emoji: "💎", value: "muito-importante" },
+                    { text: "Importante - equilíbrio entre salário e realização", emoji: "⚖️", value: "importante" },
+                    { text: "Moderada - realização profissional é mais importante", emoji: "🌟", value: "moderada" },
+                    { text: "Pouco importante - priorizo outros aspectos", emoji: "🌱", value: "pouco-importante" }
+                ]
+            },
+            {
+                question: "Tempo de formação desejado:",
+                options: [
+                    { text: "4-5 anos - graduação mais rápida", emoji: "⚡", value: "curto" },
+                    { text: "5-6 anos - tempo padrão de graduação", emoji: "📅", value: "medio" },
+                    { text: "6+ anos - não me importo com tempo", emoji: "∞", value: "longo" }
+                ]
+            }
+        ];
+
+        // Base de dados completa com todos os cursos
+        const courses = {
+            "Administração": {
+                area: "negocios",
+                descricao: "Gestão de organizações, recursos e pessoas para maximizar resultados e eficiência.",
+                carreiras: "Gerente, consultor, empreendedor, analista, diretor.",
+                notaCorte: "720-760",
+                tags: ["Gestão", "Liderança", "Estratégia"]
+            },
+            "Arquitetura e urbanismo": {
+                area: "artes",
+                descricao: "Projeto de espaços habitáveis, considerando estética, funcionalidade e sustentabilidade.",
+                carreiras: "Arquiteto, urbanista, paisagista, designer de interiores.",
+                notaCorte: "760-800",
+                tags: ["Design", "Urbanismo", "Projetos"]
+            },
+            "Artes cênicas": {
+                area: "artes",
+                descricao: "Estudo e prática das artes performáticas como teatro, dança e performance.",
+                carreiras: "Ator, diretor, coreógrafo, produtor cultural, professor.",
+                notaCorte: "650-700",
+                tags: ["Teatro", "Dança", "Performance"]
+            },
+            "Artes visuais": {
+                area: "artes",
+                descricao: "Criação e análise de obras visuais como pintura, escultura, fotografia e digital.",
+                carreiras: "Artista plástico, curador, crítico de arte, professor.",
+                notaCorte: "640-690",
+                tags: ["Arte", "Criatividade", "Expressão"]
+            },
+            "Astronomia": {
+                area: "exatas",
+                descricao: "Estudo dos corpos celestes, universo e fenômenos astronômicos.",
+                carreiras: "Astrônomo, pesquisador, professor, divulgador científico.",
+                notaCorte: "750-790",
+                tags: ["Ciência", "Espaço", "Pesquisa"]
+            },
+            "Audiovisual": {
+                area: "artes",
+                descricao: "Produção e criação de conteúdos para cinema, TV e mídias digitais.",
+                carreiras: "Cineasta, produtor, editor, diretor de fotografia.",
+                notaCorte: "710-750",
+                tags: ["Cinema", "TV", "Produção"]
+            },
+            "Biblioteconomia": {
+                area: "humanas",
+                descricao: "Organização, preservação e disseminação de informações e acervos.",
+                carreiras: "Bibliotecário, gestor de informação, arquivista.",
+                notaCorte: "620-670",
+                tags: ["Informação", "Organização", "Pesquisa"]
+            },
+            "Biotecnologia": {
+                area: "exatas",
+                descricao: "Aplicação de tecnologia em sistemas biológicos para desenvolvimento de produtos.",
+                carreiras: "Pesquisador, analista, desenvolvedor de bioprodutos.",
+                notaCorte: "770-810",
+                tags: ["Tecnologia", "Biologia", "Inovação"]
+            },
+            "Ciências agrárias": {
+                area: "ambiental",
+                descricao: "Estudo e aplicação de técnicas para produção agropecuária sustentável.",
+                carreiras: "Engenheiro agrônomo, técnico agrícola, pesquisador.",
+                notaCorte: "690-730",
+                tags: ["Agro", "Sustentabilidade", "Produção"]
+            },
+            "Ciências Atuariais": {
+                area: "exatas",
+                descricao: "Aplicação de matemática e estatística para análise de riscos em seguros e finanças.",
+                carreiras: "Atuário, analista de riscos, consultor financeiro.",
+                notaCorte: "740-780",
+                tags: ["Matemática", "Finanças", "Risco"]
+            },
+            "Ciências Biológicas": {
+                area: "ambiental",
+                descricao: "Estudo dos seres vivos, seus processos vitais e relações com o ambiente.",
+                carreiras: "Biólogo, pesquisador, professor, perito ambiental.",
+                notaCorte: "710-750",
+                tags: ["Biologia", "Pesquisa", "Natureza"]
+            },
+            "Ciências Biomédicas": {
+                area: "saude",
+                descricao: "Pesquisa e análise de processos biológicos relacionados à saúde humana.",
+                carreiras: "Pesquisador, analista biomédico, professor.",
+                notaCorte: "760-800",
+                tags: ["Pesquisa", "Saúde", "Laboratório"]
+            },
+            "Ciências Contábeis": {
+                area: "negocios",
+                descricao: "Gestão financeira, contabilidade e controle patrimonial de organizações.",
+                carreiras: "Contador, auditor, controller, consultor tributário.",
+                notaCorte: "700-740",
+                tags: ["Finanças", "Contabilidade", "Auditoria"]
+            },
+            "Ciências da Computação": {
+                area: "tecnologia",
+                descricao: "Desenvolvimento de software, algoritmos e sistemas computacionais.",
+                carreiras: "Desenvolvedor, cientista de dados, arquiteto de software.",
+                notaCorte: "780-820",
+                tags: ["Programação", "Tecnologia", "Inovação"]
+            },
+            "Ciência de Dados": {
+                area: "tecnologia",
+                descricao: "Análise e interpretação de dados complexos para tomada de decisões.",
+                carreiras: "Cientista de dados, analista, consultor de BI.",
+                notaCorte: "790-830",
+                tags: ["Dados", "Análise", "Tecnologia"]
+            },
+            "Ciências da Natureza": {
+                area: "ambiental",
+                descricao: "Estudo integrado de física, química e biologia em sistemas naturais.",
+                carreiras: "Pesquisador, professor, educador ambiental.",
+                notaCorte: "680-720",
+                tags: ["Natureza", "Ciência", "Educação"]
+            },
+            "Ciências dos Alimentos": {
+                area: "exatas",
+                descricao: "Estudo das propriedades, processamento e conservação de alimentos.",
+                carreiras: "Pesquisador, tecnólogo de alimentos, quality assurance.",
+                notaCorte: "720-760",
+                tags: ["Alimentos", "Qualidade", "Segurança"]
+            },
+            "Ciências Exatas": {
+                area: "exatas",
+                descricao: "Base teórica e aplicada de matemática, física e química.",
+                carreiras: "Pesquisador, professor, analista, consultor.",
+                notaCorte: "730-770",
+                tags: ["Matemática", "Física", "Química"]
+            },
+            "Ciências Físicas e Biomoleculares": {
+                area: "exatas",
+                descricao: "Interface entre física e biologia no estudo de sistemas moleculares.",
+                carreiras: "Pesquisador, biofísico, desenvolvedor de tecnologias médicas.",
+                notaCorte: "750-790",
+                tags: ["Física", "Biologia", "Pesquisa"]
+            },
+            "Ciências Sociais": {
+                area: "humanas",
+                descricao: "Análise das sociedades humanas, culturas e relações sociais.",
+                carreiras: "Pesquisador, consultor, analista social, professor.",
+                notaCorte: "670-710",
+                tags: ["Sociologia", "Pesquisa", "Sociedade"]
+            },
+            "Design": {
+                area: "artes",
+                descricao: "Criação de soluções visuais e funcionais para produtos e serviços.",
+                carreiras: "Designer gráfico, UX/UI designer, diretor de arte.",
+                notaCorte: "710-750",
+                tags: ["Criatividade", "Visual", "Inovação"]
+            },
+            "Direito": {
+                area: "humanas",
+                descricao: "Estudo das leis e aplicação da justiça na sociedade.",
+                carreiras: "Advogado, juiz, promotor, consultor jurídico.",
+                notaCorte: "790-830",
+                tags: ["Leis", "Justiça", "Advocacia"]
+            },
+            "Economia": {
+                area: "negocios",
+                descricao: "Análise da produção, distribuição e consumo de bens e serviços.",
+                carreiras: "Economista, analista, consultor, pesquisador.",
+                notaCorte: "750-790",
+                tags: ["Finanças", "Mercado", "Análise"]
+            },
+            "Editoração": {
+                area: "artes",
+                descricao: "Processos de edição, produção e publicação de conteúdos.",
+                carreiras: "Editor, produtor editorial, revisor, diagramador.",
+                notaCorte: "660-700",
+                tags: ["Edição", "Publicação", "Texto"]
+            },
+            "Educação Física e Esporte": {
+                area: "saude",
+                descricao: "Promoção da saúde e desempenho por meio de atividades físicas.",
+                carreiras: "Professor, personal trainer, preparador físico.",
+                notaCorte: "680-720",
+                tags: ["Esporte", "Saúde", "Movimento"]
+            },
+            "Educomunicação": {
+                area: "humanas",
+                descricao: "Interface entre educação e comunicação em processos de aprendizagem.",
+                carreiras: "Educador, produtor de conteúdo, consultor educacional.",
+                notaCorte: "650-690",
+                tags: ["Educação", "Comunicação", "Mídia"]
+            },
+            "Enfermagem": {
+                area: "saude",
+                descricao: "Cuidado integral à saúde humana em diferentes níveis de atenção.",
+                carreiras: "Enfermeiro, gestor hospitalar, educador em saúde.",
+                notaCorte: "730-770",
+                tags: ["Saúde", "Cuidado", "Hospital"]
+            },
+            "Engenharia Aeronáutica": {
+                area: "exatas",
+                descricao: "Projeto, construção e manutenção de aeronaves e sistemas aeroespaciais.",
+                carreiras: "Engenheiro aeronáutico, projetista, analista de sistemas.",
+                notaCorte: "790-830",
+                tags: ["Avião", "Espaço", "Tecnologia"]
+            },
+            "Engenharia Agronômica": {
+                area: "exatas",
+                descricao: "Aplicação de engenharia na produção agrícola e gestão rural.",
+                carreiras: "Engenheiro agrônomo, gestor rural, consultor agrícola.",
+                notaCorte: "720-760",
+                tags: ["Agricultura", "Produção", "Gestão"]
+            },
+            "Engenharia Ambiental": {
+                area: "exatas",
+                descricao: "Soluções tecnológicas para problemas ambientais e sustentabilidade.",
+                carreiras: "Engenheiro ambiental, consultor, gestor de recursos.",
+                notaCorte: "740-780",
+                tags: ["Meio Ambiente", "Sustentabilidade", "Tecnologia"]
+            },
+            "Engenharia Bioquímica": {
+                area: "exatas",
+                descricao: "Aplicação de processos bioquímicos em escala industrial.",
+                carreiras: "Engenheiro bioquímico, pesquisador, gestor de produção.",
+                notaCorte: "760-800",
+                tags: ["Bioquímica", "Indústria", "Pesquisa"]
+            },
+            "Engenharia Civil": {
+                area: "exatas",
+                descricao: "Projeto, construção e manutenção de edifícios, infraestrutura e obras.",
+                carreiras: "Engenheiro civil, projetista, fiscal, gestor de obras.",
+                notaCorte: "750-790",
+                tags: ["Construção", "Infraestrutura", "Projetos"]
+            },
+            "Engenharia de Alimentos": {
+                area: "exatas",
+                descricao: "Processamento, conservação e desenvolvimento de produtos alimentícios.",
+                carreiras: "Engenheiro de alimentos, pesquisador, gestor de qualidade.",
+                notaCorte: "740-780",
+                tags: ["Alimentos", "Processamento", "Qualidade"]
+            },
+            "Engenharia de Biossistemas": {
+                area: "exatas",
+                descricao: "Integração de sistemas biológicos com tecnologia e automação.",
+                carreiras: "Engenheiro de biossistemas, pesquisador, consultor.",
+                notaCorte: "730-770",
+                tags: ["Biotecnologia", "Automação", "Sistemas"]
+            },
+            "Engenharia de Computação": {
+                area: "tecnologia",
+                descricao: "Desenvolvimento de hardware e software integrados em sistemas computacionais.",
+                carreiras: "Engenheiro de computação, desenvolvedor, arquiteto de sistemas.",
+                notaCorte: "780-820",
+                tags: ["Hardware", "Software", "Tecnologia"]
+            },
+            "Engenharia de Materiais": {
+                area: "exatas",
+                descricao: "Desenvolvimento, processamento e aplicação de materiais inovadores.",
+                carreiras: "Engenheiro de materiais, pesquisador, desenvolvedor de produtos.",
+                notaCorte: "750-790",
+                tags: ["Materiais", "Inovação", "Pesquisa"]
+            },
+            "Engenharia de Materiais e Manufatura": {
+                area: "exatas",
+                descricao: "Processos de fabricação e transformação de materiais industriais.",
+                carreiras: "Engenheiro de produção, gestor industrial, pesquisador.",
+                notaCorte: "740-780",
+                tags: ["Manufatura", "Produção", "Materiais"]
+            },
+            "Engenharia de Minas": {
+                area: "exatas",
+                descricao: "Exploração, extração e beneficiamento de recursos minerais.",
+                carreiras: "Engenheiro de minas, gestor de projetos, pesquisador.",
+                notaCorte: "730-770",
+                tags: ["Mineração", "Recursos", "Extração"]
+            },
+            "Engenharia de Petróleo": {
+                area: "exatas",
+                descricao: "Exploração, produção e refino de petróleo e gás natural.",
+                carreiras: "Engenheiro de petróleo, gestor de campo, pesquisador.",
+                notaCorte: "770-810",
+                tags: ["Petróleo", "Energia", "Exploração"]
+            },
+            "Engenharia de Produção": {
+                area: "exatas",
+                descricao: "Otimização de sistemas produtivos e processos industriais.",
+                carreiras: "Engenheiro de produção, gestor industrial, consultor.",
+                notaCorte: "760-800",
+                tags: ["Produção", "Otimização", "Gestão"]
+            },
+            "Engenharia Elétrica": {
+                area: "exatas",
+                descricao: "Projeto e desenvolvimento de sistemas e componentes elétricos.",
+                carreiras: "Engenheiro eletricista, projetista, gestor de energia.",
+                notaCorte: "770-810",
+                tags: ["Eletricidade", "Energia", "Sistemas"]
+            },
+            "Engenharia Física": {
+                area: "exatas",
+                descricao: "Aplicação de princípios físicos no desenvolvimento de tecnologias.",
+                carreiras: "Engenheiro físico, pesquisador, desenvolvedor tecnológico.",
+                notaCorte: "760-800",
+                tags: ["Física", "Tecnologia", "Pesquisa"]
+            },
+            "Engenharia Florestal": {
+                area: "exatas",
+                descricao: "Manejo sustentável de florestas e recursos madeireiros.",
+                carreiras: "Engenheiro florestal, gestor ambiental, pesquisador.",
+                notaCorte: "700-740",
+                tags: ["Florestas", "Sustentabilidade", "Meio Ambiente"]
+            },
+            "Engenharia Mecânica": {
+                area: "exatas",
+                descricao: "Projeto, análise e manutenção de sistemas e componentes mecânicos.",
+                carreiras: "Engenheiro mecânico, projetista, gestor industrial.",
+                notaCorte: "770-810",
+                tags: ["Mecânica", "Projetos", "Indústria"]
+            },
+            "Engenharia Mecatrônica": {
+                area: "exatas",
+                descricao: "Integração de mecânica, eletrônica e computação em sistemas automatizados.",
+                carreiras: "Engenheiro mecatrônico, desenvolvedor de robótica, automação.",
+                notaCorte: "780-820",
+                tags: ["Robótica", "Automação", "Tecnologia"]
+            },
+            "Engenharia Metalúrgica": {
+                area: "exatas",
+                descricao: "Processamento e transformação de metais e ligas metálicas.",
+                carreiras: "Engenheiro metalúrgico, gestor de produção, pesquisador.",
+                notaCorte: "730-770",
+                tags: ["Metais", "Processamento", "Indústria"]
+            },
+            "Engenharia Naval": {
+                area: "exatas",
+                descricao: "Projeto, construção e manutenção de embarcações e estruturas offshore.",
+                carreiras: "Engenheiro naval, projetista, gestor de estaleiros.",
+                notaCorte: "750-790",
+                tags: ["Navios", "Oceanografia", "Projetos"]
+            },
+            "Engenharia Química": {
+                area: "exatas",
+                descricao: "Processos químicos industriais e desenvolvimento de produtos.",
+                carreiras: "Engenheiro químico, gestor de processos, pesquisador.",
+                notaCorte: "770-810",
+                tags: ["Química", "Processos", "Indústria"]
+            },
+            "Estatística": {
+                area: "exatas",
+                descricao: "Coleta, análise e interpretação de dados para tomada de decisões.",
+                carreiras: "Estatístico, analista de dados, pesquisador, consultor.",
+                notaCorte: "740-780",
+                tags: ["Dados", "Análise", "Matemática"]
+            },
+            "Farmácia": {
+                area: "saude",
+                descricao: "Desenvolvimento, produção e controle de medicamentos e cosméticos.",
+                carreiras: "Farmacêutico, pesquisador, gestor de laboratório.",
+                notaCorte: "750-790",
+                tags: ["Medicamentos", "Saúde", "Laboratório"]
+            },
+            "Filosofia": {
+                area: "humanas",
+                descricao: "Reflexão crítica sobre questões fundamentais da existência humana.",
+                carreiras: "Filósofo, professor, consultor, pesquisador.",
+                notaCorte: "630-670",
+                tags: ["Pensamento", "Reflexão", "Crítica"]
+            },
+            "Finanças e Negócios": {
+                area: "negocios",
+                descricao: "Gestão financeira estratégica e análise de oportunidades de negócios.",
+                carreiras: "Analista financeiro, gestor, consultor, investidor.",
+                notaCorte: "730-770",
+                tags: ["Finanças", "Negócios", "Estratégia"]
+            },
+            "Física": {
+                area: "exatas",
+                descricao: "Estudo das leis fundamentais que regem o universo e a matéria.",
+                carreiras: "Físico, pesquisador, professor, desenvolvedor tecnológico.",
+                notaCorte: "750-790",
+                tags: ["Ciência", "Pesquisa", "Universo"]
+            },
+            "Física Computacional": {
+                area: "tecnologia",
+                descricao: "Aplicação de computação na solução de problemas físicos complexos.",
+                carreiras: "Pesquisador, desenvolvedor de simulações, analista computacional.",
+                notaCorte: "760-800",
+                tags: ["Física", "Computação", "Simulação"]
+            },
+            "Física Médica": {
+                area: "saude",
+                descricao: "Aplicação de princípios físicos em diagnóstico e tratamento médico.",
+                carreiras: "Físico médico, pesquisador, desenvolvedor de equipamentos médicos.",
+                notaCorte: "770-810",
+                tags: ["Física", "Medicina", "Tecnologia"]
+            },
+            "Fisioterapia": {
+                area: "saude",
+                descricao: "Prevenção e tratamento de disfunções do movimento corporal.",
+                carreiras: "Fisioterapeuta, pesquisador, gestor em saúde.",
+                notaCorte: "740-780",
+                tags: ["Reabilitação", "Movimento", "Saúde"]
+            },
+            "Fonoaudiologia": {
+                area: "saude",
+                descricao: "Prevenção, avaliação e tratamento de distúrbios da comunicação.",
+                carreiras: "Fonoaudiólogo, pesquisador, professor, consultor.",
+                notaCorte: "730-770",
+                tags: ["Comunicação", "Saúde", "Terapia"]
+            },
+            "Geociências e Educação Ambiental": {
+                area: "ambiental",
+                descricao: "Estudo das ciências da terra integrado à educação ambiental.",
+                carreiras: "Geocientista, educador ambiental, pesquisador.",
+                notaCorte: "680-720",
+                tags: ["Terra", "Educação", "Meio Ambiente"]
+            },
+            "Geofísica": {
+                area: "exatas",
+                descricao: "Estudo da Terra por meio de métodos físicos e matemáticos.",
+                carreiras: "Geofísico, pesquisador, consultor em exploração.",
+                notaCorte: "730-770",
+                tags: ["Terra", "Física", "Exploração"]
+            },
+            "Geografia": {
+                area: "humanas",
+                descricao: "Análise do espaço geográfico e relações sociedade-natureza.",
+                carreiras: "Geógrafo, professor, pesquisador, planejador territorial.",
+                notaCorte: "670-710",
+                tags: ["Espaço", "Território", "Sociedade"]
+            },
+            "Geologia": {
+                area: "exatas",
+                descricao: "Estudo da composição, estrutura e história da Terra.",
+                carreiras: "Geólogo, pesquisador, consultor em mineração e petróleo.",
+                notaCorte: "720-760",
+                tags: ["Terra", "Rochas", "Recursos"]
+            },
+            "Gerontologia": {
+                area: "saude",
+                descricao: "Estudo do envelhecimento e cuidado com a população idosa.",
+                carreiras: "Gerontólogo, gestor de instituições, pesquisador.",
+                notaCorte: "650-690",
+                tags: ["Envelhecimento", "Saúde", "Cuidado"]
+            },
+            "Gestão Ambiental": {
+                area: "ambiental",
+                descricao: "Planejamento e gestão de recursos naturais e sustentabilidade.",
+                carreiras: "Gestor ambiental, consultor, analista de sustentabilidade.",
+                notaCorte: "690-730",
+                tags: ["Meio Ambiente", "Sustentabilidade", "Gestão"]
+            },
+            "Gestão de Políticas Públicas": {
+                area: "humanas",
+                descricao: "Formulação, implementação e avaliação de políticas governamentais.",
+                carreiras: "Gestor público, analista de políticas, consultor governamental.",
+                notaCorte: "700-740",
+                tags: ["Políticas", "Governo", "Gestão"]
+            },
+            "História": {
+                area: "humanas",
+                descricao: "Estudo e interpretação dos processos históricos e sociedades humanas.",
+                carreiras: "Historiador, professor, pesquisador, conservador cultural.",
+                notaCorte: "660-700",
+                tags: ["Passado", "Sociedade", "Cultura"]
+            },
+            "Informática Biomédica": {
+                area: "tecnologia",
+                descricao: "Aplicação de computação em soluções para saúde e medicina.",
+                carreiras: "Analista de sistemas de saúde, pesquisador, desenvolvedor.",
+                notaCorte: "750-790",
+                tags: ["Saúde", "Tecnologia", "Computação"]
+            },
+            "Jornalismo": {
+                area: "artes",
+                descricao: "Apuração, produção e disseminação de informações jornalísticas.",
+                carreiras: "Jornalista, editor, repórter, produtor de conteúdo.",
+                notaCorte: "710-750",
+                tags: ["Notícias", "Comunicação", "Mídia"]
+            },
+            "Lazer e Turismo": {
+                area: "humanas",
+                descricao: "Planejamento e gestão de atividades de lazer e serviços turísticos.",
+                carreiras: "Gestor de turismo, planejador, consultor, empreendedor.",
+                notaCorte: "650-690",
+                tags: ["Turismo", "Lazer", "Hospitalidade"]
+            },
+            "Letras": {
+                area: "humanas",
+                descricao: "Estudo de línguas, literaturas e manifestações culturais.",
+                carreiras: "Professor, tradutor, revisor, pesquisador linguístico.",
+                notaCorte: "640-680",
+                tags: ["Línguas", "Literatura", "Cultura"]
+            },
+            "Marketing": {
+                area: "negocios",
+                descricao: "Estratégias de mercado, comunicação e relacionamento com consumidores.",
+                carreiras: "Profissional de marketing, gestor de marcas, analista de mercado.",
+                notaCorte: "710-750",
+                tags: ["Mercado", "Comunicação", "Vendas"]
+            },
+            "Matemática": {
+                area: "exatas",
+                descricao: "Estudo de estruturas abstratas, padrões e relações quantitativas.",
+                carreiras: "Matemático, professor, pesquisador, analista.",
+                notaCorte: "730-770",
+                tags: ["Números", "Lógica", "Abstração"]
+            },
+            "Matemática Aplicada": {
+                area: "exatas",
+                descricao: "Aplicação de métodos matemáticos na solução de problemas práticos.",
+                carreiras: "Matemático aplicado, pesquisador, analista quantitativo.",
+                notaCorte: "740-780",
+                tags: ["Matemática", "Aplicação", "Problemas"]
+            },
+            "Matemática Aplicada a Negócios": {
+                area: "negocios",
+                descricao: "Uso de ferramentas matemáticas em análise de negócios e finanças.",
+                carreiras: "Analista quantitativo, consultor financeiro, gestor de riscos.",
+                notaCorte: "720-760",
+                tags: ["Matemática", "Negócios", "Finanças"]
+            },
+            "Matemática Aplicada e Computação Científica": {
+                area: "tecnologia",
+                descricao: "Desenvolvimento de algoritmos e modelos computacionais para ciência.",
+                carreiras: "Pesquisador, desenvolvedor de algoritmos, analista computacional.",
+                notaCorte: "760-800",
+                tags: ["Matemática", "Computação", "Ciência"]
+            },
+            "Matemática Aplicada e Computacional": {
+                area: "tecnologia",
+                descricao: "Integração entre matemática e computação para resolver problemas complexos.",
+                carreiras: "Matemático computacional, desenvolvedor, pesquisador.",
+                notaCorte: "750-790",
+                tags: ["Matemática", "Computação", "Modelagem"]
+            },
+            "Medicina": {
+                area: "saude",
+                descricao: "Formação para diagnóstico, tratamento e prevenção de doenças humanas.",
+                carreiras: "Médico generalista, especialista, pesquisador, professor.",
+                notaCorte: "820-860",
+                tags: ["Saúde", "Ciências Biológicas", "Assistência"]
+            },
+            "Medicina Veterinária": {
+                area: "saude",
+                descricao: "Cuidado com a saúde animal, prevenção e tratamento de doenças.",
+                carreiras: "Médico veterinário, pesquisador, gestor de saúde animal.",
+                notaCorte: "750-790",
+                tags: ["Animais", "Saúde", "Clínica"]
+            },
+            "Meteorologia": {
+                area: "exatas",
+                descricao: "Estudo dos fenômenos atmosféricos e previsão do tempo.",
+                carreiras: "Meteorologista, pesquisador, analista climático.",
+                notaCorte: "720-760",
+                tags: ["Clima", "Tempo", "Atmosfera"]
+            },
+            "Música": {
+                area: "artes",
+                descricao: "Estudo teórico e prático da linguagem e execução musical.",
+                carreiras: "Músico, compositor, professor, regente, produtor musical.",
+                notaCorte: "660-700",
+                tags: ["Som", "Arte", "Expressão"]
+            },
+            "Nutrição": {
+                area: "saude",
+                descricao: "Estudo da alimentação e sua relação com a saúde humana.",
+                carreiras: "Nutricionista, pesquisador, consultor alimentar.",
+                notaCorte: "730-770",
+                tags: ["Alimentação", "Saúde", "Prevenção"]
+            },
+            "Nutrição e Metabolismo": {
+                area: "saude",
+                descricao: "Aprofundamento nos processos metabólicos e nutrição clínica.",
+                carreiras: "Nutricionista clínico, pesquisador, especialista em metabolismo.",
+                notaCorte: "740-780",
+                tags: ["Nutrição", "Metabolismo", "Clínica"]
+            },
+            "Obstetrícia": {
+                area: "saude",
+                descricao: "Cuidado especializado com a saúde da mulher, gestação e parto.",
+                carreiras: "Obstetra, enfermeiro obstetra, educador perinatal.",
+                notaCorte: "720-760",
+                tags: ["Gestação", "Parto", "Saúde da Mulher"]
+            },
+            "Oceanografia": {
+                area: "ambiental",
+                descricao: "Estudo dos oceanos, mares e zonas costeiras.",
+                carreiras: "Oceanógrafo, pesquisador, consultor ambiental.",
+                notaCorte: "710-750",
+                tags: ["Oceanos", "Meio Ambiente", "Pesquisa"]
+            },
+            "Odontologia": {
+                area: "saude",
+                descricao: "Prevenção, diagnóstico e tratamento de doenças bucais.",
+                carreiras: "Dentista, cirurgião-dentista, pesquisador, professor.",
+                notaCorte: "780-820",
+                tags: ["Saúde Bucal", "Dentística", "Clínica"]
+            },
+            "Pedagogia": {
+                area: "humanas",
+                descricao: "Estudo dos processos de ensino e aprendizagem em diferentes contextos.",
+                carreiras: "Pedagogo, professor, gestor educacional, orientador.",
+                notaCorte: "650-690",
+                tags: ["Educação", "Ensino", "Aprendizagem"]
+            },
+            "Psicologia": {
+                area: "saude",
+                descricao: "Ciência que estuda o comportamento humano e processos mentais.",
+                carreiras: "Psicólogo clínico, organizacional, escolar, social.",
+                notaCorte: "780-820",
+                tags: ["Saúde Mental", "Comportamento", "Terapia"]
+            },
+            "Publicidade e Propaganda": {
+                area: "artes",
+                descricao: "Criação e gestão de campanhas publicitárias e comunicação mercadológica.",
+                carreiras: "Publicitário, diretor de criação, planejador, gestor de accounts.",
+                notaCorte: "710-750",
+                tags: ["Propaganda", "Comunicação", "Criatividade"]
+            },
+            "Química": {
+                area: "exatas",
+                descricao: "Estudo da matéria, suas transformações e propriedades.",
+                carreiras: "Químico, pesquisador, professor, analista laboratorial.",
+                notaCorte: "720-760",
+                tags: ["Matéria", "Transformação", "Laboratório"]
+            },
+            "Relações Internacionais": {
+                area: "humanas",
+                descricao: "Análise das relações entre Estados, organizações e atores globais.",
+                carreiras: "Diplomata, analista internacional, gestor de projetos globais.",
+                notaCorte: "740-780",
+                tags: ["Global", "Diplomacia", "Política"]
+            },
+            "Relações Públicas": {
+                area: "artes",
+                descricao: "Gestão da comunicação e imagem entre organizações e seus públicos.",
+                carreiras: "Relações públicas, gestor de comunicação, assessor de imprensa.",
+                notaCorte: "680-720",
+                tags: ["Comunicação", "Imagem", "Gestão"]
+            },
+            "Saúde Pública": {
+                area: "saude",
+                descricao: "Promoção, proteção e recuperação da saúde em nível populacional.",
+                carreiras: "Sanitarista, gestor em saúde, pesquisador, educador.",
+                notaCorte: "700-740",
+                tags: ["Saúde Coletiva", "Prevenção", "Políticas"]
+            },
+            "Sistemas de Informação": {
+                area: "tecnologia",
+                descricao: "Gestão e desenvolvimento de sistemas de informação organizacionais.",
+                carreiras: "Analista de sistemas, gestor de TI, desenvolvedor, consultor.",
+                notaCorte: "730-770",
+                tags: ["Sistemas", "TI", "Gestão"]
+            },
+            "Terapia Ocupacional": {
+                area: "saude",
+                descricao: "Uso de atividades terapêuticas na reabilitação e inclusão social.",
+                carreiras: "Terapeuta ocupacional, pesquisador, gestor em saúde.",
+                notaCorte: "710-750",
+                tags: ["Reabilitação", "Inclusão", "Terapia"]
+            },
+            "Têxtil e Moda": {
+                area: "artes",
+                descricao: "Criação, produção e gestão no universo têxtil e de moda.",
+                carreiras: "Estilista, gestor de produção têxtil, consultor de moda.",
+                notaCorte: "670-710",
+                tags: ["Moda", "Têxtil", "Criação"]
+            },
+            "Turismo": {
+                area: "humanas",
+                descricao: "Planejamento, organização e gestão de serviços e produtos turísticos.",
+                carreiras: "Gestor de turismo, agente de viagens, planejador turístico.",
+                notaCorte: "640-680",
+                tags: ["Viagens", "Hospitalidade", "Lazer"]
+            },
+            "Zootecnia": {
+                area: "ambiental",
+                descricao: "Produção, manejo e conservação de animais domésticos e silvestres.",
+                carreiras: "Zootecnista, gestor de produção animal, pesquisador.",
+                notaCorte: "690-730",
+                tags: ["Animais", "Produção", "Manejo"]
+            }
+        };
+
+        // Sistema de Pontuação Avançado
+        const scoringRules = {
+            'saude': {
+                cursos: ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Farmácia', 'Fisioterapia', 'Fonoaudiologia', 'Medicina Veterinária', 'Nutrição', 'Obstetrícia', 'Terapia Ocupacional'],
+                pontos: 15
+            },
+            'tecnologia': {
+                cursos: ['Ciência da Computação', 'Engenharia de Computação', 'Sistemas de Informação', 'Ciência de Dados', 'Engenharia Mecatrônica', 'Informática Biomédica'],
+                pontos: 15
+            },
+            'exatas': {
+                cursos: ['Engenharia Civil', 'Engenharia Elétrica', 'Engenharia Mecânica', 'Matemática', 'Física', 'Química', 'Estatística', 'Engenharia Química'],
+                pontos: 15
+            },
+            'negocios': {
+                cursos: ['Administração', 'Economia', 'Ciências Contábeis', 'Marketing', 'Finanças e Negócios'],
+                pontos: 15
+            },
+            'artes': {
+                cursos: ['Design', 'Arquitetura e urbanismo', 'Publicidade e Propaganda', 'Jornalismo', 'Artes Visuais', 'Artes Cênicas'],
+                pontos: 15
+            },
+            'humanas': {
+                cursos: ['Direito', 'Pedagogia', 'História', 'Letras', 'Filosofia', 'Relações Internacionais'],
+                pontos: 15
+            },
+            'ambiental': {
+                cursos: ['Ciências Biológicas', 'Gestão Ambiental', 'Oceanografia', 'Zootecnia', 'Engenharia Ambiental'],
+                pontos: 15
+            }
+        };
+
+        const talentRules = {
+            'analitico': {
+                cursos: ['Matemática', 'Estatística', 'Ciências Atuariais', 'Física', 'Engenharias', 'Ciência de Dados'],
+                pontos: 12
+            },
+            'criativo': {
+                cursos: ['Design', 'Arquitetura e urbanismo', 'Publicidade e Propaganda', 'Artes', 'Jornalismo'],
+                pontos: 12
+            },
+            'social': {
+                cursos: ['Psicologia', 'Pedagogia', 'Medicina', 'Enfermagem', 'Relações Internacionais'],
+                pontos: 12
+            },
+            'pratico': {
+                cursos: ['Engenharias', 'Medicina Veterinária', 'Odontologia', 'Farmácia'],
+                pontos: 10
+            },
+            'cientifico': {
+                cursos: ['Medicina', 'Ciências Biológicas', 'Física', 'Química', 'Pesquisa'],
+                pontos: 12
+            }
+        };
+
+        // Elementos da DOM
+        const startScreen = document.getElementById('start-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const loadingScreen = document.getElementById('loading-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const progressBar = document.getElementById('progress');
+        const questionCounter = document.getElementById('question-counter');
+        const resultsContainer = document.getElementById('results-container');
+        const searchInput = document.getElementById('search-input');
+        const resultsCount = document.getElementById('results-count');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const viewAllBtn = document.getElementById('view-all-btn');
+
+        // Estado do questionário
+        let currentQuestion = 0;
+        let answers = [];
+        let selectedOption = null;
+        let allCoursesWithScores = [];
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // Inicialização
+        startBtn.addEventListener('click', startQuiz);
+        nextBtn.addEventListener('click', nextQuestion);
+        restartBtn.addEventListener('click', restartQuiz);
+
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            questionScreen.classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            questionText.textContent = question.question;
+            optionsContainer.innerHTML = '';
+            
+            // Atualizar contador e barra de progresso
+            questionCounter.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+            progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            
+            // Criar opções
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <span class="emoji">${option.emoji}</span>
+                    <span>${option.text}</span>
+                `;
+                
+                optionElement.addEventListener('click', () => selectOption(optionElement, index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Resetar seleção e botão
+            selectedOption = null;
+            nextBtn.disabled = true;
+        }
+
+        function selectOption(optionElement, index) {
+            // Remover seleção anterior
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Selecionar nova opção
+            optionElement.classList.add('selected');
+            selectedOption = index;
+            nextBtn.disabled = false;
+        }
+
+        function nextQuestion() {
+            if (selectedOption === null) return;
+            
+            // Salvar resposta
+            answers.push(questions[currentQuestion].options[selectedOption].value);
+            
+            // Avançar para próxima pergunta ou mostrar resultados
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            questionScreen.classList.add('hidden');
+            loadingScreen.classList.remove('hidden');
+            
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                resultScreen.classList.remove('hidden');
+                calculateCourseScores();
+                displayRecommendations();
+            }, 1500);
+        }
+
+        function calculateCourseScores() {
+            allCoursesWithScores = Object.keys(courses).map(courseName => {
+                let score = 0;
+                const course = courses[courseName];
+                
+                // Pontuação baseada na área de interesse (1ª pergunta)
+                if (scoringRules[answers[0]] && scoringRules[answers[0]].cursos.includes(courseName)) {
+                    score += scoringRules[answers[0]].pontos;
+                }
+                
+                // Pontuação baseada em talentos (2ª pergunta)
+                if (talentRules[answers[1]] && talentRules[answers[1]].cursos.includes(courseName)) {
+                    score += talentRules[answers[1]].pontos;
+                }
+                
+                // Pontuação baseada em objetivo profissional (3ª pergunta)
+                if (answers[2] === 'impacto-social' && ['Medicina', 'Enfermagem', 'Psicologia', 'Pedagogia', 'Serviço Social'].includes(courseName)) {
+                    score += 10;
+                }
+                if (answers[2] === 'inovacao' && ['Engenharias', 'Ciência da Computação', 'Design'].includes(courseName)) {
+                    score += 10;
+                }
+                if (answers[2] === 'pesquisa' && ['Ciências Biológicas', 'Física', 'Química', 'Matemática'].includes(courseName)) {
+                    score += 10;
+                }
+                
+                // Pontuação baseada em matemática (5ª pergunta)
+                if (answers[4] === 'alto-matematica' && ['Engenharias', 'Matemática', 'Física', 'Estatística', 'Ciências Atuariais'].includes(courseName)) {
+                    score += 8;
+                } else if (answers[4] === 'nenhum-matematica' && !['Engenharias', 'Matemática', 'Física', 'Estatística'].includes(courseName)) {
+                    score += 6;
+                }
+                
+                // Pontuação baseada em tecnologia (6ª pergunta)
+                if (answers[5] === 'muito-alto-tech' && ['Ciência da Computação', 'Engenharia de Computação', 'Sistemas de Informação'].includes(courseName)) {
+                    score += 10;
+                }
+                
+                // Pontuação baseada em ambiente de trabalho (7ª pergunta)
+                if (answers[6] === 'clinica' && ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia'].includes(courseName)) {
+                    score += 8;
+                }
+                if (answers[6] === 'laboratorio' && ['Ciências Biológicas', 'Química', 'Farmácia'].includes(courseName)) {
+                    score += 8;
+                }
+                
+                // Pontuação randômica para variedade
+                score += Math.floor(Math.random() * 15);
+                
+                return {
+                    name: courseName,
+                    ...course,
+                    score: Math.min(100, score)
+                };
+            });
+            
+            // Ordenar por pontuação
+            allCoursesWithScores.sort((a, b) => b.score - a.score);
+        }
+
+        function displayRecommendations() {
+            resultsContainer.innerHTML = '';
+            
+            const filteredCourses = filterAndSearchCourses();
+            const displayedCourses = currentFilter === 'all' ? 
+                filteredCourses.slice(0, 8) : filteredCourses;
+            
+            if (filteredCourses.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <h3>Nenhum curso encontrado</h3>
+                        <p>Tente alterar os filtros ou termos da pesquisa.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            displayedCourses.forEach(course => {
+                const courseElement = createCourseElement(course);
+                resultsContainer.appendChild(courseElement);
+            });
+            
+            // Atualizar contador
+            resultsCount.textContent = `${filteredCourses.length} cursos encontrados`;
+            
+            // Mostrar botão "Ver Todos" se necessário
+            viewAllBtn.style.display = filteredCourses.length > 8 && currentFilter === 'all' ? 
+                'block' : 'none';
+        }
+
+        function createCourseElement(course) {
+            const courseElement = document.createElement('div');
+            courseElement.className = 'course-card';
+            
+            const compatibilityText = course.score >= 70 ? 'Alta' : 
+                                    course.score >= 50 ? 'Média' : 'Baixa';
+            const compatibilityClass = course.score >= 70 ? 'high' : 
+                                     course.score >= 50 ? 'medium' : 'low';
+            
+            courseElement.innerHTML = `
+                <div class="course-header">
+                    <div class="course-title">${course.name}</div>
+                    <div class="compatibility-score ${compatibilityClass}">
+                        ${compatibilityText} Compatibilidade (${course.score}%)
+                    </div>
+                </div>
+                <div class="course-info">
+                    <strong>Descrição:</strong> ${course.descricao}
+                </div>
+                <div class="course-info">
+                    <strong>Carreiras:</strong> ${course.carreiras}
+                </div>
+                <div class="course-info">
+                    <strong>Nota de Corte Média USP:</strong> ${course.notaCorte} pontos
+                </div>
+                <div class="course-tags">
+                    ${course.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+            `;
+            
+            return courseElement;
+        }
+
+        function filterAndSearchCourses() {
+            let filtered = allCoursesWithScores;
+            
+            // Aplicar busca
+            if (currentSearch) {
+                filtered = filtered.filter(course => 
+                    course.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    course.descricao.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    course.tags.some(tag => tag.toLowerCase().includes(currentSearch.toLowerCase()))
+                );
+            }
+            
+            // Aplicar filtros
+            switch (currentFilter) {
+                case 'high':
+                    filtered = filtered.filter(course => course.score >= 70);
+                    break;
+                case 'medium':
+                    filtered = filtered.filter(course => course.score >= 50 && course.score < 70);
+                    break;
+                case 'notes':
+                    filtered = [...filtered].sort((a, b) => {
+                        const noteA = parseInt(a.notaCorte.split('-')[0]);
+                        const noteB = parseInt(b.notaCorte.split('-')[0]);
+                        return noteB - noteA;
+                    });
+                    break;
+            }
+            
+            return filtered;
+        }
+
+        // Event Listeners para novos elementos
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value;
+            displayRecommendations();
+        });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                displayRecommendations();
+            });
+        });
+
+        viewAllBtn.addEventListener('click', () => {
+            const filteredCourses = filterAndSearchCourses();
+            resultsContainer.innerHTML = '';
+            filteredCourses.forEach(course => {
+                const courseElement = createCourseElement(course);
+                resultsContainer.appendChild(courseElement);
+            });
+            viewAllBtn.style.display = 'none';
+        });
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = [];
+            selectedOption = null;
+            allCoursesWithScores = [];
+            currentFilter = 'all';
+            currentSearch = '';
+            searchInput.value = '';
+            
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
