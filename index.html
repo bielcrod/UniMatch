@@ -21,12 +21,28 @@
             --success: #28A745;
             --warning: #FFC107;
             --danger: #DC3545;
+            --bg-primary: #667eea;
+            --bg-secondary: #764ba2;
+            --card-bg: white;
+            --text-color: #212529;
+            --text-light: #6c757d;
+        }
+
+        .dark-mode {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --card-bg: #2d3748;
+            --text-color: #f7fafc;
+            --text-light: #cbd5e0;
+            --light: #4a5568;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
             min-height: 100vh;
             padding: 20px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
         }
 
         .container {
@@ -35,7 +51,7 @@
         }
 
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             padding: 30px;
@@ -50,6 +66,7 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
+            position: relative;
         }
 
         .logo {
@@ -63,6 +80,28 @@
             color: white;
             font-size: 1.1rem;
             opacity: 0.9;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
         }
 
         .question-counter {
@@ -88,7 +127,7 @@
         }
 
         h2 {
-            color: var(--dark);
+            color: var(--text-color);
             margin-bottom: 20px;
             font-size: 1.5rem;
         }
@@ -109,6 +148,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            color: var(--text-color);
         }
 
         .option:hover {
@@ -150,6 +190,17 @@
             transform: none;
         }
 
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
         .result-card {
             text-align: center;
         }
@@ -170,18 +221,23 @@
             margin-bottom: 20px;
             text-align: left;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
         }
 
         .course-title {
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--dark);
+            color: var(--text-color);
             margin-bottom: 10px;
+            display: flex;
+            justify-content: between;
+            align-items: center;
         }
 
         .course-info {
             margin-bottom: 10px;
             line-height: 1.6;
+            color: var(--text-color);
         }
 
         .course-tags {
@@ -198,6 +254,67 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 500;
+        }
+
+        .market-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(46, 134, 171, 0.05);
+            border-radius: 10px;
+        }
+
+        .market-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .market-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .market-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #ccc;
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .favorite-btn.favorited {
+            color: #ff6b6b;
+        }
+
+        .favorites-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(46, 134, 171, 0.1);
+        }
+
+        .favorites-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .hidden {
@@ -231,6 +348,8 @@
             border: 2px solid #e9ecef;
             border-radius: 12px;
             font-size: 1rem;
+            background: var(--card-bg);
+            color: var(--text-color);
         }
         
         .results-header {
@@ -256,7 +375,7 @@
         .filter-btn {
             padding: 8px 16px;
             border: 2px solid var(--primary);
-            background: white;
+            background: var(--card-bg);
             color: var(--primary);
             border-radius: 20px;
             cursor: pointer;
@@ -348,12 +467,22 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            
+            .market-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-toggle {
+                position: relative;
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <button class="theme-toggle" id="theme-toggle">🌙</button>
             <div class="logo">UniMatch</div>
             <div class="tagline">Encontre o curso perfeito para seu futuro</div>
         </div>
@@ -419,6 +548,17 @@
             <button class="view-all-btn" id="view-all-btn" style="display: none;">
                 Ver Todos os Cursos
             </button>
+
+            <!-- Seção de Favoritos -->
+            <div class="favorites-section hidden" id="favorites-section">
+                <div class="favorites-header">
+                    <h2>Meus Cursos Favoritos</h2>
+                    <button class="btn btn-secondary" id="clear-favorites">Limpar Favoritos</button>
+                </div>
+                <div id="favorites-container">
+                    <!-- Cursos favoritos serão inseridos aqui -->
+                </div>
+            </div>
             
             <button class="btn" id="restart-btn">Fazer Novamente</button>
         </div>
@@ -525,681 +665,970 @@
             }
         ];
 
-        // Base de dados de cursos
-        const courses = {
-            "Administração": {
-                area: "negocios",
-                descricao: "Gestão de organizações, recursos e pessoas para maximizar resultados e eficiência.",
-                carreiras: "Gerente, consultor, empreendedor, analista, diretor.",
-                notaCorte: "720-760",
-                tags: ["Gestão", "Liderança", "Estratégia"]
-            },
-            "Arquitetura e urbanismo": {
-                area: "artes",
-                descricao: "Projeto de espaços habitáveis, considerando estética, funcionalidade e sustentabilidade.",
-                carreiras: "Arquiteto, urbanista, paisagista, designer de interiores.",
-                notaCorte: "760-800",
-                tags: ["Design", "Urbanismo", "Projetos"]
-            },
-            "Artes cênicas": {
-                area: "artes",
-                descricao: "Estudo e prática das artes performáticas como teatro, dança e performance.",
-                carreiras: "Ator, diretor, coreógrafo, produtor cultural, professor.",
-                notaCorte: "650-700",
-                tags: ["Teatro", "Dança", "Performance"]
-            },
-            "Artes visuais": {
-                area: "artes",
-                descricao: "Criação e análise de obras visuais como pintura, escultura, fotografia e digital.",
-                carreiras: "Artista plástico, curador, crítico de arte, professor.",
-                notaCorte: "640-690",
-                tags: ["Arte", "Criatividade", "Expressão"]
-            },
-            "Astronomia": {
-                area: "exatas",
-                descricao: "Estudo dos corpos celestes, universo e fenômenos astronômicos.",
-                carreiras: "Astrônomo, pesquisador, professor, divulgador científico.",
-                notaCorte: "750-790",
-                tags: ["Ciência", "Espaço", "Pesquisa"]
-            },
-            "Audiovisual": {
-                area: "artes",
-                descricao: "Produção e criação de conteúdos para cinema, TV e mídias digitais.",
-                carreiras: "Cineasta, produtor, editor, diretor de fotografia.",
-                notaCorte: "710-750",
-                tags: ["Cinema", "TV", "Produção"]
-            },
-            "Biblioteconomia": {
-                area: "humanas",
-                descricao: "Organização, preservação e disseminação de informações e acervos.",
-                carreiras: "Bibliotecário, gestor de informação, arquivista.",
-                notaCorte: "620-670",
-                tags: ["Informação", "Organização", "Pesquisa"]
-            },
-            "Biotecnologia": {
-                area: "exatas",
-                descricao: "Aplicação de tecnologia em sistemas biológicos para desenvolvimento de produtos.",
-                carreiras: "Pesquisador, analista, desenvolvedor de bioprodutos.",
-                notaCorte: "770-810",
-                tags: ["Tecnologia", "Biologia", "Inovação"]
-            },
-            "Ciências agrárias": {
-                area: "ambiental",
-                descricao: "Estudo e aplicação de técnicas para produção agropecuária sustentável.",
-                carreiras: "Engenheiro agrônomo, técnico agrícola, pesquisador.",
-                notaCorte: "690-730",
-                tags: ["Agro", "Sustentabilidade", "Produção"]
-            },
-            "Ciências Atuariais": {
-                area: "exatas",
-                descricao: "Aplicação de matemática e estatística para análise de riscos em seguros e finanças.",
-                carreiras: "Atuário, analista de riscos, consultor financeiro.",
-                notaCorte: "740-780",
-                tags: ["Matemática", "Finanças", "Risco"]
-            },
-            "Ciências Biológicas": {
-                area: "ambiental",
-                descricao: "Estudo dos seres vivos, seus processos vitais e relações com o ambiente.",
-                carreiras: "Biólogo, pesquisador, professor, perito ambiental.",
-                notaCorte: "710-750",
-                tags: ["Biologia", "Pesquisa", "Natureza"]
-            },
-            "Ciências Biomédicas": {
-                area: "saude",
-                descricao: "Pesquisa e análise de processos biológicos relacionados à saúde humana.",
-                carreiras: "Pesquisador, analista biomédico, professor.",
-                notaCorte: "760-800",
-                tags: ["Pesquisa", "Saúde", "Laboratório"]
-            },
-            "Ciências Contábeis": {
-                area: "negocios",
-                descricao: "Gestão financeira, contabilidade e controle patrimonial de organizações.",
-                carreiras: "Contador, auditor, controller, consultor tributário.",
-                notaCorte: "700-740",
-                tags: ["Finanças", "Contabilidade", "Auditoria"]
-            },
-            "Ciências da Computação": {
-                area: "tecnologia",
-                descricao: "Desenvolvimento de software, algoritmos e sistemas computacionais.",
-                carreiras: "Desenvolvedor, cientista de dados, arquiteto de software.",
-                notaCorte: "780-820",
-                tags: ["Programação", "Tecnologia", "Inovação"]
-            },
-            "Ciência de Dados": {
-                area: "tecnologia",
-                descricao: "Análise e interpretação de dados complexos para tomada de decisões.",
-                carreiras: "Cientista de dados, analista, consultor de BI.",
-                notaCorte: "790-830",
-                tags: ["Dados", "Análise", "Tecnologia"]
-            },
-            "Ciências da Natureza": {
-                area: "ambiental",
-                descricao: "Estudo integrado de física, química e biologia em sistemas naturais.",
-                carreiras: "Pesquisador, professor, educador ambiental.",
-                notaCorte: "680-720",
-                tags: ["Natureza", "Ciência", "Educação"]
-            },
-            "Ciências dos Alimentos": {
-                area: "exatas",
-                descricao: "Estudo das propriedades, processamento e conservação de alimentos.",
-                carreiras: "Pesquisador, tecnólogo de alimentos, quality assurance.",
-                notaCorte: "720-760",
-                tags: ["Alimentos", "Qualidade", "Segurança"]
-            },
-            "Ciências Exatas": {
-                area: "exatas",
-                descricao: "Base teórica e aplicada de matemática, física e química.",
-                carreiras: "Pesquisador, professor, analista, consultor.",
-                notaCorte: "730-770",
-                tags: ["Matemática", "Física", "Química"]
-            },
-            "Ciências Físicas e Biomoleculares": {
-                area: "exatas",
-                descricao: "Interface entre física e biologia no estudo de sistemas moleculares.",
-                carreiras: "Pesquisador, biofísico, desenvolvedor de tecnologias médicas.",
-                notaCorte: "750-790",
-                tags: ["Física", "Biologia", "Pesquisa"]
-            },
-            "Ciências Sociais": {
-                area: "humanas",
-                descricao: "Análise das sociedades humanas, culturas e relações sociais.",
-                carreiras: "Pesquisador, consultor, analista social, professor.",
-                notaCorte: "670-710",
-                tags: ["Sociologia", "Pesquisa", "Sociedade"]
-            },
-            "Design": {
-                area: "artes",
-                descricao: "Criação de soluções visuais e funcionais para produtos e serviços.",
-                carreiras: "Designer gráfico, UX/UI designer, diretor de arte.",
-                notaCorte: "710-750",
-                tags: ["Criatividade", "Visual", "Inovação"]
-            },
-            "Direito": {
-                area: "humanas",
-                descricao: "Estudo das leis e aplicação da justiça na sociedade.",
-                carreiras: "Advogado, juiz, promotor, consultor jurídico.",
-                notaCorte: "790-830",
-                tags: ["Leis", "Justiça", "Advocacia"]
-            },
-            "Economia": {
-                area: "negocios",
-                descricao: "Análise da produção, distribuição e consumo de bens e serviços.",
-                carreiras: "Economista, analista, consultor, pesquisador.",
-                notaCorte: "750-790",
-                tags: ["Finanças", "Mercado", "Análise"]
-            },
-            "Editoração": {
-                area: "artes",
-                descricao: "Processos de edição, produção e publicação de conteúdos.",
-                carreiras: "Editor, produtor editorial, revisor, diagramador.",
-                notaCorte: "660-700",
-                tags: ["Edição", "Publicação", "Texto"]
-            },
-            "Educação Física e Esporte": {
-                area: "saude",
-                descricao: "Promoção da saúde e desempenho por meio de atividades físicas.",
-                carreiras: "Professor, personal trainer, preparador físico.",
-                notaCorte: "680-720",
-                tags: ["Esporte", "Saúde", "Movimento"]
-            },
-            "Educomunicação": {
-                area: "humanas",
-                descricao: "Interface entre educação e comunicação em processos de aprendizagem.",
-                carreiras: "Educador, produtor de conteúdo, consultor educacional.",
-                notaCorte: "650-690",
-                tags: ["Educação", "Comunicação", "Mídia"]
-            },
-            "Enfermagem": {
-                area: "saude",
-                descricao: "Cuidado integral à saúde humana em diferentes níveis de atenção.",
-                carreiras: "Enfermeiro, gestor hospitalar, educador em saúde.",
-                notaCorte: "730-770",
-                tags: ["Saúde", "Cuidado", "Hospital"]
-            },
-            "Engenharia Aeronáutica": {
-                area: "exatas",
-                descricao: "Projeto, construção e manutenção de aeronaves e sistemas aeroespaciais.",
-                carreiras: "Engenheiro aeronáutico, projetista, analista de sistemas.",
-                notaCorte: "790-830",
-                tags: ["Avião", "Espaço", "Tecnologia"]
-            },
-            "Engenharia Agronômica": {
-                area: "exatas",
-                descricao: "Aplicação de engenharia na produção agrícola e gestão rural.",
-                carreiras: "Engenheiro agrônomo, gestor rural, consultor agrícola.",
-                notaCorte: "720-760",
-                tags: ["Agricultura", "Produção", "Gestão"]
-            },
-            "Engenharia Ambiental": {
-                area: "exatas",
-                descricao: "Soluções tecnológicas para problemas ambientais e sustentabilidade.",
-                carreiras: "Engenheiro ambiental, consultor, gestor de recursos.",
-                notaCorte: "740-780",
-                tags: ["Meio Ambiente", "Sustentabilidade", "Tecnologia"]
-            },
-            "Engenharia Bioquímica": {
-                area: "exatas",
-                descricao: "Aplicação de processos bioquímicos em escala industrial.",
-                carreiras: "Engenheiro bioquímico, pesquisador, gestor de produção.",
-                notaCorte: "760-800",
-                tags: ["Bioquímica", "Indústria", "Pesquisa"]
-            },
-            "Engenharia Civil": {
-                area: "exatas",
-                descricao: "Projeto, construção e manutenção de edifícios, infraestrutura e obras.",
-                carreiras: "Engenheiro civil, projetista, fiscal, gestor de obras.",
-                notaCorte: "750-790",
-                tags: ["Construção", "Infraestrutura", "Projetos"]
-            },
-            "Engenharia de Alimentos": {
-                area: "exatas",
-                descricao: "Processamento, conservação e desenvolvimento de produtos alimentícios.",
-                carreiras: "Engenheiro de alimentos, pesquisador, gestor de qualidade.",
-                notaCorte: "740-780",
-                tags: ["Alimentos", "Processamento", "Qualidade"]
-            },
-            "Engenharia de Biossistemas": {
-                area: "exatas",
-                descricao: "Integração de sistemas biológicos com tecnologia e automação.",
-                carreiras: "Engenheiro de biossistemas, pesquisador, consultor.",
-                notaCorte: "730-770",
-                tags: ["Biotecnologia", "Automação", "Sistemas"]
-            },
-            "Engenharia de Computação": {
-                area: "tecnologia",
-                descricao: "Desenvolvimento de hardware e software integrados em sistemas computacionais.",
-                carreiras: "Engenheiro de computação, desenvolvedor, arquiteto de sistemas.",
-                notaCorte: "780-820",
-                tags: ["Hardware", "Software", "Tecnologia"]
-            },
-            "Engenharia de Materiais": {
-                area: "exatas",
-                descricao: "Desenvolvimento, processamento e aplicação de materiais inovadores.",
-                carreiras: "Engenheiro de materiais, pesquisador, desenvolvedor de produtos.",
-                notaCorte: "750-790",
-                tags: ["Materiais", "Inovação", "Pesquisa"]
-            },
-            "Engenharia de Materiais e Manufatura": {
-                area: "exatas",
-                descricao: "Processos de fabricação e transformação de materiais industriais.",
-                carreiras: "Engenheiro de produção, gestor industrial, pesquisador.",
-                notaCorte: "740-780",
-                tags: ["Manufatura", "Produção", "Materiais"]
-            },
-            "Engenharia de Minas": {
-                area: "exatas",
-                descricao: "Exploração, extração e beneficiamento de recursos minerais.",
-                carreiras: "Engenheiro de minas, gestor de projetos, pesquisador.",
-                notaCorte: "730-770",
-                tags: ["Mineração", "Recursos", "Extração"]
-            },
-            "Engenharia de Petróleo": {
-                area: "exatas",
-                descricao: "Exploração, produção e refino de petróleo e gás natural.",
-                carreiras: "Engenheiro de petróleo, gestor de campo, pesquisador.",
-                notaCorte: "770-810",
-                tags: ["Petróleo", "Energia", "Exploração"]
-            },
-            "Engenharia de Produção": {
-                area: "exatas",
-                descricao: "Otimização de sistemas produtivos e processos industriais.",
-                carreiras: "Engenheiro de produção, gestor industrial, consultor.",
-                notaCorte: "760-800",
-                tags: ["Produção", "Otimização", "Gestão"]
-            },
-            "Engenharia Elétrica": {
-                area: "exatas",
-                descricao: "Projeto e desenvolvimento de sistemas e componentes elétricos.",
-                carreiras: "Engenheiro eletricista, projetista, gestor de energia.",
-                notaCorte: "770-810",
-                tags: ["Eletricidade", "Energia", "Sistemas"]
-            },
-            "Engenharia Física": {
-                area: "exatas",
-                descricao: "Aplicação de princípios físicos no desenvolvimento de tecnologias.",
-                carreiras: "Engenheiro físico, pesquisador, desenvolvedor tecnológico.",
-                notaCorte: "760-800",
-                tags: ["Física", "Tecnologia", "Pesquisa"]
-            },
-            "Engenharia Florestal": {
-                area: "exatas",
-                descricao: "Manejo sustentável de florestas e recursos madeireiros.",
-                carreiras: "Engenheiro florestal, gestor ambiental, pesquisador.",
-                notaCorte: "700-740",
-                tags: ["Florestas", "Sustentabilidade", "Meio Ambiente"]
-            },
-            "Engenharia Mecânica": {
-                area: "exatas",
-                descricao: "Projeto, análise e manutenção de sistemas e componentes mecânicos.",
-                carreiras: "Engenheiro mecânico, projetista, gestor industrial.",
-                notaCorte: "770-810",
-                tags: ["Mecânica", "Projetos", "Indústria"]
-            },
-            "Engenharia Mecatrônica": {
-                area: "exatas",
-                descricao: "Integração de mecânica, eletrônica e computação em sistemas automatizados.",
-                carreiras: "Engenheiro mecatrônico, desenvolvedor de robótica, automação.",
-                notaCorte: "780-820",
-                tags: ["Robótica", "Automação", "Tecnologia"]
-            },
-            "Engenharia Metalúrgica": {
-                area: "exatas",
-                descricao: "Processamento e transformação de metais e ligas metálicas.",
-                carreiras: "Engenheiro metalúrgico, gestor de produção, pesquisador.",
-                notaCorte: "730-770",
-                tags: ["Metais", "Processamento", "Indústria"]
-            },
-            "Engenharia Naval": {
-                area: "exatas",
-                descricao: "Projeto, construção e manutenção de embarcações e estruturas offshore.",
-                carreiras: "Engenheiro naval, projetista, gestor de estaleiros.",
-                notaCorte: "750-790",
-                tags: ["Navios", "Oceanografia", "Projetos"]
-            },
-            "Engenharia Química": {
-                area: "exatas",
-                descricao: "Processos químicos industriais e desenvolvimento de produtos.",
-                carreiras: "Engenheiro químico, gestor de processos, pesquisador.",
-                notaCorte: "770-810",
-                tags: ["Química", "Processos", "Indústria"]
-            },
-            "Estatística": {
-                area: "exatas",
-                descricao: "Coleta, análise e interpretação de dados para tomada de decisões.",
-                carreiras: "Estatístico, analista de dados, pesquisador, consultor.",
-                notaCorte: "740-780",
-                tags: ["Dados", "Análise", "Matemática"]
-            },
-            "Farmácia": {
-                area: "saude",
-                descricao: "Desenvolvimento, produção e controle de medicamentos e cosméticos.",
-                carreiras: "Farmacêutico, pesquisador, gestor de laboratório.",
-                notaCorte: "750-790",
-                tags: ["Medicamentos", "Saúde", "Laboratório"]
-            },
-            "Filosofia": {
-                area: "humanas",
-                descricao: "Reflexão crítica sobre questões fundamentais da existência humana.",
-                carreiras: "Filósofo, professor, consultor, pesquisador.",
-                notaCorte: "630-670",
-                tags: ["Pensamento", "Reflexão", "Crítica"]
-            },
-            "Finanças e Negócios": {
-                area: "negocios",
-                descricao: "Gestão financeira estratégica e análise de oportunidades de negócios.",
-                carreiras: "Analista financeiro, gestor, consultor, investidor.",
-                notaCorte: "730-770",
-                tags: ["Finanças", "Negócios", "Estratégia"]
-            },
-            "Física": {
-                area: "exatas",
-                descricao: "Estudo das leis fundamentais que regem o universo e a matéria.",
-                carreiras: "Físico, pesquisador, professor, desenvolvedor tecnológico.",
-                notaCorte: "750-790",
-                tags: ["Ciência", "Pesquisa", "Universo"]
-            },
-            "Física Computacional": {
-                area: "tecnologia",
-                descricao: "Aplicação de computação na solução de problemas físicos complexos.",
-                carreiras: "Pesquisador, desenvolvedor de simulações, analista computacional.",
-                notaCorte: "760-800",
-                tags: ["Física", "Computação", "Simulação"]
-            },
-            "Física Médica": {
-                area: "saude",
-                descricao: "Aplicação de princípios físicos em diagnóstico e tratamento médico.",
-                carreiras: "Físico médico, pesquisador, desenvolvedor de equipamentos médicos.",
-                notaCorte: "770-810",
-                tags: ["Física", "Medicina", "Tecnologia"]
-            },
-            "Fisioterapia": {
-                area: "saude",
-                descricao: "Prevenção e tratamento de disfunções do movimento corporal.",
-                carreiras: "Fisioterapeuta, pesquisador, gestor em saúde.",
-                notaCorte: "740-780",
-                tags: ["Reabilitação", "Movimento", "Saúde"]
-            },
-            "Fonoaudiologia": {
-                area: "saude",
-                descricao: "Prevenção, avaliação e tratamento de distúrbios da comunicação.",
-                carreiras: "Fonoaudiólogo, pesquisador, professor, consultor.",
-                notaCorte: "730-770",
-                tags: ["Comunicação", "Saúde", "Terapia"]
-            },
-            "Geociências e Educação Ambiental": {
-                area: "ambiental",
-                descricao: "Estudo das ciências da terra integrado à educação ambiental.",
-                carreiras: "Geocientista, educador ambiental, pesquisador.",
-                notaCorte: "680-720",
-                tags: ["Terra", "Educação", "Meio Ambiente"]
-            },
-            "Geofísica": {
-                area: "exatas",
-                descricao: "Estudo da Terra por meio de métodos físicos e matemáticos.",
-                carreiras: "Geofísico, pesquisador, consultor em exploração.",
-                notaCorte: "730-770",
-                tags: ["Terra", "Física", "Exploração"]
-            },
-            "Geografia": {
-                area: "humanas",
-                descricao: "Análise do espaço geográfico e relações sociedade-natureza.",
-                carreiras: "Geógrafo, professor, pesquisador, planejador territorial.",
-                notaCorte: "670-710",
-                tags: ["Espaço", "Território", "Sociedade"]
-            },
-            "Geologia": {
-                area: "exatas",
-                descricao: "Estudo da composição, estrutura e história da Terra.",
-                carreiras: "Geólogo, pesquisador, consultor em mineração e petróleo.",
-                notaCorte: "720-760",
-                tags: ["Terra", "Rochas", "Recursos"]
-            },
-            "Gerontologia": {
-                area: "saude",
-                descricao: "Estudo do envelhecimento e cuidado com a população idosa.",
-                carreiras: "Gerontólogo, gestor de instituições, pesquisador.",
-                notaCorte: "650-690",
-                tags: ["Envelhecimento", "Saúde", "Cuidado"]
-            },
-            "Gestão Ambiental": {
-                area: "ambiental",
-                descricao: "Planejamento e gestão de recursos naturais e sustentabilidade.",
-                carreiras: "Gestor ambiental, consultor, analista de sustentabilidade.",
-                notaCorte: "690-730",
-                tags: ["Meio Ambiente", "Sustentabilidade", "Gestão"]
-            },
-            "Gestão de Políticas Públicas": {
-                area: "humanas",
-                descricao: "Formulação, implementação e avaliação de políticas governamentais.",
-                carreiras: "Gestor público, analista de políticas, consultor governamental.",
-                notaCorte: "700-740",
-                tags: ["Políticas", "Governo", "Gestão"]
-            },
-            "História": {
-                area: "humanas",
-                descricao: "Estudo e interpretação dos processos históricos e sociedades humanas.",
-                carreiras: "Historiador, professor, pesquisador, conservador cultural.",
-                notaCorte: "660-700",
-                tags: ["Passado", "Sociedade", "Cultura"]
-            },
-            "Informática Biomédica": {
-                area: "tecnologia",
-                descricao: "Aplicação de computação em soluções para saúde e medicina.",
-                carreiras: "Analista de sistemas de saúde, pesquisador, desenvolvedor.",
-                notaCorte: "750-790",
-                tags: ["Saúde", "Tecnologia", "Computação"]
-            },
-            "Jornalismo": {
-                area: "artes",
-                descricao: "Apuração, produção e disseminação de informações jornalísticas.",
-                carreiras: "Jornalista, editor, repórter, produtor de conteúdo.",
-                notaCorte: "710-750",
-                tags: ["Notícias", "Comunicação", "Mídia"]
-            },
-            "Lazer e Turismo": {
-                area: "humanas",
-                descricao: "Planejamento e gestão de atividades de lazer e serviços turísticos.",
-                carreiras: "Gestor de turismo, planejador, consultor, empreendedor.",
-                notaCorte: "650-690",
-                tags: ["Turismo", "Lazer", "Hospitalidade"]
-            },
-            "Letras": {
-                area: "humanas",
-                descricao: "Estudo de línguas, literaturas e manifestações culturais.",
-                carreiras: "Professor, tradutor, revisor, pesquisador linguístico.",
-                notaCorte: "640-680",
-                tags: ["Línguas", "Literatura", "Cultura"]
-            },
-            "Marketing": {
-                area: "negocios",
-                descricao: "Estratégias de mercado, comunicação e relacionamento com consumidores.",
-                carreiras: "Profissional de marketing, gestor de marcas, analista de mercado.",
-                notaCorte: "710-750",
-                tags: ["Mercado", "Comunicação", "Vendas"]
-            },
-            "Matemática": {
-                area: "exatas",
-                descricao: "Estudo de estruturas abstratas, padrões e relações quantitativas.",
-                carreiras: "Matemático, professor, pesquisador, analista.",
-                notaCorte: "730-770",
-                tags: ["Números", "Lógica", "Abstração"]
-            },
-            "Matemática Aplicada": {
-                area: "exatas",
-                descricao: "Aplicação de métodos matemáticos na solução de problemas práticos.",
-                carreiras: "Matemático aplicado, pesquisador, analista quantitativo.",
-                notaCorte: "740-780",
-                tags: ["Matemática", "Aplicação", "Problemas"]
-            },
-            "Matemática Aplicada a Negócios": {
-                area: "negocios",
-                descricao: "Uso de ferramentas matemáticas em análise de negócios e finanças.",
-                carreiras: "Analista quantitativo, consultor financeiro, gestor de riscos.",
-                notaCorte: "720-760",
-                tags: ["Matemática", "Negócios", "Finanças"]
-            },
-            "Matemática Aplicada e Computação Científica": {
-                area: "tecnologia",
-                descricao: "Desenvolvimento de algoritmos e modelos computacionais para ciência.",
-                carreiras: "Pesquisador, desenvolvedor de algoritmos, analista computacional.",
-                notaCorte: "760-800",
-                tags: ["Matemática", "Computação", "Ciência"]
-            },
-            "Matemática Aplicada e Computacional": {
-                area: "tecnologia",
-                descricao: "Integração entre matemática e computação para resolver problemas complexos.",
-                carreiras: "Matemático computacional, desenvolvedor, pesquisador.",
-                notaCorte: "750-790",
-                tags: ["Matemática", "Computação", "Modelagem"]
-            },
-            "Medicina": {
-                area: "saude",
-                descricao: "Formação para diagnóstico, tratamento e prevenção de doenças humanas.",
-                carreiras: "Médico generalista, especialista, pesquisador, professor.",
-                notaCorte: "820-860",
-                tags: ["Saúde", "Ciências Biológicas", "Assistência"]
-            },
-            "Medicina Veterinária": {
-                area: "saude",
-                descricao: "Cuidado com a saúde animal, prevenção e tratamento de doenças.",
-                carreiras: "Médico veterinário, pesquisador, gestor de saúde animal.",
-                notaCorte: "750-790",
-                tags: ["Animais", "Saúde", "Clínica"]
-            },
-            "Meteorologia": {
-                area: "exatas",
-                descricao: "Estudo dos fenômenos atmosféricos e previsão do tempo.",
-                carreiras: "Meteorologista, pesquisador, analista climático.",
-                notaCorte: "720-760",
-                tags: ["Clima", "Tempo", "Atmosfera"]
-            },
-            "Música": {
-                area: "artes",
-                descricao: "Estudo teórico e prático da linguagem e execução musical.",
-                carreiras: "Músico, compositor, professor, regente, produtor musical.",
-                notaCorte: "660-700",
-                tags: ["Som", "Arte", "Expressão"]
-            },
-            "Nutrição": {
-                area: "saude",
-                descricao: "Estudo da alimentação e sua relação com a saúde humana.",
-                carreiras: "Nutricionista, pesquisador, consultor alimentar.",
-                notaCorte: "730-770",
-                tags: ["Alimentação", "Saúde", "Prevenção"]
-            },
-            "Nutrição e Metabolismo": {
-                area: "saude",
-                descricao: "Aprofundamento nos processos metabólicos e nutrição clínica.",
-                carreiras: "Nutricionista clínico, pesquisador, especialista em metabolismo.",
-                notaCorte: "740-780",
-                tags: ["Nutrição", "Metabolismo", "Clínica"]
-            },
-            "Obstetrícia": {
-                area: "saude",
-                descricao: "Cuidado especializado com a saúde da mulher, gestação e parto.",
-                carreiras: "Obstetra, enfermeiro obstetra, educador perinatal.",
-                notaCorte: "720-760",
-                tags: ["Gestação", "Parto", "Saúde da Mulher"]
-            },
-            "Oceanografia": {
-                area: "ambiental",
-                descricao: "Estudo dos oceanos, mares e zonas costeiras.",
-                carreiras: "Oceanógrafo, pesquisador, consultor ambiental.",
-                notaCorte: "710-750",
-                tags: ["Oceanos", "Meio Ambiente", "Pesquisa"]
-            },
-            "Odontologia": {
-                area: "saude",
-                descricao: "Prevenção, diagnóstico e tratamento de doenças bucais.",
-                carreiras: "Dentista, cirurgião-dentista, pesquisador, professor.",
-                notaCorte: "780-820",
-                tags: ["Saúde Bucal", "Dentística", "Clínica"]
-            },
-            "Pedagogia": {
-                area: "humanas",
-                descricao: "Estudo dos processos de ensino e aprendizagem em diferentes contextos.",
-                carreiras: "Pedagogo, professor, gestor educacional, orientador.",
-                notaCorte: "650-690",
-                tags: ["Educação", "Ensino", "Aprendizagem"]
-            },
-            "Psicologia": {
-                area: "saude",
-                descricao: "Ciência que estuda o comportamento humano e processos mentais.",
-                carreiras: "Psicólogo clínico, organizacional, escolar, social.",
-                notaCorte: "780-820",
-                tags: ["Saúde Mental", "Comportamento", "Terapia"]
-            },
-            "Publicidade e Propaganda": {
-                area: "artes",
-                descricao: "Criação e gestão de campanhas publicitárias e comunicação mercadológica.",
-                carreiras: "Publicitário, diretor de criação, planejador, gestor de accounts.",
-                notaCorte: "710-750",
-                tags: ["Propaganda", "Comunicação", "Criatividade"]
-            },
-            "Química": {
-                area: "exatas",
-                descricao: "Estudo da matéria, suas transformações e propriedades.",
-                carreiras: "Químico, pesquisador, professor, analista laboratorial.",
-                notaCorte: "720-760",
-                tags: ["Matéria", "Transformação", "Laboratório"]
-            },
-            "Relações Internacionais": {
-                area: "humanas",
-                descricao: "Análise das relações entre Estados, organizações e atores globais.",
-                carreiras: "Diplomata, analista internacional, gestor de projetos globais.",
-                notaCorte: "740-780",
-                tags: ["Global", "Diplomacia", "Política"]
-            },
-            "Relações Públicas": {
-                area: "artes",
-                descricao: "Gestão da comunicação e imagem entre organizações e seus públicos.",
-                carreiras: "Relações públicas, gestor de comunicação, assessor de imprensa.",
-                notaCorte: "680-720",
-                tags: ["Comunicação", "Imagem", "Gestão"]
-            },
-            "Saúde Pública": {
-                area: "saude",
-                descricao: "Promoção, proteção e recuperação da saúde em nível populacional.",
-                carreiras: "Sanitarista, gestor em saúde, pesquisador, educador.",
-                notaCorte: "700-740",
-                tags: ["Saúde Coletiva", "Prevenção", "Políticas"]
-            },
-            "Sistemas de Informação": {
-                area: "tecnologia",
-                descricao: "Gestão e desenvolvimento de sistemas de informação organizacionais.",
-                carreiras: "Analista de sistemas, gestor de TI, desenvolvedor, consultor.",
-                notaCorte: "730-770",
-                tags: ["Sistemas", "TI", "Gestão"]
-            },
-            "Terapia Ocupacional": {
-                area: "saude",
-                descricao: "Uso de atividades terapêuticas na reabilitação e inclusão social.",
-                carreiras: "Terapeuta ocupacional, pesquisador, gestor em saúde.",
-                notaCorte: "710-750",
-                tags: ["Reabilitação", "Inclusão", "Terapia"]
-            },
-            "Têxtil e Moda": {
-                area: "artes",
-                descricao: "Criação, produção e gestão no universo têxtil e de moda.",
-                carreiras: "Estilista, gestor de produção têxtil, consultor de moda.",
-                notaCorte: "670-710",
-                tags: ["Moda", "Têxtil", "Criação"]
-            },
-            "Turismo": {
-                area: "humanas",
-                descricao: "Planejamento, organização e gestão de serviços e produtos turísticos.",
-                carreiras: "Gestor de turismo, agente de viagens, planejador turístico.",
-                notaCorte: "640-680",
-                tags: ["Viagens", "Hospitalidade", "Lazer"]
-            },
-            "Zootecnia": {
-                area: "ambiental",
-                descricao: "Produção, manejo e conservação de animais domésticos e silvestres.",
-                carreiras: "Zootecnista, gestor de produção animal, pesquisador.",
-                notaCorte: "690-730",
-                tags: ["Animais", "Produção", "Manejo"]
-            }
-        };
+        // Base de dados de cursos ATUALIZADA com dados de mercado
+ // Base de dados de cursos COMPLETA com dados de mercado
+const courses = {
+    "Administração": {
+        area: "negocios",
+        descricao: "Gestão de organizações, recursos e pessoas para maximizar resultados e eficiência.",
+        carreiras: "Gerente, consultor, empreendedor, analista, diretor.",
+        notaCorte: "720-760",
+        tags: ["Gestão", "Liderança", "Estratégia"],
+        salarioMedio: "R$ 4.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Arquitetura e urbanismo": {
+        area: "artes",
+        descricao: "Projeto de espaços habitáveis, considerando estética, funcionalidade e sustentabilidade.",
+        carreiras: "Arquiteto, urbanista, paisagista, designer de interiores.",
+        notaCorte: "760-800",
+        tags: ["Design", "Urbanismo", "Projetos"],
+        salarioMedio: "R$ 3.800 - R$ 9.000",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Artes cênicas": {
+        area: "artes",
+        descricao: "Estudo e prática das artes performáticas como teatro, dança e performance.",
+        carreiras: "Ator, diretor, coreógrafo, produtor cultural, professor.",
+        notaCorte: "650-700",
+        tags: ["Teatro", "Dança", "Performance"],
+        salarioMedio: "R$ 2.500 - R$ 6.000",
+        empregabilidade: "Baixa",
+        demanda: "Competitiva"
+    },
+    "Artes visuais": {
+        area: "artes",
+        descricao: "Criação e análise de obras visuais como pintura, escultura, fotografia e digital.",
+        carreiras: "Artista plástico, curador, crítico de arte, professor.",
+        notaCorte: "640-690",
+        tags: ["Arte", "Criatividade", "Expressão"],
+        salarioMedio: "R$ 2.800 - R$ 7.000",
+        empregabilidade: "Média",
+        demanda: "Competitiva"
+    },
+    "Astronomia": {
+        area: "exatas",
+        descricao: "Estudo dos corpos celestes, universo e fenômenos astronômicos.",
+        carreiras: "Astrônomo, pesquisador, professor, divulgador científico.",
+        notaCorte: "750-790",
+        tags: ["Ciência", "Espaço", "Pesquisa"],
+        salarioMedio: "R$ 6.000 - R$ 15.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Audiovisual": {
+        area: "artes",
+        descricao: "Produção e criação de conteúdos para cinema, TV e mídias digitais.",
+        carreiras: "Cineasta, produtor, editor, diretor de fotografia.",
+        notaCorte: "710-750",
+        tags: ["Cinema", "TV", "Produção"],
+        salarioMedio: "R$ 3.200 - R$ 8.500",
+        empregabilidade: "Média",
+        demanda: "Crescendo"
+    },
+    "Biblioteconomia": {
+        area: "humanas",
+        descricao: "Organização, preservação e disseminação de informações e acervos.",
+        carreiras: "Bibliotecário, gestor de informação, arquivista.",
+        notaCorte: "620-670",
+        tags: ["Informação", "Organização", "Pesquisa"],
+        salarioMedio: "R$ 3.000 - R$ 6.500",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Biotecnologia": {
+        area: "exatas",
+        descricao: "Aplicação de tecnologia em sistemas biológicos para desenvolvimento de produtos.",
+        carreiras: "Pesquisador, analista, desenvolvedor de bioprodutos.",
+        notaCorte: "770-810",
+        tags: ["Tecnologia", "Biologia", "Inovação"],
+        salarioMedio: "R$ 5.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Ciências agrárias": {
+        area: "ambiental",
+        descricao: "Estudo e aplicação de técnicas para produção agropecuária sustentável.",
+        carreiras: "Engenheiro agrônomo, técnico agrícola, pesquisador.",
+        notaCorte: "690-730",
+        tags: ["Agro", "Sustentabilidade", "Produção"],
+        salarioMedio: "R$ 4.000 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Ciências Atuariais": {
+        area: "exatas",
+        descricao: "Aplicação de matemática e estatística para análise de riscos em seguros e finanças.",
+        carreiras: "Atuário, analista de riscos, consultor financeiro.",
+        notaCorte: "740-780",
+        tags: ["Matemática", "Finanças", "Risco"],
+        salarioMedio: "R$ 5.000 - R$ 11.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Ciências Biológicas": {
+        area: "ambiental",
+        descricao: "Estudo dos seres vivos, seus processos vitais e relações com o ambiente.",
+        carreiras: "Biólogo, pesquisador, professor, perito ambiental.",
+        notaCorte: "710-750",
+        tags: ["Biologia", "Pesquisa", "Natureza"],
+        salarioMedio: "R$ 3.500 - R$ 8.000",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Ciências Biomédicas": {
+        area: "saude",
+        descricao: "Pesquisa e análise de processos biológicos relacionados à saúde humana.",
+        carreiras: "Pesquisador, analista biomédico, professor.",
+        notaCorte: "760-800",
+        tags: ["Pesquisa", "Saúde", "Laboratório"],
+        salarioMedio: "R$ 4.500 - R$ 10.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Ciências Contábeis": {
+        area: "negocios",
+        descricao: "Gestão financeira, contabilidade e controle patrimonial de organizações.",
+        carreiras: "Contador, auditor, controller, consultor tributário.",
+        notaCorte: "700-740",
+        tags: ["Finanças", "Contabilidade", "Auditoria"],
+        salarioMedio: "R$ 4.000 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Ciências da Computação": {
+        area: "tecnologia",
+        descricao: "Desenvolvimento de software, algoritmos e sistemas computacionais.",
+        carreiras: "Desenvolvedor, cientista de dados, arquiteto de software.",
+        notaCorte: "780-820",
+        tags: ["Programação", "Tecnologia", "Inovação"],
+        salarioMedio: "R$ 4.000 - R$ 15.000",
+        empregabilidade: "Muito Alta",
+        demanda: "Crescendo"
+    },
+    "Ciência de Dados": {
+        area: "tecnologia",
+        descricao: "Análise e interpretação de dados complexos para tomada de decisões.",
+        carreiras: "Cientista de dados, analista, consultor de BI.",
+        notaCorte: "790-830",
+        tags: ["Dados", "Análise", "Tecnologia"],
+        salarioMedio: "R$ 5.000 - R$ 18.000",
+        empregabilidade: "Muito Alta",
+        demanda: "Crescendo"
+    },
+    "Ciências da Natureza": {
+        area: "ambiental",
+        descricao: "Estudo integrado de física, química e biologia em sistemas naturais.",
+        carreiras: "Pesquisador, professor, educador ambiental.",
+        notaCorte: "680-720",
+        tags: ["Natureza", "Ciência", "Educação"],
+        salarioMedio: "R$ 3.800 - R$ 7.500",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Ciências dos Alimentos": {
+        area: "exatas",
+        descricao: "Estudo das propriedades, processamento e conservação de alimentos.",
+        carreiras: "Pesquisador, tecnólogo de alimentos, quality assurance.",
+        notaCorte: "720-760",
+        tags: ["Alimentos", "Qualidade", "Segurança"],
+        salarioMedio: "R$ 4.200 - R$ 8.500",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Ciências Exatas": {
+        area: "exatas",
+        descricao: "Base teórica e aplicada de matemática, física e química.",
+        carreiras: "Pesquisador, professor, analista, consultor.",
+        notaCorte: "730-770",
+        tags: ["Matemática", "Física", "Química"],
+        salarioMedio: "R$ 5.000 - R$ 11.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Ciências Físicas e Biomoleculares": {
+        area: "exatas",
+        descricao: "Interface entre física e biologia no estudo de sistemas moleculares.",
+        carreiras: "Pesquisador, biofísico, desenvolvedor de tecnologias médicas.",
+        notaCorte: "750-790",
+        tags: ["Física", "Biologia", "Pesquisa"],
+        salarioMedio: "R$ 5.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Ciências Sociais": {
+        area: "humanas",
+        descricao: "Análise das sociedades humanas, culturas e relações sociais.",
+        carreiras: "Pesquisador, consultor, analista social, professor.",
+        notaCorte: "670-710",
+        tags: ["Sociologia", "Pesquisa", "Sociedade"],
+        salarioMedio: "R$ 3.200 - R$ 7.000",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Design": {
+        area: "artes",
+        descricao: "Criação de soluções visuais e funcionais para produtos e serviços.",
+        carreiras: "Designer gráfico, UX/UI designer, diretor de arte.",
+        notaCorte: "710-750",
+        tags: ["Criatividade", "Visual", "Inovação"],
+        salarioMedio: "R$ 3.500 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Direito": {
+        area: "humanas",
+        descricao: "Estudo das leis e aplicação da justiça na sociedade.",
+        carreiras: "Advogado, juiz, promotor, consultor jurídico.",
+        notaCorte: "790-830",
+        tags: ["Leis", "Justiça", "Advocacia"],
+        salarioMedio: "R$ 3.000 - R$ 20.000",
+        empregabilidade: "Alta",
+        demanda: "Competitiva"
+    },
+    "Economia": {
+        area: "negocios",
+        descricao: "Análise da produção, distribuição e consumo de bens e serviços.",
+        carreiras: "Economista, analista, consultor, pesquisador.",
+        notaCorte: "750-790",
+        tags: ["Finanças", "Mercado", "Análise"],
+        salarioMedio: "R$ 5.000 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Editoração": {
+        area: "artes",
+        descricao: "Processos de edição, produção e publicação de conteúdos.",
+        carreiras: "Editor, produtor editorial, revisor, diagramador.",
+        notaCorte: "660-700",
+        tags: ["Edição", "Publicação", "Texto"],
+        salarioMedio: "R$ 2.800 - R$ 6.500",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Educação Física e Esporte": {
+        area: "saude",
+        descricao: "Promoção da saúde e desempenho por meio de atividades físicas.",
+        carreiras: "Professor, personal trainer, preparador físico.",
+        notaCorte: "680-720",
+        tags: ["Esporte", "Saúde", "Movimento"],
+        salarioMedio: "R$ 2.800 - R$ 7.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Educomunicação": {
+        area: "humanas",
+        descricao: "Interface entre educação e comunicação em processos de aprendizagem.",
+        carreiras: "Educador, produtor de conteúdo, consultor educacional.",
+        notaCorte: "650-690",
+        tags: ["Educação", "Comunicação", "Mídia"],
+        salarioMedio: "R$ 3.000 - R$ 6.800",
+        empregabilidade: "Média",
+        demanda: "Crescendo"
+    },
+    "Enfermagem": {
+        area: "saude",
+        descricao: "Cuidado integral à saúde humana em diferentes níveis de atenção.",
+        carreiras: "Enfermeiro, gestor hospitalar, educador em saúde.",
+        notaCorte: "730-770",
+        tags: ["Saúde", "Cuidado", "Hospital"],
+        salarioMedio: "R$ 3.500 - R$ 8.000",
+        empregabilidade: "Muito Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia Aeronáutica": {
+        area: "exatas",
+        descricao: "Projeto, construção e manutenção de aeronaves e sistemas aeroespaciais.",
+        carreiras: "Engenheiro aeronáutico, projetista, analista de sistemas.",
+        notaCorte: "790-830",
+        tags: ["Avião", "Espaço", "Tecnologia"],
+        salarioMedio: "R$ 6.000 - R$ 15.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia Agronômica": {
+        area: "exatas",
+        descricao: "Aplicação de engenharia na produção agrícola e gestão rural.",
+        carreiras: "Engenheiro agrônomo, gestor rural, consultor agrícola.",
+        notaCorte: "720-760",
+        tags: ["Agricultura", "Produção", "Gestão"],
+        salarioMedio: "R$ 4.500 - R$ 10.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia Ambiental": {
+        area: "exatas",
+        descricao: "Soluções tecnológicas para problemas ambientais e sustentabilidade.",
+        carreiras: "Engenheiro ambiental, consultor, gestor de recursos.",
+        notaCorte: "740-780",
+        tags: ["Meio Ambiente", "Sustentabilidade", "Tecnologia"],
+        salarioMedio: "R$ 4.800 - R$ 9.500",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia Bioquímica": {
+        area: "exatas",
+        descricao: "Aplicação de processos bioquímicos em escala industrial.",
+        carreiras: "Engenheiro bioquímico, pesquisador, gestor de produção.",
+        notaCorte: "760-800",
+        tags: ["Bioquímica", "Indústria", "Pesquisa"],
+        salarioMedio: "R$ 5.200 - R$ 11.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia Civil": {
+        area: "exatas",
+        descricao: "Projeto, construção e manutenção de edifícios, infraestrutura e obras.",
+        carreiras: "Engenheiro civil, projetista, fiscal, gestor de obras.",
+        notaCorte: "750-790",
+        tags: ["Construção", "Infraestrutura", "Projetos"],
+        salarioMedio: "R$ 5.000 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia de Alimentos": {
+        area: "exatas",
+        descricao: "Processamento, conservação e desenvolvimento de produtos alimentícios.",
+        carreiras: "Engenheiro de alimentos, pesquisador, gestor de qualidade.",
+        notaCorte: "740-780",
+        tags: ["Alimentos", "Processamento", "Qualidade"],
+        salarioMedio: "R$ 4.500 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia de Biossistemas": {
+        area: "exatas",
+        descricao: "Integração de sistemas biológicos com tecnologia e automação.",
+        carreiras: "Engenheiro de biossistemas, pesquisador, consultor.",
+        notaCorte: "730-770",
+        tags: ["Biotecnologia", "Automação", "Sistemas"],
+        salarioMedio: "R$ 4.800 - R$ 10.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia de Computação": {
+        area: "tecnologia",
+        descricao: "Desenvolvimento de hardware e software integrados em sistemas computacionais.",
+        carreiras: "Engenheiro de computação, desenvolvedor, arquiteto de sistemas.",
+        notaCorte: "780-820",
+        tags: ["Hardware", "Software", "Tecnologia"],
+        salarioMedio: "R$ 4.500 - R$ 14.000",
+        empregabilidade: "Muito Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia de Materiais": {
+        area: "exatas",
+        descricao: "Desenvolvimento, processamento e aplicação de materiais inovadores.",
+        carreiras: "Engenheiro de materiais, pesquisador, desenvolvedor de produtos.",
+        notaCorte: "750-790",
+        tags: ["Materiais", "Inovação", "Pesquisa"],
+        salarioMedio: "R$ 5.000 - R$ 11.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia de Materiais e Manufatura": {
+        area: "exatas",
+        descricao: "Processos de fabricação e transformação de materiais industriais.",
+        carreiras: "Engenheiro de produção, gestor industrial, pesquisador.",
+        notaCorte: "740-780",
+        tags: ["Manufatura", "Produção", "Materiais"],
+        salarioMedio: "R$ 4.800 - R$ 10.500",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia de Minas": {
+        area: "exatas",
+        descricao: "Exploração, extração e beneficiamento de recursos minerais.",
+        carreiras: "Engenheiro de minas, gestor de projetos, pesquisador.",
+        notaCorte: "730-770",
+        tags: ["Mineração", "Recursos", "Extração"],
+        salarioMedio: "R$ 6.000 - R$ 13.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia de Petróleo": {
+        area: "exatas",
+        descricao: "Exploração, produção e refino de petróleo e gás natural.",
+        carreiras: "Engenheiro de petróleo, gestor de campo, pesquisador.",
+        notaCorte: "770-810",
+        tags: ["Petróleo", "Energia", "Exploração"],
+        salarioMedio: "R$ 7.000 - R$ 16.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia de Produção": {
+        area: "exatas",
+        descricao: "Otimização de sistemas produtivos e processos industriais.",
+        carreiras: "Engenheiro de produção, gestor industrial, consultor.",
+        notaCorte: "760-800",
+        tags: ["Produção", "Otimização", "Gestão"],
+        salarioMedio: "R$ 5.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia Elétrica": {
+        area: "exatas",
+        descricao: "Projeto e desenvolvimento de sistemas e componentes elétricos.",
+        carreiras: "Engenheiro eletricista, projetista, gestor de energia.",
+        notaCorte: "770-810",
+        tags: ["Eletricidade", "Energia", "Sistemas"],
+        salarioMedio: "R$ 5.000 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia Física": {
+        area: "exatas",
+        descricao: "Aplicação de princípios físicos no desenvolvimento de tecnologias.",
+        carreiras: "Engenheiro físico, pesquisador, desenvolvedor tecnológico.",
+        notaCorte: "760-800",
+        tags: ["Física", "Tecnologia", "Pesquisa"],
+        salarioMedio: "R$ 5.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia Florestal": {
+        area: "exatas",
+        descricao: "Manejo sustentável de florestas e recursos madeireiros.",
+        carreiras: "Engenheiro florestal, gestor ambiental, pesquisador.",
+        notaCorte: "700-740",
+        tags: ["Florestas", "Sustentabilidade", "Meio Ambiente"],
+        salarioMedio: "R$ 4.200 - R$ 8.500",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Engenharia Mecânica": {
+        area: "exatas",
+        descricao: "Projeto, análise e manutenção de sistemas e componentes mecânicos.",
+        carreiras: "Engenheiro mecânico, projetista, gestor industrial.",
+        notaCorte: "770-810",
+        tags: ["Mecânica", "Projetos", "Indústria"],
+        salarioMedio: "R$ 5.000 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia Mecatrônica": {
+        area: "exatas",
+        descricao: "Integração de mecânica, eletrônica e computação em sistemas automatizados.",
+        carreiras: "Engenheiro mecatrônico, desenvolvedor de robótica, automação.",
+        notaCorte: "780-820",
+        tags: ["Robótica", "Automação", "Tecnologia"],
+        salarioMedio: "R$ 5.000 - R$ 13.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Engenharia Metalúrgica": {
+        area: "exatas",
+        descricao: "Processamento e transformação de metais e ligas metálicas.",
+        carreiras: "Engenheiro metalúrgico, gestor de produção, pesquisador.",
+        notaCorte: "730-770",
+        tags: ["Metais", "Processamento", "Indústria"],
+        salarioMedio: "R$ 5.000 - R$ 11.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia Naval": {
+        area: "exatas",
+        descricao: "Projeto, construção e manutenção de embarcações e estruturas offshore.",
+        carreiras: "Engenheiro naval, projetista, gestor de estaleiros.",
+        notaCorte: "750-790",
+        tags: ["Navios", "Oceanografia", "Projetos"],
+        salarioMedio: "R$ 5.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Engenharia Química": {
+        area: "exatas",
+        descricao: "Processos químicos industriais e desenvolvimento de produtos.",
+        carreiras: "Engenheiro químico, gestor de processos, pesquisador.",
+        notaCorte: "770-810",
+        tags: ["Química", "Processos", "Indústria"],
+        salarioMedio: "R$ 5.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Estatística": {
+        area: "exatas",
+        descricao: "Coleta, análise e interpretação de dados para tomada de decisões.",
+        carreiras: "Estatístico, analista de dados, pesquisador, consultor.",
+        notaCorte: "740-780",
+        tags: ["Dados", "Análise", "Matemática"],
+        salarioMedio: "R$ 4.500 - R$ 10.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Farmácia": {
+        area: "saude",
+        descricao: "Desenvolvimento, produção e controle de medicamentos e cosméticos.",
+        carreiras: "Farmacêutico, pesquisador, gestor de laboratório.",
+        notaCorte: "750-790",
+        tags: ["Medicamentos", "Saúde", "Laboratório"],
+        salarioMedio: "R$ 3.800 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Filosofia": {
+        area: "humanas",
+        descricao: "Reflexão crítica sobre questões fundamentais da existência humana.",
+        carreiras: "Filósofo, professor, consultor, pesquisador.",
+        notaCorte: "630-670",
+        tags: ["Pensamento", "Reflexão", "Crítica"],
+        salarioMedio: "R$ 2.800 - R$ 6.000",
+        empregabilidade: "Baixa",
+        demanda: "Competitiva"
+    },
+    "Finanças e Negócios": {
+        area: "negocios",
+        descricao: "Gestão financeira estratégica e análise de oportunidades de negócios.",
+        carreiras: "Analista financeiro, gestor, consultor, investidor.",
+        notaCorte: "730-770",
+        tags: ["Finanças", "Negócios", "Estratégia"],
+        salarioMedio: "R$ 4.500 - R$ 11.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Física": {
+        area: "exatas",
+        descricao: "Estudo das leis fundamentais que regem o universo e a matéria.",
+        carreiras: "Físico, pesquisador, professor, desenvolvedor tecnológico.",
+        notaCorte: "750-790",
+        tags: ["Ciência", "Pesquisa", "Universo"],
+        salarioMedio: "R$ 6.000 - R$ 15.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Física Computacional": {
+        area: "tecnologia",
+        descricao: "Aplicação de computação na solução de problemas físicos complexos.",
+        carreiras: "Pesquisador, desenvolvedor de simulações, analista computacional.",
+        notaCorte: "760-800",
+        tags: ["Física", "Computação", "Simulação"],
+        salarioMedio: "R$ 5.500 - R$ 13.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Física Médica": {
+        area: "saude",
+        descricao: "Aplicação de princípios físicos em diagnóstico e tratamento médico.",
+        carreiras: "Físico médico, pesquisador, desenvolvedor de equipamentos médicos.",
+        notaCorte: "770-810",
+        tags: ["Física", "Medicina", "Tecnologia"],
+        salarioMedio: "R$ 6.500 - R$ 14.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Fisioterapia": {
+        area: "saude",
+        descricao: "Prevenção e tratamento de disfunções do movimento corporal.",
+        carreiras: "Fisioterapeuta, pesquisador, gestor em saúde.",
+        notaCorte: "740-780",
+        tags: ["Reabilitação", "Movimento", "Saúde"],
+        salarioMedio: "R$ 3.200 - R$ 8.500",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Fonoaudiologia": {
+        area: "saude",
+        descricao: "Prevenção, avaliação e tratamento de distúrbios da comunicação.",
+        carreiras: "Fonoaudiólogo, pesquisador, professor, consultor.",
+        notaCorte: "730-770",
+        tags: ["Comunicação", "Saúde", "Terapia"],
+        salarioMedio: "R$ 3.500 - R$ 8.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Geociências e Educação Ambiental": {
+        area: "ambiental",
+        descricao: "Estudo das ciências da terra integrado à educação ambiental.",
+        carreiras: "Geocientista, educador ambiental, pesquisador.",
+        notaCorte: "680-720",
+        tags: ["Terra", "Educação", "Meio Ambiente"],
+        salarioMedio: "R$ 3.800 - R$ 7.500",
+        empregabilidade: "Média",
+        demanda: "Crescendo"
+    },
+    "Geofísica": {
+        area: "exatas",
+        descricao: "Estudo da Terra por meio de métodos físicos e matemáticos.",
+        carreiras: "Geofísico, pesquisador, consultor em exploração.",
+        notaCorte: "730-770",
+        tags: ["Terra", "Física", "Exploração"],
+        salarioMedio: "R$ 5.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Geografia": {
+        area: "humanas",
+        descricao: "Análise do espaço geográfico e relações sociedade-natureza.",
+        carreiras: "Geógrafo, professor, pesquisador, planejador territorial.",
+        notaCorte: "670-710",
+        tags: ["Espaço", "Território", "Sociedade"],
+        salarioMedio: "R$ 3.200 - R$ 7.000",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Geologia": {
+        area: "exatas",
+        descricao: "Estudo da composição, estrutura e história da Terra.",
+        carreiras: "Geólogo, pesquisador, consultor em mineração e petróleo.",
+        notaCorte: "720-760",
+        tags: ["Terra", "Rochas", "Recursos"],
+        salarioMedio: "R$ 5.800 - R$ 13.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Gerontologia": {
+        area: "saude",
+        descricao: "Estudo do envelhecimento e cuidado com a população idosa.",
+        carreiras: "Gerontólogo, gestor de instituições, pesquisador.",
+        notaCorte: "650-690",
+        tags: ["Envelhecimento", "Saúde", "Cuidado"],
+        salarioMedio: "R$ 3.500 - R$ 7.500",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Gestão Ambiental": {
+        area: "ambiental",
+        descricao: "Planejamento e gestão de recursos naturais e sustentabilidade.",
+        carreiras: "Gestor ambiental, consultor, analista de sustentabilidade.",
+        notaCorte: "690-730",
+        tags: ["Meio Ambiente", "Sustentabilidade", "Gestão"],
+        salarioMedio: "R$ 3.800 - R$ 8.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Gestão de Políticas Públicas": {
+        area: "humanas",
+        descricao: "Formulação, implementação e avaliação de políticas governamentais.",
+        carreiras: "Gestor público, analista de políticas, consultor governamental.",
+        notaCorte: "700-740",
+        tags: ["Políticas", "Governo", "Gestão"],
+        salarioMedio: "R$ 4.000 - R$ 9.000",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "História": {
+        area: "humanas",
+        descricao: "Estudo e interpretação dos processos históricos e sociedades humanas.",
+        carreiras: "Historiador, professor, pesquisador, conservador cultural.",
+        notaCorte: "660-700",
+        tags: ["Passado", "Sociedade", "Cultura"],
+        salarioMedio: "R$ 2.800 - R$ 6.500",
+        empregabilidade: "Média",
+        demanda: "Competitiva"
+    },
+    "Informática Biomédica": {
+        area: "tecnologia",
+        descricao: "Aplicação de computação em soluções para saúde e medicina.",
+        carreiras: "Analista de sistemas de saúde, pesquisador, desenvolvedor.",
+        notaCorte: "750-790",
+        tags: ["Saúde", "Tecnologia", "Computação"],
+        salarioMedio: "R$ 5.000 - R$ 11.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Jornalismo": {
+        area: "artes",
+        descricao: "Apuração, produção e disseminação de informações jornalísticas.",
+        carreiras: "Jornalista, editor, repórter, produtor de conteúdo.",
+        notaCorte: "710-750",
+        tags: ["Notícias", "Comunicação", "Mídia"],
+        salarioMedio: "R$ 2.800 - R$ 7.500",
+        empregabilidade: "Média",
+        demanda: "Competitiva"
+    },
+    "Lazer e Turismo": {
+        area: "humanas",
+        descricao: "Planejamento e gestão de atividades de lazer e serviços turísticos.",
+        carreiras: "Gestor de turismo, planejador, consultor, empreendedor.",
+        notaCorte: "650-690",
+        tags: ["Turismo", "Lazer", "Hospitalidade"],
+        salarioMedio: "R$ 2.800 - R$ 6.500",
+        empregabilidade: "Média",
+        demanda: "Crescendo"
+    },
+    "Letras": {
+        area: "humanas",
+        descricao: "Estudo de línguas, literaturas e manifestações culturais.",
+        carreiras: "Professor, tradutor, revisor, pesquisador linguístico.",
+        notaCorte: "640-680",
+        tags: ["Línguas", "Literatura", "Cultura"],
+        salarioMedio: "R$ 2.800 - R$ 6.000",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Marketing": {
+        area: "negocios",
+        descricao: "Estratégias de mercado, comunicação e relacionamento com consumidores.",
+        carreiras: "Profissional de marketing, gestor de marcas, analista de mercado.",
+        notaCorte: "710-750",
+        tags: ["Mercado", "Comunicação", "Vendas"],
+        salarioMedio: "R$ 3.500 - R$ 10.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Matemática": {
+        area: "exatas",
+        descricao: "Estudo de estruturas abstratas, padrões e relações quantitativas.",
+        carreiras: "Matemático, professor, pesquisador, analista.",
+        notaCorte: "730-770",
+        tags: ["Números", "Lógica", "Abstração"],
+        salarioMedio: "R$ 5.000 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Matemática Aplicada": {
+        area: "exatas",
+        descricao: "Aplicação de métodos matemáticos na solução de problemas práticos.",
+        carreiras: "Matemático aplicado, pesquisador, analista quantitativo.",
+        notaCorte: "740-780",
+        tags: ["Matemática", "Aplicação", "Problemas"],
+        salarioMedio: "R$ 5.200 - R$ 11.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Matemática Aplicada a Negócios": {
+        area: "negocios",
+        descricao: "Uso de ferramentas matemáticas em análise de negócios e finanças.",
+        carreiras: "Analista quantitativo, consultor financeiro, gestor de riscos.",
+        notaCorte: "720-760",
+        tags: ["Matemática", "Negócios", "Finanças"],
+        salarioMedio: "R$ 4.800 - R$ 10.500",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Matemática Aplicada e Computação Científica": {
+        area: "tecnologia",
+        descricao: "Desenvolvimento de algoritmos e modelos computacionais para ciência.",
+        carreiras: "Pesquisador, desenvolvedor de algoritmos, analista computacional.",
+        notaCorte: "760-800",
+        tags: ["Matemática", "Computação", "Ciência"],
+        salarioMedio: "R$ 5.500 - R$ 12.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Matemática Aplicada e Computacional": {
+        area: "tecnologia",
+        descricao: "Integração entre matemática e computação para resolver problemas complexos.",
+        carreiras: "Matemático computacional, desenvolvedor, pesquisador.",
+        notaCorte: "750-790",
+        tags: ["Matemática", "Computação", "Modelagem"],
+        salarioMedio: "R$ 5.200 - R$ 11.500",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Medicina": {
+        area: "saude",
+        descricao: "Formação para diagnóstico, tratamento e prevenção de doenças humanas.",
+        carreiras: "Médico generalista, especialista, pesquisador, professor.",
+        notaCorte: "820-860",
+        tags: ["Saúde", "Ciências Biológicas", "Assistência"],
+        salarioMedio: "R$ 8.000 - R$ 25.000",
+        empregabilidade: "Muito Alta",
+        demanda: "Alta"
+    },
+    "Medicina Veterinária": {
+        area: "saude",
+        descricao: "Cuidado com a saúde animal, prevenção e tratamento de doenças.",
+        carreiras: "Médico veterinário, pesquisador, gestor de saúde animal.",
+        notaCorte: "750-790",
+        tags: ["Animais", "Saúde", "Clínica"],
+        salarioMedio: "R$ 4.000 - R$ 9.500",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Meteorologia": {
+        area: "exatas",
+        descricao: "Estudo dos fenômenos atmosféricos e previsão do tempo.",
+        carreiras: "Meteorologista, pesquisador, analista climático.",
+        notaCorte: "720-760",
+        tags: ["Clima", "Tempo", "Atmosfera"],
+        salarioMedio: "R$ 5.000 - R$ 10.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Música": {
+        area: "artes",
+        descricao: "Estudo teórico e prático da linguagem e execução musical.",
+        carreiras: "Músico, compositor, professor, regente, produtor musical.",
+        notaCorte: "660-700",
+        tags: ["Som", "Arte", "Expressão"],
+        salarioMedio: "R$ 2.500 - R$ 7.000",
+        empregabilidade: "Baixa",
+        demanda: "Competitiva"
+    },
+    "Nutrição": {
+        area: "saude",
+        descricao: "Estudo da alimentação e sua relação com a saúde humana.",
+        carreiras: "Nutricionista, pesquisador, consultor alimentar.",
+        notaCorte: "730-770",
+        tags: ["Alimentação", "Saúde", "Prevenção"],
+        salarioMedio: "R$ 2.800 - R$ 7.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Nutrição e Metabolismo": {
+        area: "saude",
+        descricao: "Aprofundamento nos processos metabólicos e nutrição clínica.",
+        carreiras: "Nutricionista clínico, pesquisador, especialista em metabolismo.",
+        notaCorte: "740-780",
+        tags: ["Nutrição", "Metabolismo", "Clínica"],
+        salarioMedio: "R$ 3.500 - R$ 8.500",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Obstetrícia": {
+        area: "saude",
+        descricao: "Cuidado especializado com a saúde da mulher, gestação e parto.",
+        carreiras: "Obstetra, enfermeiro obstetra, educador perinatal.",
+        notaCorte: "720-760",
+        tags: ["Gestação", "Parto", "Saúde da Mulher"],
+        salarioMedio: "R$ 4.000 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Oceanografia": {
+        area: "ambiental",
+        descricao: "Estudo dos oceanos, mares e zonas costeiras.",
+        carreiras: "Oceanógrafo, pesquisador, consultor ambiental.",
+        notaCorte: "710-750",
+        tags: ["Oceanos", "Meio Ambiente", "Pesquisa"],
+        salarioMedio: "R$ 4.500 - R$ 9.500",
+        empregabilidade: "Média",
+        demanda: "Crescendo"
+    },
+    "Odontologia": {
+        area: "saude",
+        descricao: "Prevenção, diagnóstico e tratamento de doenças bucais.",
+        carreiras: "Dentista, cirurgião-dentista, pesquisador, professor.",
+        notaCorte: "780-820",
+        tags: ["Saúde Bucal", "Dentística", "Clínica"],
+        salarioMedio: "R$ 4.000 - R$ 15.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Pedagogia": {
+        area: "humanas",
+        descricao: "Estudo dos processos de ensino e aprendizagem em diferentes contextos.",
+        carreiras: "Pedagogo, professor, gestor educacional, orientador.",
+        notaCorte: "650-690",
+        tags: ["Educação", "Ensino", "Aprendizagem"],
+        salarioMedio: "R$ 2.500 - R$ 6.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Psicologia": {
+        area: "saude",
+        descricao: "Ciência que estuda o comportamento humano e processos mentais.",
+        carreiras: "Psicólogo clínico, organizacional, escolar, social.",
+        notaCorte: "780-820",
+        tags: ["Saúde Mental", "Comportamento", "Terapia"],
+        salarioMedio: "R$ 3.000 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Publicidade e Propaganda": {
+        area: "artes",
+        descricao: "Criação e gestão de campanhas publicitárias e comunicação mercadológica.",
+        carreiras: "Publicitário, diretor de criação, planejador, gestor de accounts.",
+        notaCorte: "710-750",
+        tags: ["Propaganda", "Comunicação", "Criatividade"],
+        salarioMedio: "R$ 3.200 - R$ 9.000",
+        empregabilidade: "Média",
+        demanda: "Competitiva"
+    },
+    "Química": {
+        area: "exatas",
+        descricao: "Estudo da matéria, suas transformações e propriedades.",
+        carreiras: "Químico, pesquisador, professor, analista laboratorial.",
+        notaCorte: "720-760",
+        tags: ["Matéria", "Transformação", "Laboratório"],
+        salarioMedio: "R$ 4.000 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    },
+    "Relações Internacionais": {
+        area: "humanas",
+        descricao: "Análise das relações entre Estados, organizações e atores globais.",
+        carreiras: "Diplomata, analista internacional, gestor de projetos globais.",
+        notaCorte: "740-780",
+        tags: ["Global", "Diplomacia", "Política"],
+        salarioMedio: "R$ 4.000 - R$ 10.000",
+        empregabilidade: "Média",
+        demanda: "Competitiva"
+    },
+    "Relações Públicas": {
+        area: "artes",
+        descricao: "Gestão da comunicação e imagem entre organizações e seus públicos.",
+        carreiras: "Relações públicas, gestor de comunicação, assessor de imprensa.",
+        notaCorte: "680-720",
+        tags: ["Comunicação", "Imagem", "Gestão"],
+        salarioMedio: "R$ 3.200 - R$ 8.000",
+        empregabilidade: "Média",
+        demanda: "Estável"
+    },
+    "Saúde Pública": {
+        area: "saude",
+        descricao: "Promoção, proteção e recuperação da saúde em nível populacional.",
+        carreiras: "Sanitarista, gestor em saúde, pesquisador, educador.",
+        notaCorte: "700-740",
+        tags: ["Saúde Coletiva", "Prevenção", "Políticas"],
+        salarioMedio: "R$ 4.000 - R$ 9.000",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Sistemas de Informação": {
+        area: "tecnologia",
+        descricao: "Gestão e desenvolvimento de sistemas de informação organizacionais.",
+        carreiras: "Analista de sistemas, gestor de TI, desenvolvedor, consultor.",
+        notaCorte: "730-770",
+        tags: ["Sistemas", "TI", "Gestão"],
+        salarioMedio: "R$ 4.000 - R$ 12.000",
+        empregabilidade: "Muito Alta",
+        demanda: "Crescendo"
+    },
+    "Terapia Ocupacional": {
+        area: "saude",
+        descricao: "Uso de atividades terapêuticas na reabilitação e inclusão social.",
+        carreiras: "Terapeuta ocupacional, pesquisador, gestor em saúde.",
+        notaCorte: "710-750",
+        tags: ["Reabilitação", "Inclusão", "Terapia"],
+        salarioMedio: "R$ 3.200 - R$ 7.500",
+        empregabilidade: "Alta",
+        demanda: "Crescendo"
+    },
+    "Têxtil e Moda": {
+        area: "artes",
+        descricao: "Criação, produção e gestão no universo têxtil e de moda.",
+        carreiras: "Estilista, gestor de produção têxtil, consultor de moda.",
+        notaCorte: "670-710",
+        tags: ["Moda", "Têxtil", "Criação"],
+        salarioMedio: "R$ 2.800 - R$ 7.000",
+        empregabilidade: "Média",
+        demanda: "Competitiva"
+    },
+    "Turismo": {
+        area: "humanas",
+        descricao: "Planejamento, organização e gestão de serviços e produtos turísticos.",
+        carreiras: "Gestor de turismo, agente de viagens, planejador turístico.",
+        notaCorte: "640-680",
+        tags: ["Viagens", "Hospitalidade", "Lazer"],
+        salarioMedio: "R$ 2.500 - R$ 6.500",
+        empregabilidade: "Média",
+        demanda: "Crescendo"
+    },
+    "Zootecnia": {
+        area: "ambiental",
+        descricao: "Produção, manejo e conservação de animais domésticos e silvestres.",
+        carreiras: "Zootecnista, gestor de produção animal, pesquisador.",
+        notaCorte: "690-730",
+        tags: ["Animais", "Produção", "Manejo"],
+        salarioMedio: "R$ 3.800 - R$ 8.000",
+        empregabilidade: "Alta",
+        demanda: "Estável"
+    }
+};
 
         // ======================
         // SISTEMA DE PESOS AVANÇADO
@@ -1227,104 +1656,76 @@
             'saude': {
                 cursos: {
                     'Medicina': 25, 'Enfermagem': 22, 'Psicologia': 20, 'Odontologia': 23,
-                    'Farmácia': 21, 'Fisioterapia': 19, 'Fonoaudiologia': 18, 'Medicina Veterinária': 20,
-                    'Nutrição': 17, 'Obstetrícia': 19, 'Terapia Ocupacional': 16, 'Gerontologia': 15,
-                    'Saúde Pública': 18, 'Educação Física e Esporte': 14, 'Nutrição e Metabolismo': 16,
-                    'Física Médica': 17
+                    'Farmácia': 21, 'Fisioterapia': 19, 'Nutrição': 17
                 }
             },
             'tecnologia': {
                 cursos: {
                     'Ciências da Computação': 25, 'Engenharia de Computação': 24, 'Sistemas de Informação': 22,
-                    'Ciência de Dados': 23, 'Engenharia Mecatrônica': 21, 'Informática Biomédica': 20,
-                    'Física Computacional': 19, 'Matemática Aplicada e Computação Científica': 18,
-                    'Matemática Aplicada e Computacional': 17
+                    'Ciência de Dados': 23, 'Engenharia Mecatrônica': 21
                 }
             },
             'exatas': {
                 cursos: {
                     'Engenharia Civil': 22, 'Engenharia Elétrica': 23, 'Engenharia Mecânica': 22,
-                    'Matemática': 21, 'Física': 22, 'Química': 20, 'Estatística': 19,
-                    'Engenharia Química': 21, 'Engenharia de Produção': 18, 'Ciências Atuariais': 19,
-                    'Engenharia Aeronáutica': 20, 'Engenharia Agronômica': 17, 'Engenharia Ambiental': 19,
-                    'Engenharia Bioquímica': 18, 'Engenharia de Alimentos': 17, 'Engenharia de Biossistemas': 16,
-                    'Engenharia de Materiais': 18, 'Engenharia de Minas': 16, 'Engenharia de Petróleo': 19,
-                    'Engenharia Física': 17, 'Engenharia Florestal': 15, 'Engenharia Metalúrgica': 16,
-                    'Engenharia Naval': 17, 'Astronomia': 18, 'Biotecnologia': 19, 'Ciências dos Alimentos': 16,
-                    'Ciências Exatas': 20, 'Ciências Físicas e Biomoleculares': 18, 'Geofísica': 17,
-                    'Geologia': 16, 'Meteorologia': 15
+                    'Matemática': 21, 'Física': 22, 'Biotecnologia': 19
                 }
             },
             'negocios': {
                 cursos: {
                     'Administração': 24, 'Economia': 22, 'Ciências Contábeis': 21,
-                    'Marketing': 20, 'Finanças e Negócios': 22, 'Gestão de Políticas Públicas': 16,
-                    'Matemática Aplicada a Negócios': 18
+                    'Marketing': 20, 'Finanças e Negócios': 22
                 }
             },
             'artes': {
                 cursos: {
                     'Design': 23, 'Arquitetura e urbanismo': 22, 'Publicidade e Propaganda': 21,
-                    'Jornalismo': 20, 'Artes Visuais': 19, 'Artes Cênicas': 18,
-                    'Música': 17, 'Audiovisual': 19, 'Editoração': 16, 'Relações Públicas': 15,
-                    'Têxtil e Moda': 14
+                    'Jornalismo': 20, 'Artes Visuais': 19, 'Audiovisual': 19
                 }
             },
             'humanas': {
                 cursos: {
                     'Direito': 23, 'Pedagogia': 20, 'História': 19, 'Letras': 18,
-                    'Filosofia': 17, 'Relações Internacionais': 19, 'Ciências Sociais': 18,
-                    'Geografia': 16, 'Relações Públicas': 15, 'Turismo': 14, 'Lazer e Turismo': 13,
-                    'Educomunicação': 15, 'Biblioteconomia': 12, 'Gestão de Políticas Públicas': 14
+                    'Filosofia': 17, 'Relações Internacionais': 19
                 }
             },
             'ambiental': {
                 cursos: {
                     'Ciências Biológicas': 22, 'Gestão Ambiental': 21, 'Oceanografia': 20,
-                    'Zootecnia': 19, 'Engenharia Ambiental': 21, 'Engenharia Florestal': 18,
-                    'Geologia': 19, 'Ciências Agrárias': 17, 'Ciências da Natureza': 16,
-                    'Geociências e Educação Ambiental': 15, 'Geofísica': 16
+                    'Engenharia Ambiental': 21, 'Engenharia Florestal': 18
                 }
             },
 
             // PERGUNTA 2: Talentos naturais
             'analitico': {
                 cursos: {
-                    'Matemática': 15, 'Estatística': 16, 'Ciências Atuariais': 17, 'Física': 15,
-                    'Engenharia Civil': 14, 'Engenharia Elétrica': 15, 'Ciência de Dados': 18,
-                    'Economia': 13, 'Ciências da Computação': 16, 'Engenharia de Computação': 15,
-                    'Engenharia Química': 14, 'Engenharia Mecânica': 13, 'Astronomia': 14,
-                    'Biotecnologia': 15, 'Geofísica': 13, 'Geologia': 12
+                    'Matemática': 15, 'Estatística': 16, 'Física': 15,
+                    'Engenharia Civil': 14, 'Ciência de Dados': 18,
+                    'Economia': 13, 'Ciências da Computação': 16
                 }
             },
             'criativo': {
                 cursos: {
                     'Design': 16, 'Arquitetura e urbanismo': 15, 'Publicidade e Propaganda': 16,
-                    'Artes Visuais': 17, 'Jornalismo': 14, 'Música': 15, 'Audiovisual': 14,
-                    'Artes Cênicas': 16, 'Moda': 15, 'Editoração': 13
+                    'Artes Visuais': 17, 'Jornalismo': 14, 'Audiovisual': 14
                 }
             },
             'social': {
                 cursos: {
                     'Psicologia': 16, 'Pedagogia': 15, 'Medicina': 14, 'Enfermagem': 13,
-                    'Relações Internacionais': 12, 'Direito': 13, 'Marketing': 12,
-                    'Relações Públicas': 14, 'Turismo': 11, 'Jornalismo': 10
+                    'Relações Internacionais': 12, 'Direito': 13, 'Marketing': 12
                 }
             },
             'pratico': {
                 cursos: {
                     'Engenharia Civil': 14, 'Engenharia Mecânica': 15, 'Medicina Veterinária': 13,
-                    'Odontologia': 12, 'Farmácia': 11, 'Engenharia de Alimentos': 13,
-                    'Engenharia de Produção': 12, 'Engenharia Elétrica': 13, 'Engenharia Química': 11,
-                    'Arquitetura e urbanismo': 10, 'Design': 9
+                    'Odontologia': 12, 'Farmácia': 11, 'Engenharia de Alimentos': 13
                 }
             },
             'cientifico': {
                 cursos: {
                     'Medicina': 14, 'Ciências Biológicas': 15, 'Física': 16, 'Química': 15,
-                    'Engenharia Química': 14, 'Farmácia': 13, 'Biotecnologia': 16,
-                    'Ciências Biomédicas': 15, 'Oceanografia': 14, 'Geologia': 13,
-                    'Astronomia': 17, 'Meteorologia': 12
+                    'Engenharia Química': 14, 'Farmácia': 13, 'Biotecnologia': 16
                 }
             },
 
@@ -1332,37 +1733,31 @@
             'impacto-social': {
                 cursos: {
                     'Medicina': 12, 'Enfermagem': 13, 'Psicologia': 14, 'Pedagogia': 15,
-                    'Serviço Social': 16, 'Saúde Pública': 14, 'Gerontologia': 13,
-                    'Terapia Ocupacional': 12, 'Fonoaudiologia': 11, 'Fisioterapia': 10
+                    'Serviço Social': 16, 'Saúde Pública': 14
                 }
             },
             'inovacao': {
                 cursos: {
                     'Engenharias': 12, 'Ciências da Computação': 14, 'Design': 13,
-                    'Biotecnologia': 15, 'Engenharia de Computação': 14, 'Ciência de Dados': 13,
-                    'Engenharia Mecatrônica': 12, 'Arquitetura e urbanismo': 11,
-                    'Engenharia de Materiais': 13, 'Engenharia Aeroespacial': 14
+                    'Biotecnologia': 15, 'Engenharia de Computação': 14, 'Ciência de Dados': 13
                 }
             },
             'estabilidade': {
                 cursos: {
                     'Medicina': 10, 'Direito': 11, 'Engenharia Civil': 9, 'Administração': 10,
-                    'Ciências Contábeis': 12, 'Odontologia': 9, 'Engenharia de Produção': 8,
-                    'Economia': 9, 'Farmácia': 8
+                    'Ciências Contábeis': 12, 'Odontologia': 9
                 }
             },
             'liberdade': {
                 cursos: {
                     'Design': 13, 'Artes': 14, 'Jornalismo': 12, 'Publicidade e Propaganda': 11,
-                    'Música': 15, 'Arquitetura e urbanismo': 10, 'Audiovisual': 12,
-                    'Letras': 13, 'Filosofia': 14
+                    'Música': 15, 'Arquitetura e urbanismo': 10
                 }
             },
             'pesquisa': {
                 cursos: {
                     'Ciências Biológicas': 15, 'Física': 16, 'Química': 15, 'Matemática': 14,
-                    'Astronomia': 17, 'Geologia': 13, 'Oceanografia': 14, 'Biotecnologia': 16,
-                    'Ciências Biomédicas': 15, 'Física Computacional': 14, 'Estatística': 13
+                    'Astronomia': 17, 'Geologia': 13, 'Oceanografia': 14
                 }
             },
 
@@ -1370,31 +1765,25 @@
             'equipe': {
                 cursos: {
                     'Medicina': 8, 'Enfermagem': 9, 'Administração': 8, 'Psicologia': 7,
-                    'Engenharia de Produção': 6, 'Publicidade e Propaganda': 7,
-                    'Relações Públicas': 8, 'Pedagogia': 9, 'Direito': 7
+                    'Engenharia de Produção': 6, 'Publicidade e Propaganda': 7
                 }
             },
             'sozinho': {
-                cursos: {
-                    'Programação': 8, 'Pesquisa': 9, 'Escrita': 8, 'Artes': 7,
-                    'Matemática': 6, 'Estatística': 7
-                },
                 cursosEspecificos: {
                     'Ciências da Computação': 7, 'Matemática': 8, 'Estatística': 7,
-                    'Letras': 9, 'Filosofia': 8, 'História': 7, 'Artes Visuais': 8,
-                    'Física': 6, 'Química': 6, 'Astronomia': 7
+                    'Letras': 9, 'Filosofia': 8, 'História': 7
                 }
             },
             'dinamico': {
                 cursos: {
                     'Jornalismo': 9, 'Marketing': 8, 'Publicidade e Propaganda': 7,
-                    'Medicina': 6, 'Engenharias': 5, 'Turismo': 8, 'Relações Internacionais': 7
+                    'Medicina': 6, 'Engenharias': 5
                 }
             },
             'publico': {
                 cursos: {
                     'Direito': 9, 'Psicologia': 8, 'Medicina': 7, 'Pedagogia': 9,
-                    'Relações Públicas': 10, 'Turismo': 8, 'Enfermagem': 8, 'Odontologia': 7
+                    'Relações Públicas': 10, 'Turismo': 8
                 }
             },
 
@@ -1402,29 +1791,25 @@
             'alto-matematica': {
                 cursos: {
                     'Engenharias': 12, 'Matemática': 15, 'Física': 14, 'Estatística': 13,
-                    'Ciências Atuariais': 14, 'Economia': 11, 'Ciência de Dados': 12,
-                    'Astronomia': 13, 'Geofísica': 12, 'Meteorologia': 11
+                    'Ciências Atuariais': 14, 'Economia': 11, 'Ciência de Dados': 12
                 }
             },
             'medio-matematica': {
                 cursos: {
                     'Administração': 8, 'Economia': 7, 'Ciências Contábeis': 9,
-                    'Engenharias': 6, 'Estatística': 5, 'Farmácia': 4, 'Química': 6,
-                    'Ciências Biológicas': 3, 'Psicologia': 2
+                    'Engenharias': 6, 'Estatística': 5, 'Farmácia': 4
                 }
             },
             'basico-matematica': {
                 cursosEspecificos: {
                     'Psicologia': 8, 'Letras': 9, 'História': 10, 'Artes': 11,
-                    'Pedagogia': 8, 'Filosofia': 10, 'Jornalismo': 7, 'Direito': 6,
-                    'Enfermagem': 5, 'Medicina': 4, 'Arquitetura e urbanismo': 3
+                    'Pedagogia': 8, 'Filosofia': 10, 'Jornalismo': 7
                 }
             },
             'nenhum-matematica': {
                 cursosEspecificos: {
                     'Letras': 15, 'História': 14, 'Artes': 13, 'Filosofia': 14,
-                    'Pedagogia': 12, 'Jornalismo': 11, 'Psicologia': 10, 'Direito': 9,
-                    'Serviço Social': 13, 'Relações Públicas': 11, 'Turismo': 12
+                    'Pedagogia': 12, 'Jornalismo': 11, 'Psicologia': 10
                 }
             }
         };
@@ -1436,28 +1821,28 @@
         const contextualFactors = {
             // Compatibilidade com tecnologia
             techCompatibility: {
-                'muito-alto-tech': ['Ciências da Computação', 'Engenharia de Computação', 'Sistemas de Informação', 'Ciência de Dados', 'Engenharia Mecatrônica', 'Informática Biomédica', 'Física Computacional'],
-                'alto-tech': ['Engenharia Elétrica', 'Design', 'Arquitetura e urbanismo', 'Engenharia de Produção', 'Engenharia Mecânica', 'Engenharia Civil', 'Engenharia Química'],
-                'moderado-tech': ['Administração', 'Economia', 'Marketing', 'Medicina', 'Jornalismo', 'Psicologia', 'Farmácia'],
-                'baixo-tech': ['Letras', 'História', 'Filosofia', 'Artes', 'Pedagogia', 'Serviço Social', 'Música', 'Artes Cênicas']
+                'muito-alto-tech': ['Ciências da Computação', 'Engenharia de Computação', 'Sistemas de Informação', 'Ciência de Dados', 'Engenharia Mecatrônica'],
+                'alto-tech': ['Engenharia Elétrica', 'Design', 'Arquitetura e urbanismo', 'Engenharia de Produção', 'Engenharia Mecânica'],
+                'moderado-tech': ['Administração', 'Economia', 'Marketing', 'Medicina', 'Jornalismo'],
+                'baixo-tech': ['Letras', 'História', 'Filosofia', 'Artes', 'Pedagogia', 'Serviço Social']
             },
             
             // Ambiente de trabalho preferido
             workEnvironment: {
-                'escritorio': ['Administração', 'Economia', 'Direito', 'Marketing', 'Ciências Contábeis', 'Relações Internacionais', 'Gestão de Políticas Públicas'],
-                'laboratorio': ['Ciências Biológicas', 'Química', 'Farmácia', 'Biotecnologia', 'Engenharia Química', 'Biomedicina', 'Física', 'Geologia'],
-                'campo': ['Geologia', 'Engenharia Florestal', 'Agronomia', 'Oceanografia', 'Zootecnia', 'Engenharia Ambiental', 'Meteorologia'],
-                'clinica': ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Fisioterapia', 'Fonoaudiologia', 'Terapia Ocupacional'],
-                'remoto': ['Ciências da Computação', 'Design', 'Jornalismo', 'Tradução', 'Programação', 'Marketing Digital', 'Artes Visuais'],
-                'sala-aula': ['Pedagogia', 'Letras', 'História', 'Matemática', 'Física', 'Química', 'Biologia', 'Geografia']
+                'escritorio': ['Administração', 'Economia', 'Direito', 'Marketing', 'Ciências Contábeis'],
+                'laboratorio': ['Ciências Biológicas', 'Química', 'Farmácia', 'Biotecnologia', 'Engenharia Química'],
+                'campo': ['Geologia', 'Engenharia Florestal', 'Agronomia', 'Oceanografia', 'Zootecnia'],
+                'clinica': ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Fisioterapia'],
+                'remoto': ['Ciências da Computação', 'Design', 'Jornalismo', 'Tradução', 'Programação'],
+                'sala-aula': ['Pedagogia', 'Letras', 'História', 'Matemática', 'Física']
             },
             
             // Potencial salarial (baseado em pesquisas de mercado)
             salaryPotential: {
-                'alto': ['Medicina', 'Engenharia de Petróleo', 'Direito', 'Ciências da Computação', 'Odontologia', 'Engenharia Aeroespacial', 'Engenharia de Computação'],
-                'medio-alto': ['Engenharias', 'Economia', 'Farmácia', 'Psicologia', 'Medicina Veterinária', 'Arquitetura e urbanismo', 'Engenharia Civil'],
-                'medio': ['Administração', 'Enfermagem', 'Design', 'Jornalismo', 'Publicidade e Propaganda', 'Relações Internacionais', 'Turismo'],
-                'medio-baixo': ['Pedagogia', 'Letras', 'História', 'Artes', 'Serviço Social', 'Filosofia', 'Biblioteconomia']
+                'alto': ['Medicina', 'Engenharia de Petróleo', 'Direito', 'Ciências da Computação', 'Odontologia'],
+                'medio-alto': ['Engenharias', 'Economia', 'Farmácia', 'Psicologia', 'Medicina Veterinária'],
+                'medio': ['Administração', 'Enfermagem', 'Design', 'Jornalismo', 'Arquitetura e urbanismo'],
+                'medio-baixo': ['Pedagogia', 'Letras', 'História', 'Artes', 'Serviço Social']
             }
         };
 
@@ -1471,14 +1856,13 @@
                 courses: ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Farmácia', 
                          'Fisioterapia', 'Fonoaudiologia', 'Medicina Veterinária', 'Nutrição',
                          'Obstetrícia', 'Terapia Ocupacional', 'Gerontologia', 'Saúde Pública',
-                         'Educação Física e Esporte', 'Nutrição e Metabolismo', 'Física Médica']
+                         'Educação Física e Esporte']
             },
             'tecnologia': {
                 weight: 30,
                 courses: ['Ciências da Computação', 'Engenharia de Computação', 'Sistemas de Informação',
                          'Ciência de Dados', 'Engenharia Mecatrônica', 'Informática Biomédica',
-                         'Física Computacional', 'Matemática Aplicada e Computação Científica',
-                         'Matemática Aplicada e Computacional']
+                         'Física Computacional', 'Matemática Aplicada e Computação Científica']
             },
             'exatas': {
                 weight: 28,
@@ -1490,12 +1874,12 @@
                          'Engenharia de Minas', 'Engenharia de Petróleo', 'Engenharia Física',
                          'Engenharia Florestal', 'Engenharia Metalúrgica', 'Engenharia Naval',
                          'Astronomia', 'Biotecnologia', 'Ciências dos Alimentos', 'Geofísica',
-                         'Geologia', 'Meteorologia', 'Ciências Físicas e Biomoleculares']
+                         'Geologia', 'Meteorologia']
             },
             'negocios': {
                 weight: 26,
                 courses: ['Administração', 'Economia', 'Ciências Contábeis', 'Marketing', 
-                         'Finanças e Negócios', 'Gestão de Políticas Públicas', 'Matemática Aplicada a Negócios']
+                         'Finanças e Negócios', 'Gestão de Políticas Públicas']
             },
             'artes': {
                 weight: 24,
@@ -1672,6 +2056,10 @@
         const resultsCount = document.getElementById('results-count');
         const filterBtns = document.querySelectorAll('.filter-btn');
         const viewAllBtn = document.getElementById('view-all-btn');
+        const themeToggle = document.getElementById('theme-toggle');
+        const favoritesSection = document.getElementById('favorites-section');
+        const favoritesContainer = document.getElementById('favorites-container');
+        const clearFavoritesBtn = document.getElementById('clear-favorites');
 
         // Estado do questionário
         let currentQuestion = 0;
@@ -1680,6 +2068,81 @@
         let allCoursesWithScores = [];
         let currentFilter = 'all';
         let currentSearch = '';
+        let favorites = JSON.parse(localStorage.getItem('unimatch_favorites')) || [];
+
+        // ======================
+        // NOVAS FUNCIONALIDADES
+        // ======================
+
+        // Sistema de Modo Escuro
+        function initTheme() {
+            const savedTheme = localStorage.getItem('unimatch_theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('unimatch_theme', 'dark');
+                themeToggle.textContent = '☀️';
+            } else {
+                localStorage.setItem('unimatch_theme', 'light');
+                themeToggle.textContent = '🌙';
+            }
+        }
+
+        // Sistema de Favoritos
+        function toggleFavorite(courseName) {
+            const index = favorites.indexOf(courseName);
+            if (index === -1) {
+                favorites.push(courseName);
+            } else {
+                favorites.splice(index, 1);
+            }
+            localStorage.setItem('unimatch_favorites', JSON.stringify(favorites));
+            displayRecommendations();
+            displayFavorites();
+        }
+
+        function isFavorited(courseName) {
+            return favorites.includes(courseName);
+        }
+
+        function displayFavorites() {
+            favoritesContainer.innerHTML = '';
+            
+            if (favorites.length === 0) {
+                favoritesContainer.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--text-light);">
+                        <p>Nenhum curso favoritado ainda.</p>
+                        <p>Clique no ❤️ dos cursos para adicioná-los aos favoritos!</p>
+                    </div>
+                `;
+                favoritesSection.classList.add('hidden');
+                return;
+            }
+            
+            favoritesSection.classList.remove('hidden');
+            
+            favorites.forEach(courseName => {
+                const course = allCoursesWithScores.find(c => c.name === courseName);
+                if (course) {
+                    const favoriteElement = createCourseElement(course, true);
+                    favoritesContainer.appendChild(favoriteElement);
+                }
+            });
+        }
+
+        function clearFavorites() {
+            if (confirm('Tem certeza que deseja limpar todos os favoritos?')) {
+                favorites = [];
+                localStorage.setItem('unimatch_favorites', JSON.stringify(favorites));
+                displayFavorites();
+            }
+        }
 
         // ======================
         // FUNÇÕES PRINCIPAIS
@@ -1689,6 +2152,8 @@
         startBtn.addEventListener('click', startQuiz);
         nextBtn.addEventListener('click', nextQuestion);
         restartBtn.addEventListener('click', restartQuiz);
+        themeToggle.addEventListener('click', toggleTheme);
+        clearFavoritesBtn.addEventListener('click', clearFavorites);
 
         function startQuiz() {
             startScreen.classList.add('hidden');
@@ -1760,6 +2225,7 @@
                 resultScreen.classList.remove('hidden');
                 calculateCourseScores();
                 displayRecommendations();
+                displayFavorites();
             }, 1500);
         }
 
@@ -1787,7 +2253,7 @@
             
             if (filteredCourses.length === 0) {
                 resultsContainer.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #666;">
+                    <div style="text-align: center; padding: 40px; color: var(--text-light);">
                         <h3>Nenhum curso encontrado</h3>
                         <p>Tente alterar os filtros ou termos da pesquisa.</p>
                     </div>
@@ -1796,7 +2262,7 @@
             }
             
             displayedCourses.forEach(course => {
-                const courseElement = createCourseElement(course);
+                const courseElement = createCourseElement(course, false);
                 resultsContainer.appendChild(courseElement);
             });
             
@@ -1808,7 +2274,7 @@
                 'block' : 'none';
         }
 
-        function createCourseElement(course) {
+        function createCourseElement(course, isFavoriteView) {
             const courseElement = document.createElement('div');
             courseElement.className = 'course-card';
             
@@ -1817,11 +2283,23 @@
             const compatibilityClass = course.score >= 70 ? 'high' : 
                                      course.score >= 50 ? 'medium' : 'low';
             
+            // Botão de favorito
+            const favoriteBtn = document.createElement('button');
+            favoriteBtn.className = `favorite-btn ${isFavorited(course.name) ? 'favorited' : ''}`;
+            favoriteBtn.innerHTML = isFavorited(course.name) ? '❤️' : '🤍';
+            favoriteBtn.title = isFavorited(course.name) ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
+            favoriteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleFavorite(course.name);
+            });
+
             courseElement.innerHTML = `
                 <div class="course-header">
-                    <div class="course-title">${course.name}</div>
-                    <div class="compatibility-score ${compatibilityClass}">
-                        ${compatibilityText} Compatibilidade (${course.score}%)
+                    <div class="course-title">
+                        ${course.name}
+                        <div class="compatibility-score ${compatibilityClass}">
+                            ${compatibilityText} Compatibilidade (${course.score}%)
+                        </div>
                     </div>
                 </div>
                 <div class="course-info">
@@ -1830,6 +2308,23 @@
                 <div class="course-info">
                     <strong>Carreiras:</strong> ${course.carreiras}
                 </div>
+                
+                <!-- NOVO: Informações de Mercado -->
+                <div class="market-info">
+                    <div class="market-item">
+                        <span class="market-label">Salário Médio</span>
+                        <span class="market-value">${course.salarioMedio}</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="market-label">Empregabilidade</span>
+                        <span class="market-value">${course.empregabilidade}</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="market-label">Demanda</span>
+                        <span class="market-value">${course.demanda}</span>
+                    </div>
+                </div>
+                
                 <div class="course-info">
                     <strong>Nota de Corte Média USP:</strong> ${course.notaCorte} pontos
                 </div>
@@ -1838,6 +2333,7 @@
                 </div>
             `;
             
+            courseElement.appendChild(favoriteBtn);
             return courseElement;
         }
 
@@ -1892,7 +2388,7 @@
             const filteredCourses = filterAndSearchCourses();
             resultsContainer.innerHTML = '';
             filteredCourses.forEach(course => {
-                const courseElement = createCourseElement(course);
+                const courseElement = createCourseElement(course, false);
                 resultsContainer.appendChild(courseElement);
             });
             viewAllBtn.style.display = 'none';
@@ -1910,6 +2406,9 @@
             resultScreen.classList.add('hidden');
             startScreen.classList.remove('hidden');
         }
+
+        // Inicializar tema ao carregar a página
+        initTheme();
     </script>
 </body>
 </html>
