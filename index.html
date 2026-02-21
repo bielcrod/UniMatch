@@ -1,2414 +1,2017 @@
-<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniMatch - Encontre Seu Curso Ideal</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniMatch — Encontre Seu Curso Ideal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ========================================
+   RESET & VARIABLES
+======================================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        :root {
-            --primary: #2E86AB;
-            --secondary: #A23B72;
-            --accent: #F18F01;
-            --light: #F8F9FA;
-            --dark: #212529;
-            --success: #28A745;
-            --warning: #FFC107;
-            --danger: #DC3545;
-            --bg-primary: #667eea;
-            --bg-secondary: #764ba2;
-            --card-bg: white;
-            --text-color: #212529;
-            --text-light: #6c757d;
-        }
+:root {
+  --bg: #0f0f13;
+  --surface: #1a1a24;
+  --surface2: #222230;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.18);
+  --accent: #7c6af7;
+  --accent2: #f7b26a;
+  --accent3: #6af7b2;
+  --text: #f0eff8;
+  --text-muted: #8884a8;
+  --text-dim: #5a5878;
+  --danger: #f76a6a;
+  --warning: #f7c36a;
+  --success: #6af7b2;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        .dark-mode {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --card-bg: #2d3748;
-            --text-color: #f7fafc;
-            --text-light: #cbd5e0;
-            --light: #4a5568;
-        }
+.light {
+  --bg: #f4f3ff;
+  --surface: #ffffff;
+  --surface2: #f0effe;
+  --border: rgba(100,90,200,0.12);
+  --border-hover: rgba(100,90,200,0.3);
+  --text: #1a1830;
+  --text-muted: #6259a8;
+  --text-dim: #a09cc8;
+  --accent: #5c4ef0;
+}
 
-        body {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: var(--text-color);
-            transition: all 0.3s ease;
-        }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background var(--transition), color var(--transition);
+  overflow-x: hidden;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+/* Background texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(124,106,247,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(106,247,178,0.07) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
+/* ========================================
+   LAYOUT
+======================================== */
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
+/* ========================================
+   TOPBAR
+======================================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
 
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 10px;
-        }
+.logo span {
+  color: var(--accent);
+}
 
-        .tagline {
-            color: white;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 
-        .theme-toggle {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all var(--transition);
+  color: var(--text-muted);
+}
 
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
+.icon-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+  transform: scale(1.05);
+}
 
-        .question-counter {
-            text-align: center;
-            margin-bottom: 20px;
-            color: white;
-            font-weight: 500;
-        }
+/* ========================================
+   PROGRESS
+======================================== */
+.progress-wrap {
+  margin-bottom: 10px;
+}
 
-        .progress-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
-        .progress {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 10px;
-            transition: width 0.5s ease;
-        }
+.progress-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
 
-        h2 {
-            color: var(--text-color);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
+.progress-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: visible;
+  position: relative;
+}
 
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 99px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
 
-        .option {
-            padding: 18px 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-color);
-        }
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background: var(--accent2);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent2);
+}
 
-        .option:hover {
-            border-color: var(--primary);
-            background-color: rgba(46, 134, 171, 0.05);
-        }
+/* ========================================
+   CARDS
+======================================== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  transition: all var(--transition);
+}
 
-        .option.selected {
-            border-color: var(--primary);
-            background-color: rgba(46, 134, 171, 0.1);
-        }
+/* ========================================
+   START SCREEN
+======================================== */
+.start-hero {
+  text-align: center;
+  padding: 20px 0 32px;
+}
 
-        .emoji {
-            font-size: 1.5rem;
-        }
+.start-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
 
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 16px 30px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 20px;
-        }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
 
-        .btn:hover {
-            background: #236a8a;
-            transform: translateY(-2px);
-        }
+.start-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
 
-        .btn:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-        }
+.start-title em {
+  font-style: normal;
+  color: var(--accent);
+}
 
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
+.start-desc {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 32px;
+  font-weight: 300;
+}
 
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: white;
-        }
+.stats-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
 
-        .result-card {
-            text-align: center;
-        }
+.stat-pill {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
 
-        .result-badge {
-            background: var(--accent);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            display: inline-block;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
+.stat-pill strong {
+  color: var(--accent);
+  font-weight: 700;
+}
 
-        .course-card {
-            border-left: 5px solid var(--primary);
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: left;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            position: relative;
-        }
+/* ========================================
+   BUTTONS
+======================================== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 16px 32px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  width: 100%;
+  letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+}
 
-        .course-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: between;
-            align-items: center;
-        }
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
 
-        .course-info {
-            margin-bottom: 10px;
-            line-height: 1.6;
-            color: var(--text-color);
-        }
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,106,247,0.35); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .course-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 15px;
-        }
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
 
-        .tag {
-            background: rgba(46, 134, 171, 0.1);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
+.btn-ghost:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
 
-        .market-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
-            padding: 15px;
-            background: rgba(46, 134, 171, 0.05);
-            border-radius: 10px;
-        }
+/* ========================================
+   QUESTION SCREEN
+======================================== */
+.question-header {
+  margin-bottom: 28px;
+}
 
-        .market-item {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
+.question-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-        .market-label {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            font-weight: 500;
-        }
+.question-num::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
 
-        .market-value {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
+.question-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  color: var(--text);
+}
 
-        .favorite-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #ccc;
-        }
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
 
-        .favorite-btn:hover {
-            transform: scale(1.2);
-        }
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: left;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.4;
+  position: relative;
+  overflow: hidden;
+}
 
-        .favorite-btn.favorited {
-            color: #ff6b6b;
-        }
+.option-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform var(--transition);
+  border-radius: 0 2px 2px 0;
+}
 
-        .favorites-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid rgba(46, 134, 171, 0.1);
-        }
+.option-btn:hover {
+  border-color: var(--border-hover);
+  background: var(--surface);
+}
 
-        .favorites-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+.option-btn:hover::before { transform: scaleY(1); }
 
-        .hidden {
-            display: none;
-        }
+.option-btn.selected {
+  border-color: var(--accent);
+  background: rgba(124, 106, 247, 0.08);
+}
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-        }
+.option-btn.selected::before { transform: scaleY(1); }
 
-        .spinner {
-            border: 5px solid rgba(46, 134, 171, 0.2);
-            border-radius: 50%;
-            border-top: 5px solid var(--primary);
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
+.option-emoji {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+}
 
-        /* NOVOS ESTILOS ADICIONADOS */
-        .search-bar {
-            margin: 20px 0;
-            position: relative;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            font-size: 1rem;
-            background: var(--card-bg);
-            color: var(--text-color);
-        }
-        
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .results-count {
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .filters {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 8px 16px;
-            border: 2px solid var(--primary);
-            background: var(--card-bg);
-            color: var(--primary);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .compatibility-score {
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .compatibility-score.high {
-            background: var(--success);
-        }
-        
-        .compatibility-score.medium {
-            background: var(--warning);
-        }
-        
-        .compatibility-score.low {
-            background: var(--danger);
-        }
-        
-        .course-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .view-all-btn {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            padding: 12px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin: 20px auto;
-            display: block;
-        }
-        
-        .view-all-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
+.option-text { flex: 1; }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+.option-check {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  font-size: 0.7rem;
+  color: transparent;
+}
 
-        @media (max-width: 600px) {
-            .card {
-                padding: 20px;
-            }
-            
-            h2 {
-                font-size: 1.3rem;
-            }
-            
-            .option {
-                padding: 15px;
-            }
-            
-            .results-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filters {
-                justify-content: center;
-            }
-            
-            .course-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .market-info {
-                grid-template-columns: 1fr;
-            }
-            
-            .theme-toggle {
-                position: relative;
-                margin-bottom: 15px;
-            }
-        }
-    </style>
+.option-btn.selected .option-check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Question nav */
+.question-nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.question-nav .btn-ghost {
+  width: auto;
+  flex-shrink: 0;
+}
+
+.question-nav .btn-primary {
+  flex: 1;
+}
+
+/* ========================================
+   LOADING
+======================================== */
+.loading-wrap {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.loading-animation {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  position: relative;
+}
+
+.loading-animation::before,
+.loading-animation::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.loading-animation::before {
+  inset: 0;
+  border: 3px solid var(--border);
+}
+
+.loading-animation::after {
+  inset: 0;
+  border: 3px solid transparent;
+  border-top-color: var(--accent);
+  border-right-color: var(--accent2);
+  animation: spin 1.2s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.loading-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+  text-align: left;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loading-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  transition: all 0.4s ease;
+}
+
+.loading-step.active {
+  color: var(--text-muted);
+}
+
+.loading-step.done {
+  color: var(--success);
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.loading-step.active .step-dot {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 1s ease infinite;
+}
+
+.loading-step.done .step-dot {
+  background: var(--success);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ========================================
+   RESULTS SCREEN
+======================================== */
+.results-hero {
+  margin-bottom: 28px;
+}
+
+.results-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.results-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 12px;
+}
+
+/* Profile summary */
+.profile-summary {
+  background: linear-gradient(135deg, rgba(124,106,247,0.1), rgba(106,247,178,0.05));
+  border: 1px solid rgba(124,106,247,0.2);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.profile-summary strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Controls */
+.search-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 13px 16px 13px 44px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: all var(--transition);
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.search-input::placeholder { color: var(--text-dim); }
+
+.filters-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  padding: 7px 16px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  border-radius: 99px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.filter-chip:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.filter-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.results-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+.results-count strong { color: var(--accent); }
+
+/* ========================================
+   COURSE CARDS
+======================================== */
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.course-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all var(--transition);
+  animation: slideIn 0.4s ease both;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.course-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.course-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 20px 16px;
+  cursor: pointer;
+}
+
+.course-rank {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--border);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: right;
+}
+
+.course-rank.top { color: var(--accent2); }
+
+.course-main { flex: 1; min-width: 0; }
+
+.course-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.course-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.compat-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.03em;
+}
+
+.compat-badge.high { background: rgba(106,247,178,0.15); color: var(--success); }
+.compat-badge.medium { background: rgba(247,195,106,0.15); color: var(--warning); }
+.compat-badge.low { background: rgba(247,106,106,0.15); color: var(--danger); }
+
+.course-area-tag {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.course-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.fav-btn, .expand-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-size: 1rem;
+  color: var(--text-dim);
+}
+
+.fav-btn:hover { border-color: #f76a6a; color: #f76a6a; }
+.fav-btn.favorited { background: rgba(247,106,106,0.1); border-color: rgba(247,106,106,0.4); color: #f76a6a; }
+
+.expand-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.expand-btn.open { transform: rotate(180deg); }
+
+/* Score bar */
+.score-bar-wrap {
+  padding: 0 20px 16px 72px;
+}
+
+.score-bar-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+}
+
+/* Expandable body */
+.course-body {
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.course-body.open { max-height: 700px; }
+
+.course-body-inner {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Score explanation */
+.score-explain {
+  background: linear-gradient(135deg, rgba(124,106,247,0.08), transparent);
+  border: 1px solid rgba(124,106,247,0.15);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.score-explain-title {
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.info-item {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.info-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.info-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.info-item.full { grid-column: 1 / -1; }
+
+.desc-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background: rgba(124,106,247,0.1);
+  color: var(--accent);
+  border: 1px solid rgba(124,106,247,0.2);
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+/* Duration badge */
+.duration-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border-radius: 99px;
+  padding: 3px 10px;
+}
+
+/* ========================================
+   MARKET INDICATORS
+======================================== */
+.emp-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.emp-badge.muito-alta, .emp-badge.muito-alto { background: rgba(106,247,178,0.15); color: #6af7b2; }
+.emp-badge.alta { background: rgba(106,247,178,0.1); color: #98f7c8; }
+.emp-badge.media, .emp-badge.média { background: rgba(247,195,106,0.1); color: #f7c36a; }
+.emp-badge.baixa { background: rgba(247,106,106,0.1); color: #f76a6a; }
+.dem-crescendo { color: #6af7b2; }
+.dem-estavel, .dem-estável { color: var(--text-muted); }
+.dem-competitiva { color: #f7b26a; }
+
+/* ========================================
+   VIEW ALL / FAVORITES
+======================================== */
+.show-more-wrap {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.show-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  padding: 12px 28px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.show-more-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ========================================
+   FAVORITES SECTION
+======================================== */
+.section-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 32px 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-count {
+  background: rgba(247,106,106,0.15);
+  color: #f76a6a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+/* ========================================
+   BOTTOM ACTIONS
+======================================== */
+.bottom-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.bottom-actions .btn-primary { flex: 1; background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+.bottom-actions .btn-primary:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ========================================
+   TOAST
+======================================== */
+.toast-wrap {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  z-index: 1000;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast-wrap.show { transform: translateX(-50%) translateY(0); }
+
+.toast {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 12px 24px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 560px) {
+  .card { padding: 20px; }
+  .start-title { font-size: 1.7rem; }
+  .question-text { font-size: 1.2rem; }
+  .info-grid { grid-template-columns: 1fr; }
+  .bottom-actions { flex-direction: column; }
+  .results-title { font-size: 1.4rem; }
+}
+
+/* ========================================
+   HIDDEN UTILITY
+======================================== */
+.hidden { display: none !important; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <button class="theme-toggle" id="theme-toggle">🌙</button>
-            <div class="logo">UniMatch</div>
-            <div class="tagline">Encontre o curso perfeito para seu futuro</div>
-        </div>
 
-        <div class="progress-bar">
-            <div class="progress" id="progress" style="width: 10%;"></div>
-        </div>
+<div class="app">
 
-        <div class="question-counter" id="question-counter">Pergunta 1 de 10</div>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="logo">Uni<span>Match</span></div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="theme-btn" title="Alternar tema" aria-label="Alternar tema">☀️</button>
+    </div>
+  </div>
 
-        <!-- Tela de Início -->
-        <div class="card" id="start-screen">
-            <h2>Encontre o Curso Ideal para Você!</h2>
-            <p style="margin-bottom: 20px; line-height: 1.6;">Responda algumas perguntas simples e receba recomendações personalizadas de cursos de graduação em universidades públicas.</p>
-            <p style="margin-bottom: 30px; line-height: 1.6;">Vamos descobrir juntos qual carreira combina mais com seu perfil!</p>
-            <button class="btn" id="start-btn">Começar Agora</button>
-        </div>
+  <!-- Progress -->
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label" id="progress-label">Início</span>
+      <span class="progress-label" id="progress-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
 
-        <!-- Questionário -->
-        <div class="card hidden" id="question-screen">
-            <h2 id="question-text">Qual sua área de maior interesse?</h2>
-            <div class="options" id="options-container">
-                <!-- Opções serão inseridas aqui via JavaScript -->
-            </div>
-            <button class="btn" id="next-btn" disabled>Próxima Pergunta</button>
-        </div>
+  <!-- ===== START SCREEN ===== -->
+  <div class="card" id="start-screen">
+    <div class="start-hero">
+      <span class="start-icon">🎓</span>
+      <h1 class="start-title">Encontre seu curso <em>ideal</em></h1>
+      <p class="start-desc">10 perguntas rápidas. Um algoritmo honesto. Recomendações reais de cursos em universidades públicas brasileiras.</p>
+      <div class="stats-row">
+        <div class="stat-pill">✦ <strong>100+</strong> cursos mapeados</div>
+        <div class="stat-pill">📊 <strong>Dados</strong> de mercado reais</div>
+        <div class="stat-pill">⚡ <strong>~3 min</strong></div>
+      </div>
+      <button class="btn-primary" id="start-btn" aria-label="Iniciar questionário">
+        Começar agora →
+      </button>
+    </div>
+  </div>
 
-        <!-- Tela de Carregamento -->
-        <div class="card hidden" id="loading-screen">
-            <div class="loading">
-                <div class="spinner"></div>
-                <h2>Analisando suas respostas...</h2>
-                <p>Estamos encontrando os cursos mais compatíveis com seu perfil.</p>
-            </div>
-        </div>
+  <!-- ===== QUESTION SCREEN ===== -->
+  <div class="card hidden" id="question-screen" role="main" aria-live="polite">
+    <div class="question-header">
+      <div class="question-num" id="question-num">Pergunta 1 de 10</div>
+      <h2 class="question-text" id="question-text"></h2>
+    </div>
+    <div class="options-grid" id="options-grid" role="listbox" aria-label="Opções de resposta"></div>
+    <div class="question-nav">
+      <button class="btn-ghost" id="back-btn" aria-label="Voltar para pergunta anterior">← Voltar</button>
+      <button class="btn-primary" id="next-btn" disabled aria-label="Próxima pergunta">Próxima →</button>
+    </div>
+  </div>
 
-        <!-- Tela de Resultados MELHORADA -->
-        <div class="card hidden" id="result-screen">
-            <div class="result-badge">Recomendações para Você</div>
-            <h2>Descubra seus cursos ideais!</h2>
-            <p style="margin-bottom: 20px;">Com base nas suas respostas, encontramos os cursos mais compatíveis com seu perfil:</p>
-            
-            <!-- Barra de Pesquisa -->
-            <div class="search-bar">
-                <input type="text" class="search-input" id="search-input" placeholder="🔍 Pesquisar curso específico...">
-            </div>
-            
-            <!-- Filtros -->
-            <div class="results-header">
-                <div class="results-count" id="results-count">Carregando...</div>
-                <div class="filters">
-                    <button class="filter-btn active" data-filter="all">Todos</button>
-                    <button class="filter-btn" data-filter="high">Alta Compatibilidade</button>
-                    <button class="filter-btn" data-filter="medium">Média Compatibilidade</button>
-                    <button class="filter-btn" data-filter="notes">Maiores Notas de Corte</button>
-                </div>
-            </div>
-            
-            <div id="results-container">
-                <!-- Resultados serão inseridos aqui via JavaScript -->
-            </div>
-            
-            <button class="view-all-btn" id="view-all-btn" style="display: none;">
-                Ver Todos os Cursos
-            </button>
+  <!-- ===== LOADING SCREEN ===== -->
+  <div class="card hidden" id="loading-screen" aria-live="polite" aria-label="Calculando resultados">
+    <div class="loading-wrap">
+      <div class="loading-animation"></div>
+      <h2 class="loading-title">Calculando seu perfil…</h2>
+      <div class="loading-steps" id="loading-steps">
+        <div class="loading-step active" id="step-0"><div class="step-dot"></div> Analisando suas respostas</div>
+        <div class="loading-step" id="step-1"><div class="step-dot"></div> Calculando compatibilidades</div>
+        <div class="loading-step" id="step-2"><div class="step-dot"></div> Verificando dados de mercado</div>
+        <div class="loading-step" id="step-3"><div class="step-dot"></div> Preparando recomendações</div>
+      </div>
+    </div>
+  </div>
 
-            <!-- Seção de Favoritos -->
-            <div class="favorites-section hidden" id="favorites-section">
-                <div class="favorites-header">
-                    <h2>Meus Cursos Favoritos</h2>
-                    <button class="btn btn-secondary" id="clear-favorites">Limpar Favoritos</button>
-                </div>
-                <div id="favorites-container">
-                    <!-- Cursos favoritos serão inseridos aqui -->
-                </div>
-            </div>
-            
-            <button class="btn" id="restart-btn">Fazer Novamente</button>
-        </div>
+  <!-- ===== RESULTS SCREEN ===== -->
+  <div class="hidden" id="result-screen">
+    <div class="results-hero">
+      <div class="results-eyebrow">✦ Seus resultados</div>
+      <h2 class="results-title">Cursos compatíveis com você</h2>
+      <div class="profile-summary" id="profile-summary">
+        Carregando análise do perfil...
+      </div>
     </div>
 
-    <script>
-        // Dados do questionário
-        const questions = [
-            {
-                question: "Qual sua área de maior interesse?",
-                options: [
-                    { text: "Ciências da Saúde", emoji: "🏥", value: "saude" },
-                    { text: "Tecnologia e Computação", emoji: "💻", value: "tecnologia" },
-                    { text: "Ciências Exatas e Engenharias", emoji: "🔬", value: "exatas" },
-                    { text: "Negócios e Gestão", emoji: "📊", value: "negocios" },
-                    { text: "Artes e Comunicação", emoji: "🎨", value: "artes" },
-                    { text: "Ciências Humanas", emoji: "👥", value: "humanas" },
-                    { text: "Ciências Ambientais e Biológicas", emoji: "🌿", value: "ambiental" }
-                ]
-            },
-            {
-                question: "Como você descreveria seus talentos naturais?",
-                options: [
-                    { text: "Analítico - bom com números e lógica", emoji: "🔢", value: "analitico" },
-                    { text: "Criativo - ideias inovadoras e arte", emoji: "✨", value: "criativo" },
-                    { text: "Social - comunicação e trabalho em equipe", emoji: "💬", value: "social" },
-                    { text: "Prático - mãos na massa e resultados", emoji: "🔧", value: "pratico" },
-                    { text: "Científico - pesquisa e curiosidade", emoji: "🧪", value: "cientifico" }
-                ]
-            },
-            {
-                question: "Qual seu objetivo profissional principal?",
-                options: [
-                    { text: "Alto impacto social - ajudar pessoas", emoji: "❤️", value: "impacto-social" },
-                    { text: "Inovação tecnológica - soluções futuras", emoji: "🚀", value: "inovacao" },
-                    { text: "Estabilidade financeira - carreira sólida", emoji: "💰", value: "estabilidade" },
-                    { text: "Liberdade criativa - expressar ideias", emoji: "🎭", value: "liberdade" },
-                    { text: "Pesquisa científica - descobrir conhecimentos", emoji: "🔍", value: "pesquisa" }
-                ]
-            },
-            {
-                question: "Prefere trabalhar principalmente:",
-                options: [
-                    { text: "Em equipe - colaborando com várias pessoas", emoji: "👥", value: "equipe" },
-                    { text: "Sozinho - com foco individual", emoji: "🧘", value: "sozinho" },
-                    { text: "Ambiente dinâmico - variando entre equipe e individual", emoji: "🔄", value: "dinamico" },
-                    { text: "Com público - atendimento direto", emoji: "🙋", value: "publico" }
-                ]
-            },
-            {
-                question: "Qual seu nível de conforto com matemática?",
-                options: [
-                    { text: "Alto - adoro matemática", emoji: "🧮", value: "alto-matematica" },
-                    { text: "Médio - me viro bem", emoji: "✅", value: "medio-matematica" },
-                    { text: "Básico - prefiro áreas com menos matemática", emoji: "📝", value: "basico-matematica" },
-                    { text: "Nenhum - quero evitar cálculos complexos", emoji: "🚫", value: "nenhum-matematica" }
-                ]
-            },
-            {
-                question: "Interesse por tecnologia e inovação:",
-                options: [
-                    { text: "Muito alto - quero trabalhar na vanguarda", emoji: "💡", value: "muito-alto-tech" },
-                    { text: "Alto - usar tecnologia como ferramenta principal", emoji: "📱", value: "alto-tech" },
-                    { text: "Moderado - tecnologia como suporte", emoji: "💻", value: "moderado-tech" },
-                    { text: "Baixo - prefiro áreas mais tradicionais", emoji: "📚", value: "baixo-tech" }
-                ]
-            },
-            {
-                question: "Preferência de ambiente de trabalho:",
-                options: [
-                    { text: "Escritório/empresarial", emoji: "🏢", value: "escritorio" },
-                    { text: "Laboratório", emoji: "🧪", value: "laboratorio" },
-                    { text: "Campo/externo", emoji: "🌳", value: "campo" },
-                    { text: "Clínica/hospital", emoji: "🏥", value: "clinica" },
-                    { text: "Home office/remoto", emoji: "🏠", value: "remoto" },
-                    { text: "Sala de aula", emoji: "👨‍🏫", value: "sala-aula" }
-                ]
-            },
-            {
-                question: "Horário de trabalho preferido:",
-                options: [
-                    { text: "Horário comercial - 9h às 18h", emoji: "🕘", value: "comercial" },
-                    { text: "Flexível - horários variados", emoji: "⏰", value: "flexivel" },
-                    { text: "Plantões/scale - trabalhar em turnos", emoji: "🔄", value: "plantao" },
-                    { text: "Autônomo - definir meus próprios horários", emoji: "🗓️", value: "autonomo" }
-                ]
-            },
-            {
-                question: "Importância do salário:",
-                options: [
-                    { text: "Muito importante - busco alta remuneração", emoji: "💎", value: "muito-importante" },
-                    { text: "Importante - equilíbrio entre salário e realização", emoji: "⚖️", value: "importante" },
-                    { text: "Moderada - realização profissional é mais importante", emoji: "🌟", value: "moderada" },
-                    { text: "Pouco importante - priorizo outros aspectos", emoji: "🌱", value: "pouco-importante" }
-                ]
-            },
-            {
-                question: "Tempo de formação desejado:",
-                options: [
-                    { text: "4-5 anos - graduação mais rápida", emoji: "⚡", value: "curto" },
-                    { text: "5-6 anos - tempo padrão de graduação", emoji: "📅", value: "medio" },
-                    { text: "6+ anos - não me importo com tempo", emoji: "∞", value: "longo" }
-                ]
-            }
-        ];
+    <div class="card" style="padding: 20px; margin-bottom: 16px;">
+      <!-- Search -->
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="search" class="search-input" id="search-input" placeholder="Buscar curso específico..." aria-label="Buscar curso">
+      </div>
 
-        // Base de dados de cursos ATUALIZADA com dados de mercado
- // Base de dados de cursos COMPLETA com dados de mercado
-const courses = {
-    "Administração": {
-        area: "negocios",
-        descricao: "Gestão de organizações, recursos e pessoas para maximizar resultados e eficiência.",
-        carreiras: "Gerente, consultor, empreendedor, analista, diretor.",
-        notaCorte: "720-760",
-        tags: ["Gestão", "Liderança", "Estratégia"],
-        salarioMedio: "R$ 4.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Arquitetura e urbanismo": {
-        area: "artes",
-        descricao: "Projeto de espaços habitáveis, considerando estética, funcionalidade e sustentabilidade.",
-        carreiras: "Arquiteto, urbanista, paisagista, designer de interiores.",
-        notaCorte: "760-800",
-        tags: ["Design", "Urbanismo", "Projetos"],
-        salarioMedio: "R$ 3.800 - R$ 9.000",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Artes cênicas": {
-        area: "artes",
-        descricao: "Estudo e prática das artes performáticas como teatro, dança e performance.",
-        carreiras: "Ator, diretor, coreógrafo, produtor cultural, professor.",
-        notaCorte: "650-700",
-        tags: ["Teatro", "Dança", "Performance"],
-        salarioMedio: "R$ 2.500 - R$ 6.000",
-        empregabilidade: "Baixa",
-        demanda: "Competitiva"
-    },
-    "Artes visuais": {
-        area: "artes",
-        descricao: "Criação e análise de obras visuais como pintura, escultura, fotografia e digital.",
-        carreiras: "Artista plástico, curador, crítico de arte, professor.",
-        notaCorte: "640-690",
-        tags: ["Arte", "Criatividade", "Expressão"],
-        salarioMedio: "R$ 2.800 - R$ 7.000",
-        empregabilidade: "Média",
-        demanda: "Competitiva"
-    },
-    "Astronomia": {
-        area: "exatas",
-        descricao: "Estudo dos corpos celestes, universo e fenômenos astronômicos.",
-        carreiras: "Astrônomo, pesquisador, professor, divulgador científico.",
-        notaCorte: "750-790",
-        tags: ["Ciência", "Espaço", "Pesquisa"],
-        salarioMedio: "R$ 6.000 - R$ 15.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Audiovisual": {
-        area: "artes",
-        descricao: "Produção e criação de conteúdos para cinema, TV e mídias digitais.",
-        carreiras: "Cineasta, produtor, editor, diretor de fotografia.",
-        notaCorte: "710-750",
-        tags: ["Cinema", "TV", "Produção"],
-        salarioMedio: "R$ 3.200 - R$ 8.500",
-        empregabilidade: "Média",
-        demanda: "Crescendo"
-    },
-    "Biblioteconomia": {
-        area: "humanas",
-        descricao: "Organização, preservação e disseminação de informações e acervos.",
-        carreiras: "Bibliotecário, gestor de informação, arquivista.",
-        notaCorte: "620-670",
-        tags: ["Informação", "Organização", "Pesquisa"],
-        salarioMedio: "R$ 3.000 - R$ 6.500",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Biotecnologia": {
-        area: "exatas",
-        descricao: "Aplicação de tecnologia em sistemas biológicos para desenvolvimento de produtos.",
-        carreiras: "Pesquisador, analista, desenvolvedor de bioprodutos.",
-        notaCorte: "770-810",
-        tags: ["Tecnologia", "Biologia", "Inovação"],
-        salarioMedio: "R$ 5.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Ciências agrárias": {
-        area: "ambiental",
-        descricao: "Estudo e aplicação de técnicas para produção agropecuária sustentável.",
-        carreiras: "Engenheiro agrônomo, técnico agrícola, pesquisador.",
-        notaCorte: "690-730",
-        tags: ["Agro", "Sustentabilidade", "Produção"],
-        salarioMedio: "R$ 4.000 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Ciências Atuariais": {
-        area: "exatas",
-        descricao: "Aplicação de matemática e estatística para análise de riscos em seguros e finanças.",
-        carreiras: "Atuário, analista de riscos, consultor financeiro.",
-        notaCorte: "740-780",
-        tags: ["Matemática", "Finanças", "Risco"],
-        salarioMedio: "R$ 5.000 - R$ 11.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Ciências Biológicas": {
-        area: "ambiental",
-        descricao: "Estudo dos seres vivos, seus processos vitais e relações com o ambiente.",
-        carreiras: "Biólogo, pesquisador, professor, perito ambiental.",
-        notaCorte: "710-750",
-        tags: ["Biologia", "Pesquisa", "Natureza"],
-        salarioMedio: "R$ 3.500 - R$ 8.000",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Ciências Biomédicas": {
-        area: "saude",
-        descricao: "Pesquisa e análise de processos biológicos relacionados à saúde humana.",
-        carreiras: "Pesquisador, analista biomédico, professor.",
-        notaCorte: "760-800",
-        tags: ["Pesquisa", "Saúde", "Laboratório"],
-        salarioMedio: "R$ 4.500 - R$ 10.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Ciências Contábeis": {
-        area: "negocios",
-        descricao: "Gestão financeira, contabilidade e controle patrimonial de organizações.",
-        carreiras: "Contador, auditor, controller, consultor tributário.",
-        notaCorte: "700-740",
-        tags: ["Finanças", "Contabilidade", "Auditoria"],
-        salarioMedio: "R$ 4.000 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Ciências da Computação": {
-        area: "tecnologia",
-        descricao: "Desenvolvimento de software, algoritmos e sistemas computacionais.",
-        carreiras: "Desenvolvedor, cientista de dados, arquiteto de software.",
-        notaCorte: "780-820",
-        tags: ["Programação", "Tecnologia", "Inovação"],
-        salarioMedio: "R$ 4.000 - R$ 15.000",
-        empregabilidade: "Muito Alta",
-        demanda: "Crescendo"
-    },
-    "Ciência de Dados": {
-        area: "tecnologia",
-        descricao: "Análise e interpretação de dados complexos para tomada de decisões.",
-        carreiras: "Cientista de dados, analista, consultor de BI.",
-        notaCorte: "790-830",
-        tags: ["Dados", "Análise", "Tecnologia"],
-        salarioMedio: "R$ 5.000 - R$ 18.000",
-        empregabilidade: "Muito Alta",
-        demanda: "Crescendo"
-    },
-    "Ciências da Natureza": {
-        area: "ambiental",
-        descricao: "Estudo integrado de física, química e biologia em sistemas naturais.",
-        carreiras: "Pesquisador, professor, educador ambiental.",
-        notaCorte: "680-720",
-        tags: ["Natureza", "Ciência", "Educação"],
-        salarioMedio: "R$ 3.800 - R$ 7.500",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Ciências dos Alimentos": {
-        area: "exatas",
-        descricao: "Estudo das propriedades, processamento e conservação de alimentos.",
-        carreiras: "Pesquisador, tecnólogo de alimentos, quality assurance.",
-        notaCorte: "720-760",
-        tags: ["Alimentos", "Qualidade", "Segurança"],
-        salarioMedio: "R$ 4.200 - R$ 8.500",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Ciências Exatas": {
-        area: "exatas",
-        descricao: "Base teórica e aplicada de matemática, física e química.",
-        carreiras: "Pesquisador, professor, analista, consultor.",
-        notaCorte: "730-770",
-        tags: ["Matemática", "Física", "Química"],
-        salarioMedio: "R$ 5.000 - R$ 11.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Ciências Físicas e Biomoleculares": {
-        area: "exatas",
-        descricao: "Interface entre física e biologia no estudo de sistemas moleculares.",
-        carreiras: "Pesquisador, biofísico, desenvolvedor de tecnologias médicas.",
-        notaCorte: "750-790",
-        tags: ["Física", "Biologia", "Pesquisa"],
-        salarioMedio: "R$ 5.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Ciências Sociais": {
-        area: "humanas",
-        descricao: "Análise das sociedades humanas, culturas e relações sociais.",
-        carreiras: "Pesquisador, consultor, analista social, professor.",
-        notaCorte: "670-710",
-        tags: ["Sociologia", "Pesquisa", "Sociedade"],
-        salarioMedio: "R$ 3.200 - R$ 7.000",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Design": {
-        area: "artes",
-        descricao: "Criação de soluções visuais e funcionais para produtos e serviços.",
-        carreiras: "Designer gráfico, UX/UI designer, diretor de arte.",
-        notaCorte: "710-750",
-        tags: ["Criatividade", "Visual", "Inovação"],
-        salarioMedio: "R$ 3.500 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Direito": {
-        area: "humanas",
-        descricao: "Estudo das leis e aplicação da justiça na sociedade.",
-        carreiras: "Advogado, juiz, promotor, consultor jurídico.",
-        notaCorte: "790-830",
-        tags: ["Leis", "Justiça", "Advocacia"],
-        salarioMedio: "R$ 3.000 - R$ 20.000",
-        empregabilidade: "Alta",
-        demanda: "Competitiva"
-    },
-    "Economia": {
-        area: "negocios",
-        descricao: "Análise da produção, distribuição e consumo de bens e serviços.",
-        carreiras: "Economista, analista, consultor, pesquisador.",
-        notaCorte: "750-790",
-        tags: ["Finanças", "Mercado", "Análise"],
-        salarioMedio: "R$ 5.000 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Editoração": {
-        area: "artes",
-        descricao: "Processos de edição, produção e publicação de conteúdos.",
-        carreiras: "Editor, produtor editorial, revisor, diagramador.",
-        notaCorte: "660-700",
-        tags: ["Edição", "Publicação", "Texto"],
-        salarioMedio: "R$ 2.800 - R$ 6.500",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Educação Física e Esporte": {
-        area: "saude",
-        descricao: "Promoção da saúde e desempenho por meio de atividades físicas.",
-        carreiras: "Professor, personal trainer, preparador físico.",
-        notaCorte: "680-720",
-        tags: ["Esporte", "Saúde", "Movimento"],
-        salarioMedio: "R$ 2.800 - R$ 7.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Educomunicação": {
-        area: "humanas",
-        descricao: "Interface entre educação e comunicação em processos de aprendizagem.",
-        carreiras: "Educador, produtor de conteúdo, consultor educacional.",
-        notaCorte: "650-690",
-        tags: ["Educação", "Comunicação", "Mídia"],
-        salarioMedio: "R$ 3.000 - R$ 6.800",
-        empregabilidade: "Média",
-        demanda: "Crescendo"
-    },
-    "Enfermagem": {
-        area: "saude",
-        descricao: "Cuidado integral à saúde humana em diferentes níveis de atenção.",
-        carreiras: "Enfermeiro, gestor hospitalar, educador em saúde.",
-        notaCorte: "730-770",
-        tags: ["Saúde", "Cuidado", "Hospital"],
-        salarioMedio: "R$ 3.500 - R$ 8.000",
-        empregabilidade: "Muito Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia Aeronáutica": {
-        area: "exatas",
-        descricao: "Projeto, construção e manutenção de aeronaves e sistemas aeroespaciais.",
-        carreiras: "Engenheiro aeronáutico, projetista, analista de sistemas.",
-        notaCorte: "790-830",
-        tags: ["Avião", "Espaço", "Tecnologia"],
-        salarioMedio: "R$ 6.000 - R$ 15.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia Agronômica": {
-        area: "exatas",
-        descricao: "Aplicação de engenharia na produção agrícola e gestão rural.",
-        carreiras: "Engenheiro agrônomo, gestor rural, consultor agrícola.",
-        notaCorte: "720-760",
-        tags: ["Agricultura", "Produção", "Gestão"],
-        salarioMedio: "R$ 4.500 - R$ 10.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia Ambiental": {
-        area: "exatas",
-        descricao: "Soluções tecnológicas para problemas ambientais e sustentabilidade.",
-        carreiras: "Engenheiro ambiental, consultor, gestor de recursos.",
-        notaCorte: "740-780",
-        tags: ["Meio Ambiente", "Sustentabilidade", "Tecnologia"],
-        salarioMedio: "R$ 4.800 - R$ 9.500",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia Bioquímica": {
-        area: "exatas",
-        descricao: "Aplicação de processos bioquímicos em escala industrial.",
-        carreiras: "Engenheiro bioquímico, pesquisador, gestor de produção.",
-        notaCorte: "760-800",
-        tags: ["Bioquímica", "Indústria", "Pesquisa"],
-        salarioMedio: "R$ 5.200 - R$ 11.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia Civil": {
-        area: "exatas",
-        descricao: "Projeto, construção e manutenção de edifícios, infraestrutura e obras.",
-        carreiras: "Engenheiro civil, projetista, fiscal, gestor de obras.",
-        notaCorte: "750-790",
-        tags: ["Construção", "Infraestrutura", "Projetos"],
-        salarioMedio: "R$ 5.000 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia de Alimentos": {
-        area: "exatas",
-        descricao: "Processamento, conservação e desenvolvimento de produtos alimentícios.",
-        carreiras: "Engenheiro de alimentos, pesquisador, gestor de qualidade.",
-        notaCorte: "740-780",
-        tags: ["Alimentos", "Processamento", "Qualidade"],
-        salarioMedio: "R$ 4.500 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia de Biossistemas": {
-        area: "exatas",
-        descricao: "Integração de sistemas biológicos com tecnologia e automação.",
-        carreiras: "Engenheiro de biossistemas, pesquisador, consultor.",
-        notaCorte: "730-770",
-        tags: ["Biotecnologia", "Automação", "Sistemas"],
-        salarioMedio: "R$ 4.800 - R$ 10.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia de Computação": {
-        area: "tecnologia",
-        descricao: "Desenvolvimento de hardware e software integrados em sistemas computacionais.",
-        carreiras: "Engenheiro de computação, desenvolvedor, arquiteto de sistemas.",
-        notaCorte: "780-820",
-        tags: ["Hardware", "Software", "Tecnologia"],
-        salarioMedio: "R$ 4.500 - R$ 14.000",
-        empregabilidade: "Muito Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia de Materiais": {
-        area: "exatas",
-        descricao: "Desenvolvimento, processamento e aplicação de materiais inovadores.",
-        carreiras: "Engenheiro de materiais, pesquisador, desenvolvedor de produtos.",
-        notaCorte: "750-790",
-        tags: ["Materiais", "Inovação", "Pesquisa"],
-        salarioMedio: "R$ 5.000 - R$ 11.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia de Materiais e Manufatura": {
-        area: "exatas",
-        descricao: "Processos de fabricação e transformação de materiais industriais.",
-        carreiras: "Engenheiro de produção, gestor industrial, pesquisador.",
-        notaCorte: "740-780",
-        tags: ["Manufatura", "Produção", "Materiais"],
-        salarioMedio: "R$ 4.800 - R$ 10.500",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia de Minas": {
-        area: "exatas",
-        descricao: "Exploração, extração e beneficiamento de recursos minerais.",
-        carreiras: "Engenheiro de minas, gestor de projetos, pesquisador.",
-        notaCorte: "730-770",
-        tags: ["Mineração", "Recursos", "Extração"],
-        salarioMedio: "R$ 6.000 - R$ 13.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia de Petróleo": {
-        area: "exatas",
-        descricao: "Exploração, produção e refino de petróleo e gás natural.",
-        carreiras: "Engenheiro de petróleo, gestor de campo, pesquisador.",
-        notaCorte: "770-810",
-        tags: ["Petróleo", "Energia", "Exploração"],
-        salarioMedio: "R$ 7.000 - R$ 16.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia de Produção": {
-        area: "exatas",
-        descricao: "Otimização de sistemas produtivos e processos industriais.",
-        carreiras: "Engenheiro de produção, gestor industrial, consultor.",
-        notaCorte: "760-800",
-        tags: ["Produção", "Otimização", "Gestão"],
-        salarioMedio: "R$ 5.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia Elétrica": {
-        area: "exatas",
-        descricao: "Projeto e desenvolvimento de sistemas e componentes elétricos.",
-        carreiras: "Engenheiro eletricista, projetista, gestor de energia.",
-        notaCorte: "770-810",
-        tags: ["Eletricidade", "Energia", "Sistemas"],
-        salarioMedio: "R$ 5.000 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia Física": {
-        area: "exatas",
-        descricao: "Aplicação de princípios físicos no desenvolvimento de tecnologias.",
-        carreiras: "Engenheiro físico, pesquisador, desenvolvedor tecnológico.",
-        notaCorte: "760-800",
-        tags: ["Física", "Tecnologia", "Pesquisa"],
-        salarioMedio: "R$ 5.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia Florestal": {
-        area: "exatas",
-        descricao: "Manejo sustentável de florestas e recursos madeireiros.",
-        carreiras: "Engenheiro florestal, gestor ambiental, pesquisador.",
-        notaCorte: "700-740",
-        tags: ["Florestas", "Sustentabilidade", "Meio Ambiente"],
-        salarioMedio: "R$ 4.200 - R$ 8.500",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Engenharia Mecânica": {
-        area: "exatas",
-        descricao: "Projeto, análise e manutenção de sistemas e componentes mecânicos.",
-        carreiras: "Engenheiro mecânico, projetista, gestor industrial.",
-        notaCorte: "770-810",
-        tags: ["Mecânica", "Projetos", "Indústria"],
-        salarioMedio: "R$ 5.000 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia Mecatrônica": {
-        area: "exatas",
-        descricao: "Integração de mecânica, eletrônica e computação em sistemas automatizados.",
-        carreiras: "Engenheiro mecatrônico, desenvolvedor de robótica, automação.",
-        notaCorte: "780-820",
-        tags: ["Robótica", "Automação", "Tecnologia"],
-        salarioMedio: "R$ 5.000 - R$ 13.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Engenharia Metalúrgica": {
-        area: "exatas",
-        descricao: "Processamento e transformação de metais e ligas metálicas.",
-        carreiras: "Engenheiro metalúrgico, gestor de produção, pesquisador.",
-        notaCorte: "730-770",
-        tags: ["Metais", "Processamento", "Indústria"],
-        salarioMedio: "R$ 5.000 - R$ 11.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia Naval": {
-        area: "exatas",
-        descricao: "Projeto, construção e manutenção de embarcações e estruturas offshore.",
-        carreiras: "Engenheiro naval, projetista, gestor de estaleiros.",
-        notaCorte: "750-790",
-        tags: ["Navios", "Oceanografia", "Projetos"],
-        salarioMedio: "R$ 5.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Engenharia Química": {
-        area: "exatas",
-        descricao: "Processos químicos industriais e desenvolvimento de produtos.",
-        carreiras: "Engenheiro químico, gestor de processos, pesquisador.",
-        notaCorte: "770-810",
-        tags: ["Química", "Processos", "Indústria"],
-        salarioMedio: "R$ 5.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Estatística": {
-        area: "exatas",
-        descricao: "Coleta, análise e interpretação de dados para tomada de decisões.",
-        carreiras: "Estatístico, analista de dados, pesquisador, consultor.",
-        notaCorte: "740-780",
-        tags: ["Dados", "Análise", "Matemática"],
-        salarioMedio: "R$ 4.500 - R$ 10.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Farmácia": {
-        area: "saude",
-        descricao: "Desenvolvimento, produção e controle de medicamentos e cosméticos.",
-        carreiras: "Farmacêutico, pesquisador, gestor de laboratório.",
-        notaCorte: "750-790",
-        tags: ["Medicamentos", "Saúde", "Laboratório"],
-        salarioMedio: "R$ 3.800 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Filosofia": {
-        area: "humanas",
-        descricao: "Reflexão crítica sobre questões fundamentais da existência humana.",
-        carreiras: "Filósofo, professor, consultor, pesquisador.",
-        notaCorte: "630-670",
-        tags: ["Pensamento", "Reflexão", "Crítica"],
-        salarioMedio: "R$ 2.800 - R$ 6.000",
-        empregabilidade: "Baixa",
-        demanda: "Competitiva"
-    },
-    "Finanças e Negócios": {
-        area: "negocios",
-        descricao: "Gestão financeira estratégica e análise de oportunidades de negócios.",
-        carreiras: "Analista financeiro, gestor, consultor, investidor.",
-        notaCorte: "730-770",
-        tags: ["Finanças", "Negócios", "Estratégia"],
-        salarioMedio: "R$ 4.500 - R$ 11.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Física": {
-        area: "exatas",
-        descricao: "Estudo das leis fundamentais que regem o universo e a matéria.",
-        carreiras: "Físico, pesquisador, professor, desenvolvedor tecnológico.",
-        notaCorte: "750-790",
-        tags: ["Ciência", "Pesquisa", "Universo"],
-        salarioMedio: "R$ 6.000 - R$ 15.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Física Computacional": {
-        area: "tecnologia",
-        descricao: "Aplicação de computação na solução de problemas físicos complexos.",
-        carreiras: "Pesquisador, desenvolvedor de simulações, analista computacional.",
-        notaCorte: "760-800",
-        tags: ["Física", "Computação", "Simulação"],
-        salarioMedio: "R$ 5.500 - R$ 13.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Física Médica": {
-        area: "saude",
-        descricao: "Aplicação de princípios físicos em diagnóstico e tratamento médico.",
-        carreiras: "Físico médico, pesquisador, desenvolvedor de equipamentos médicos.",
-        notaCorte: "770-810",
-        tags: ["Física", "Medicina", "Tecnologia"],
-        salarioMedio: "R$ 6.500 - R$ 14.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Fisioterapia": {
-        area: "saude",
-        descricao: "Prevenção e tratamento de disfunções do movimento corporal.",
-        carreiras: "Fisioterapeuta, pesquisador, gestor em saúde.",
-        notaCorte: "740-780",
-        tags: ["Reabilitação", "Movimento", "Saúde"],
-        salarioMedio: "R$ 3.200 - R$ 8.500",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Fonoaudiologia": {
-        area: "saude",
-        descricao: "Prevenção, avaliação e tratamento de distúrbios da comunicação.",
-        carreiras: "Fonoaudiólogo, pesquisador, professor, consultor.",
-        notaCorte: "730-770",
-        tags: ["Comunicação", "Saúde", "Terapia"],
-        salarioMedio: "R$ 3.500 - R$ 8.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Geociências e Educação Ambiental": {
-        area: "ambiental",
-        descricao: "Estudo das ciências da terra integrado à educação ambiental.",
-        carreiras: "Geocientista, educador ambiental, pesquisador.",
-        notaCorte: "680-720",
-        tags: ["Terra", "Educação", "Meio Ambiente"],
-        salarioMedio: "R$ 3.800 - R$ 7.500",
-        empregabilidade: "Média",
-        demanda: "Crescendo"
-    },
-    "Geofísica": {
-        area: "exatas",
-        descricao: "Estudo da Terra por meio de métodos físicos e matemáticos.",
-        carreiras: "Geofísico, pesquisador, consultor em exploração.",
-        notaCorte: "730-770",
-        tags: ["Terra", "Física", "Exploração"],
-        salarioMedio: "R$ 5.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Geografia": {
-        area: "humanas",
-        descricao: "Análise do espaço geográfico e relações sociedade-natureza.",
-        carreiras: "Geógrafo, professor, pesquisador, planejador territorial.",
-        notaCorte: "670-710",
-        tags: ["Espaço", "Território", "Sociedade"],
-        salarioMedio: "R$ 3.200 - R$ 7.000",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Geologia": {
-        area: "exatas",
-        descricao: "Estudo da composição, estrutura e história da Terra.",
-        carreiras: "Geólogo, pesquisador, consultor em mineração e petróleo.",
-        notaCorte: "720-760",
-        tags: ["Terra", "Rochas", "Recursos"],
-        salarioMedio: "R$ 5.800 - R$ 13.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Gerontologia": {
-        area: "saude",
-        descricao: "Estudo do envelhecimento e cuidado com a população idosa.",
-        carreiras: "Gerontólogo, gestor de instituições, pesquisador.",
-        notaCorte: "650-690",
-        tags: ["Envelhecimento", "Saúde", "Cuidado"],
-        salarioMedio: "R$ 3.500 - R$ 7.500",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Gestão Ambiental": {
-        area: "ambiental",
-        descricao: "Planejamento e gestão de recursos naturais e sustentabilidade.",
-        carreiras: "Gestor ambiental, consultor, analista de sustentabilidade.",
-        notaCorte: "690-730",
-        tags: ["Meio Ambiente", "Sustentabilidade", "Gestão"],
-        salarioMedio: "R$ 3.800 - R$ 8.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Gestão de Políticas Públicas": {
-        area: "humanas",
-        descricao: "Formulação, implementação e avaliação de políticas governamentais.",
-        carreiras: "Gestor público, analista de políticas, consultor governamental.",
-        notaCorte: "700-740",
-        tags: ["Políticas", "Governo", "Gestão"],
-        salarioMedio: "R$ 4.000 - R$ 9.000",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "História": {
-        area: "humanas",
-        descricao: "Estudo e interpretação dos processos históricos e sociedades humanas.",
-        carreiras: "Historiador, professor, pesquisador, conservador cultural.",
-        notaCorte: "660-700",
-        tags: ["Passado", "Sociedade", "Cultura"],
-        salarioMedio: "R$ 2.800 - R$ 6.500",
-        empregabilidade: "Média",
-        demanda: "Competitiva"
-    },
-    "Informática Biomédica": {
-        area: "tecnologia",
-        descricao: "Aplicação de computação em soluções para saúde e medicina.",
-        carreiras: "Analista de sistemas de saúde, pesquisador, desenvolvedor.",
-        notaCorte: "750-790",
-        tags: ["Saúde", "Tecnologia", "Computação"],
-        salarioMedio: "R$ 5.000 - R$ 11.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Jornalismo": {
-        area: "artes",
-        descricao: "Apuração, produção e disseminação de informações jornalísticas.",
-        carreiras: "Jornalista, editor, repórter, produtor de conteúdo.",
-        notaCorte: "710-750",
-        tags: ["Notícias", "Comunicação", "Mídia"],
-        salarioMedio: "R$ 2.800 - R$ 7.500",
-        empregabilidade: "Média",
-        demanda: "Competitiva"
-    },
-    "Lazer e Turismo": {
-        area: "humanas",
-        descricao: "Planejamento e gestão de atividades de lazer e serviços turísticos.",
-        carreiras: "Gestor de turismo, planejador, consultor, empreendedor.",
-        notaCorte: "650-690",
-        tags: ["Turismo", "Lazer", "Hospitalidade"],
-        salarioMedio: "R$ 2.800 - R$ 6.500",
-        empregabilidade: "Média",
-        demanda: "Crescendo"
-    },
-    "Letras": {
-        area: "humanas",
-        descricao: "Estudo de línguas, literaturas e manifestações culturais.",
-        carreiras: "Professor, tradutor, revisor, pesquisador linguístico.",
-        notaCorte: "640-680",
-        tags: ["Línguas", "Literatura", "Cultura"],
-        salarioMedio: "R$ 2.800 - R$ 6.000",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Marketing": {
-        area: "negocios",
-        descricao: "Estratégias de mercado, comunicação e relacionamento com consumidores.",
-        carreiras: "Profissional de marketing, gestor de marcas, analista de mercado.",
-        notaCorte: "710-750",
-        tags: ["Mercado", "Comunicação", "Vendas"],
-        salarioMedio: "R$ 3.500 - R$ 10.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Matemática": {
-        area: "exatas",
-        descricao: "Estudo de estruturas abstratas, padrões e relações quantitativas.",
-        carreiras: "Matemático, professor, pesquisador, analista.",
-        notaCorte: "730-770",
-        tags: ["Números", "Lógica", "Abstração"],
-        salarioMedio: "R$ 5.000 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Matemática Aplicada": {
-        area: "exatas",
-        descricao: "Aplicação de métodos matemáticos na solução de problemas práticos.",
-        carreiras: "Matemático aplicado, pesquisador, analista quantitativo.",
-        notaCorte: "740-780",
-        tags: ["Matemática", "Aplicação", "Problemas"],
-        salarioMedio: "R$ 5.200 - R$ 11.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Matemática Aplicada a Negócios": {
-        area: "negocios",
-        descricao: "Uso de ferramentas matemáticas em análise de negócios e finanças.",
-        carreiras: "Analista quantitativo, consultor financeiro, gestor de riscos.",
-        notaCorte: "720-760",
-        tags: ["Matemática", "Negócios", "Finanças"],
-        salarioMedio: "R$ 4.800 - R$ 10.500",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Matemática Aplicada e Computação Científica": {
-        area: "tecnologia",
-        descricao: "Desenvolvimento de algoritmos e modelos computacionais para ciência.",
-        carreiras: "Pesquisador, desenvolvedor de algoritmos, analista computacional.",
-        notaCorte: "760-800",
-        tags: ["Matemática", "Computação", "Ciência"],
-        salarioMedio: "R$ 5.500 - R$ 12.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Matemática Aplicada e Computacional": {
-        area: "tecnologia",
-        descricao: "Integração entre matemática e computação para resolver problemas complexos.",
-        carreiras: "Matemático computacional, desenvolvedor, pesquisador.",
-        notaCorte: "750-790",
-        tags: ["Matemática", "Computação", "Modelagem"],
-        salarioMedio: "R$ 5.200 - R$ 11.500",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Medicina": {
-        area: "saude",
-        descricao: "Formação para diagnóstico, tratamento e prevenção de doenças humanas.",
-        carreiras: "Médico generalista, especialista, pesquisador, professor.",
-        notaCorte: "820-860",
-        tags: ["Saúde", "Ciências Biológicas", "Assistência"],
-        salarioMedio: "R$ 8.000 - R$ 25.000",
-        empregabilidade: "Muito Alta",
-        demanda: "Alta"
-    },
-    "Medicina Veterinária": {
-        area: "saude",
-        descricao: "Cuidado com a saúde animal, prevenção e tratamento de doenças.",
-        carreiras: "Médico veterinário, pesquisador, gestor de saúde animal.",
-        notaCorte: "750-790",
-        tags: ["Animais", "Saúde", "Clínica"],
-        salarioMedio: "R$ 4.000 - R$ 9.500",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Meteorologia": {
-        area: "exatas",
-        descricao: "Estudo dos fenômenos atmosféricos e previsão do tempo.",
-        carreiras: "Meteorologista, pesquisador, analista climático.",
-        notaCorte: "720-760",
-        tags: ["Clima", "Tempo", "Atmosfera"],
-        salarioMedio: "R$ 5.000 - R$ 10.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Música": {
-        area: "artes",
-        descricao: "Estudo teórico e prático da linguagem e execução musical.",
-        carreiras: "Músico, compositor, professor, regente, produtor musical.",
-        notaCorte: "660-700",
-        tags: ["Som", "Arte", "Expressão"],
-        salarioMedio: "R$ 2.500 - R$ 7.000",
-        empregabilidade: "Baixa",
-        demanda: "Competitiva"
-    },
-    "Nutrição": {
-        area: "saude",
-        descricao: "Estudo da alimentação e sua relação com a saúde humana.",
-        carreiras: "Nutricionista, pesquisador, consultor alimentar.",
-        notaCorte: "730-770",
-        tags: ["Alimentação", "Saúde", "Prevenção"],
-        salarioMedio: "R$ 2.800 - R$ 7.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Nutrição e Metabolismo": {
-        area: "saude",
-        descricao: "Aprofundamento nos processos metabólicos e nutrição clínica.",
-        carreiras: "Nutricionista clínico, pesquisador, especialista em metabolismo.",
-        notaCorte: "740-780",
-        tags: ["Nutrição", "Metabolismo", "Clínica"],
-        salarioMedio: "R$ 3.500 - R$ 8.500",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Obstetrícia": {
-        area: "saude",
-        descricao: "Cuidado especializado com a saúde da mulher, gestação e parto.",
-        carreiras: "Obstetra, enfermeiro obstetra, educador perinatal.",
-        notaCorte: "720-760",
-        tags: ["Gestação", "Parto", "Saúde da Mulher"],
-        salarioMedio: "R$ 4.000 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Oceanografia": {
-        area: "ambiental",
-        descricao: "Estudo dos oceanos, mares e zonas costeiras.",
-        carreiras: "Oceanógrafo, pesquisador, consultor ambiental.",
-        notaCorte: "710-750",
-        tags: ["Oceanos", "Meio Ambiente", "Pesquisa"],
-        salarioMedio: "R$ 4.500 - R$ 9.500",
-        empregabilidade: "Média",
-        demanda: "Crescendo"
-    },
-    "Odontologia": {
-        area: "saude",
-        descricao: "Prevenção, diagnóstico e tratamento de doenças bucais.",
-        carreiras: "Dentista, cirurgião-dentista, pesquisador, professor.",
-        notaCorte: "780-820",
-        tags: ["Saúde Bucal", "Dentística", "Clínica"],
-        salarioMedio: "R$ 4.000 - R$ 15.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Pedagogia": {
-        area: "humanas",
-        descricao: "Estudo dos processos de ensino e aprendizagem em diferentes contextos.",
-        carreiras: "Pedagogo, professor, gestor educacional, orientador.",
-        notaCorte: "650-690",
-        tags: ["Educação", "Ensino", "Aprendizagem"],
-        salarioMedio: "R$ 2.500 - R$ 6.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Psicologia": {
-        area: "saude",
-        descricao: "Ciência que estuda o comportamento humano e processos mentais.",
-        carreiras: "Psicólogo clínico, organizacional, escolar, social.",
-        notaCorte: "780-820",
-        tags: ["Saúde Mental", "Comportamento", "Terapia"],
-        salarioMedio: "R$ 3.000 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Publicidade e Propaganda": {
-        area: "artes",
-        descricao: "Criação e gestão de campanhas publicitárias e comunicação mercadológica.",
-        carreiras: "Publicitário, diretor de criação, planejador, gestor de accounts.",
-        notaCorte: "710-750",
-        tags: ["Propaganda", "Comunicação", "Criatividade"],
-        salarioMedio: "R$ 3.200 - R$ 9.000",
-        empregabilidade: "Média",
-        demanda: "Competitiva"
-    },
-    "Química": {
-        area: "exatas",
-        descricao: "Estudo da matéria, suas transformações e propriedades.",
-        carreiras: "Químico, pesquisador, professor, analista laboratorial.",
-        notaCorte: "720-760",
-        tags: ["Matéria", "Transformação", "Laboratório"],
-        salarioMedio: "R$ 4.000 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    },
-    "Relações Internacionais": {
-        area: "humanas",
-        descricao: "Análise das relações entre Estados, organizações e atores globais.",
-        carreiras: "Diplomata, analista internacional, gestor de projetos globais.",
-        notaCorte: "740-780",
-        tags: ["Global", "Diplomacia", "Política"],
-        salarioMedio: "R$ 4.000 - R$ 10.000",
-        empregabilidade: "Média",
-        demanda: "Competitiva"
-    },
-    "Relações Públicas": {
-        area: "artes",
-        descricao: "Gestão da comunicação e imagem entre organizações e seus públicos.",
-        carreiras: "Relações públicas, gestor de comunicação, assessor de imprensa.",
-        notaCorte: "680-720",
-        tags: ["Comunicação", "Imagem", "Gestão"],
-        salarioMedio: "R$ 3.200 - R$ 8.000",
-        empregabilidade: "Média",
-        demanda: "Estável"
-    },
-    "Saúde Pública": {
-        area: "saude",
-        descricao: "Promoção, proteção e recuperação da saúde em nível populacional.",
-        carreiras: "Sanitarista, gestor em saúde, pesquisador, educador.",
-        notaCorte: "700-740",
-        tags: ["Saúde Coletiva", "Prevenção", "Políticas"],
-        salarioMedio: "R$ 4.000 - R$ 9.000",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Sistemas de Informação": {
-        area: "tecnologia",
-        descricao: "Gestão e desenvolvimento de sistemas de informação organizacionais.",
-        carreiras: "Analista de sistemas, gestor de TI, desenvolvedor, consultor.",
-        notaCorte: "730-770",
-        tags: ["Sistemas", "TI", "Gestão"],
-        salarioMedio: "R$ 4.000 - R$ 12.000",
-        empregabilidade: "Muito Alta",
-        demanda: "Crescendo"
-    },
-    "Terapia Ocupacional": {
-        area: "saude",
-        descricao: "Uso de atividades terapêuticas na reabilitação e inclusão social.",
-        carreiras: "Terapeuta ocupacional, pesquisador, gestor em saúde.",
-        notaCorte: "710-750",
-        tags: ["Reabilitação", "Inclusão", "Terapia"],
-        salarioMedio: "R$ 3.200 - R$ 7.500",
-        empregabilidade: "Alta",
-        demanda: "Crescendo"
-    },
-    "Têxtil e Moda": {
-        area: "artes",
-        descricao: "Criação, produção e gestão no universo têxtil e de moda.",
-        carreiras: "Estilista, gestor de produção têxtil, consultor de moda.",
-        notaCorte: "670-710",
-        tags: ["Moda", "Têxtil", "Criação"],
-        salarioMedio: "R$ 2.800 - R$ 7.000",
-        empregabilidade: "Média",
-        demanda: "Competitiva"
-    },
-    "Turismo": {
-        area: "humanas",
-        descricao: "Planejamento, organização e gestão de serviços e produtos turísticos.",
-        carreiras: "Gestor de turismo, agente de viagens, planejador turístico.",
-        notaCorte: "640-680",
-        tags: ["Viagens", "Hospitalidade", "Lazer"],
-        salarioMedio: "R$ 2.500 - R$ 6.500",
-        empregabilidade: "Média",
-        demanda: "Crescendo"
-    },
-    "Zootecnia": {
-        area: "ambiental",
-        descricao: "Produção, manejo e conservação de animais domésticos e silvestres.",
-        carreiras: "Zootecnista, gestor de produção animal, pesquisador.",
-        notaCorte: "690-730",
-        tags: ["Animais", "Produção", "Manejo"],
-        salarioMedio: "R$ 3.800 - R$ 8.000",
-        empregabilidade: "Alta",
-        demanda: "Estável"
-    }
+      <!-- Filters -->
+      <div class="filters-row" role="group" aria-label="Filtrar resultados">
+        <button class="filter-chip active" data-filter="all">Todos</button>
+        <button class="filter-chip" data-filter="high">Alta compat.</button>
+        <button class="filter-chip" data-filter="medium">Média compat.</button>
+        <button class="filter-chip" data-filter="notes">Maior nota corte</button>
+      </div>
+
+      <div class="results-meta">
+        <div class="results-count" id="results-count"></div>
+      </div>
+
+      <!-- Results list -->
+      <div class="course-list" id="course-list" aria-live="polite"></div>
+
+      <!-- Show more -->
+      <div class="show-more-wrap hidden" id="show-more-wrap">
+        <button class="show-more-btn" id="show-more-btn">Ver todos os cursos ↓</button>
+      </div>
+    </div>
+
+    <!-- Favorites -->
+    <div class="hidden" id="favorites-section">
+      <div class="section-divider"></div>
+      <div class="section-header">
+        <div class="section-title">❤️ Favoritos <span class="section-count" id="fav-count">0</span></div>
+        <button class="btn-ghost" id="clear-fav-btn" style="padding: 8px 14px; font-size: 0.8rem;">Limpar</button>
+      </div>
+      <div class="course-list" id="fav-list"></div>
+    </div>
+
+    <!-- Bottom actions -->
+    <div class="bottom-actions">
+      <button class="btn-primary" id="restart-btn">↩ Refazer o quiz</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast-wrap" id="toast-wrap" aria-live="assertive" role="status">
+  <div class="toast" id="toast-msg"></div>
+</div>
+
+<script>
+/* =============================================
+   DATA
+============================================= */
+const QUESTIONS = [
+  {
+    q: "Qual sua área de maior interesse?",
+    opts: [
+      { t: "Ciências da Saúde",            e: "🏥", v: "saude" },
+      { t: "Tecnologia e Computação",       e: "💻", v: "tecnologia" },
+      { t: "Ciências Exatas e Engenharias", e: "🔬", v: "exatas" },
+      { t: "Negócios e Gestão",             e: "📊", v: "negocios" },
+      { t: "Artes e Comunicação",           e: "🎨", v: "artes" },
+      { t: "Ciências Humanas",              e: "👥", v: "humanas" },
+      { t: "Ciências Ambientais e Biológicas", e: "🌿", v: "ambiental" }
+    ]
+  },
+  {
+    q: "Como você descreveria seus talentos naturais?",
+    opts: [
+      { t: "Analítico — bom com números e lógica", e: "🔢", v: "analitico" },
+      { t: "Criativo — ideias inovadoras e arte",  e: "✨", v: "criativo" },
+      { t: "Social — comunicação e trabalho em equipe", e: "💬", v: "social" },
+      { t: "Prático — mãos na massa e resultados", e: "🔧", v: "pratico" },
+      { t: "Científico — pesquisa e curiosidade",  e: "🧪", v: "cientifico" }
+    ]
+  },
+  {
+    q: "Qual seu objetivo profissional principal?",
+    opts: [
+      { t: "Alto impacto social — ajudar pessoas",          e: "❤️", v: "impacto-social" },
+      { t: "Inovação tecnológica — soluções para o futuro", e: "🚀", v: "inovacao" },
+      { t: "Estabilidade financeira — carreira sólida",     e: "💰", v: "estabilidade" },
+      { t: "Liberdade criativa — expressar ideias",         e: "🎭", v: "liberdade" },
+      { t: "Pesquisa científica — descobrir conhecimento",  e: "🔍", v: "pesquisa" }
+    ]
+  },
+  {
+    q: "Você prefere trabalhar principalmente:",
+    opts: [
+      { t: "Em equipe — colaborando com várias pessoas", e: "👥", v: "equipe" },
+      { t: "Sozinho — com foco e concentração",          e: "🧘", v: "sozinho" },
+      { t: "Modo dinâmico — alternando individual e grupo", e: "🔄", v: "dinamico" },
+      { t: "Com o público — atendimento direto",         e: "🙋", v: "publico" }
+    ]
+  },
+  {
+    q: "Qual seu nível de conforto com matemática?",
+    opts: [
+      { t: "Alto — adoro matemática",                   e: "🧮", v: "alto-mat" },
+      { t: "Médio — me viro bem quando preciso",        e: "✅", v: "medio-mat" },
+      { t: "Básico — prefiro pouca matemática",         e: "📝", v: "basico-mat" },
+      { t: "Evito — quero fugir dos cálculos",          e: "🚫", v: "nenhum-mat" }
+    ]
+  },
+  {
+    q: "Interesse por tecnologia e inovação:",
+    opts: [
+      { t: "Muito alto — quero trabalhar na vanguarda",   e: "💡", v: "tech-muito-alto" },
+      { t: "Alto — tecnologia como ferramenta principal", e: "📱", v: "tech-alto" },
+      { t: "Moderado — tecnologia como suporte",          e: "💻", v: "tech-moderado" },
+      { t: "Baixo — prefiro áreas mais tradicionais",     e: "📚", v: "tech-baixo" }
+    ]
+  },
+  {
+    q: "Prefere qual ambiente de trabalho?",
+    opts: [
+      { t: "Escritório / empresarial", e: "🏢", v: "amb-escritorio" },
+      { t: "Laboratório",              e: "🧪", v: "amb-lab" },
+      { t: "Campo / externo",          e: "🌳", v: "amb-campo" },
+      { t: "Clínica / hospital",       e: "🏥", v: "amb-clinica" },
+      { t: "Home office / remoto",     e: "🏠", v: "amb-remoto" },
+      { t: "Sala de aula",             e: "👨‍🏫", v: "amb-sala" }
+    ]
+  },
+  {
+    q: "Como prefere organizar seu horário?",
+    opts: [
+      { t: "Horário comercial — 9h às 18h",              e: "🕘", v: "hora-comercial" },
+      { t: "Flexível — horários variados por demanda",   e: "⏰", v: "hora-flexivel" },
+      { t: "Plantões / turnos",                          e: "🔄", v: "hora-plantao" },
+      { t: "Autônomo — defino meus próprios horários",   e: "🗓️", v: "hora-autonomo" }
+    ]
+  },
+  {
+    q: "Qual a importância do salário para você?",
+    opts: [
+      { t: "Muito importante — busco alta remuneração", e: "💎", v: "sal-muito" },
+      { t: "Importante — equilíbrio salário e realização", e: "⚖️", v: "sal-importante" },
+      { t: "Moderada — realização profissional vem primeiro", e: "🌟", v: "sal-moderado" },
+      { t: "Pouco importante — priorizo outros aspectos",  e: "🌱", v: "sal-pouco" }
+    ]
+  },
+  {
+    q: "Quanto tempo você aceita de graduação?",
+    opts: [
+      { t: "4–5 anos — quero terminar logo",       e: "⚡", v: "dur-curto" },
+      { t: "5–6 anos — tempo padrão tá ótimo",     e: "📅", v: "dur-medio" },
+      { t: "6+ anos — não tenho pressa, quero o melhor", e: "♾️", v: "dur-longo" }
+    ]
+  }
+];
+
+/* ---- COURSES DATABASE ---- */
+const COURSES = {
+  "Administração":                    { area:"negocios", desc:"Gestão de organizações, recursos e pessoas para maximizar resultados.", carreiras:"Gerente, consultor, empreendedor, analista de negócios.", notaUSP:"720–760", sal:"R$ 4.500–12.000", emp:"Alta", dem:"Estável",  dur:"4 anos",  tags:["Gestão","Liderança","Estratégia"] },
+  "Arquitetura e Urbanismo":          { area:"artes",    desc:"Projeto de espaços habitáveis: estética, funcionalidade e cidade.", carreiras:"Arquiteto, urbanista, paisagista, designer de interiores.", notaUSP:"760–800", sal:"R$ 3.800–9.000",  emp:"Média", dem:"Estável",  dur:"5 anos",  tags:["Design","Cidade","Projetos"] },
+  "Artes Cênicas":                    { area:"artes",    desc:"Teatro, dança e performance — teoria e prática das artes do corpo.", carreiras:"Ator, diretor, coreógrafo, produtor cultural, professor.", notaUSP:"650–700", sal:"R$ 2.500–6.000",  emp:"Baixa", dem:"Competitiva", dur:"4 anos", tags:["Teatro","Dança","Expressão"] },
+  "Artes Visuais":                    { area:"artes",    desc:"Pintura, escultura, fotografia, vídeo e arte digital.", carreiras:"Artista, curador, crítico de arte, professor, galerista.", notaUSP:"640–690", sal:"R$ 2.800–7.000",  emp:"Média", dem:"Competitiva", dur:"4 anos", tags:["Arte","Visual","Criatividade"] },
+  "Astronomia":                       { area:"exatas",   desc:"Estudo dos corpos celestes, cosmologia e fenômenos do universo.", carreiras:"Astrônomo, pesquisador, professor, divulgador científico.", notaUSP:"750–790", sal:"R$ 6.000–15.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Espaço","Pesquisa","Cosmologia"] },
+  "Audiovisual":                      { area:"artes",    desc:"Produção para cinema, TV e mídias digitais.", carreiras:"Cineasta, produtor, editor, diretor de fotografia.", notaUSP:"710–750", sal:"R$ 3.200–8.500",  emp:"Média", dem:"Crescendo", dur:"4 anos", tags:["Cinema","Produção","Narrativa"] },
+  "Biblioteconomia":                  { area:"humanas",  desc:"Organização, preservação e disseminação de informação e acervos.", carreiras:"Bibliotecário, gestor de informação, arquivista.", notaUSP:"620–670", sal:"R$ 3.000–6.500",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Informação","Acervo","Organização"] },
+  "Biotecnologia":                    { area:"exatas",   desc:"Aplicação de tecnologia em sistemas biológicos para novos produtos.", carreiras:"Pesquisador, analista, desenvolvedor de bioprodutos.", notaUSP:"770–810", sal:"R$ 5.500–12.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Biotech","Inovação","Laboratório"] },
+  "Ciências Agrárias":                { area:"ambiental",desc:"Produção agropecuária sustentável: solo, plantas e animais.", carreiras:"Engenheiro agrônomo, pesquisador, técnico agrícola.", notaUSP:"690–730", sal:"R$ 4.000–9.000",  emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Agro","Sustentabilidade","Campo"] },
+  "Ciências Atuariais":               { area:"exatas",   desc:"Matemática e estatística para análise de riscos em seguros e finanças.", carreiras:"Atuário, analista de riscos, consultor financeiro.", notaUSP:"740–780", sal:"R$ 5.000–11.000", emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Matemática","Risco","Finanças"] },
+  "Ciências Biológicas":              { area:"ambiental",desc:"Seres vivos, processos vitais e relações ecológicas.", carreiras:"Biólogo, pesquisador, professor, perito ambiental.", notaUSP:"710–750", sal:"R$ 3.500–8.000",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Biologia","Ecologia","Pesquisa"] },
+  "Ciências Biomédicas":              { area:"saude",    desc:"Pesquisa e análise de processos biológicos relacionados à saúde.", carreiras:"Pesquisador, analista biomédico, professor universitário.", notaUSP:"760–800", sal:"R$ 4.500–10.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Pesquisa","Saúde","Laboratório"] },
+  "Ciências Contábeis":               { area:"negocios", desc:"Gestão financeira, contabilidade e controle patrimonial.", carreiras:"Contador, auditor, controller, consultor tributário.", notaUSP:"700–740", sal:"R$ 4.000–9.000",  emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Finanças","Auditoria","Tributário"] },
+  "Ciências da Computação":           { area:"tecnologia",desc:"Algoritmos, software, inteligência artificial e sistemas.", carreiras:"Desenvolvedor, cientista de dados, arquiteto de software, pesquisador.", notaUSP:"780–820", sal:"R$ 4.000–15.000", emp:"Muito Alta", dem:"Crescendo", dur:"4 anos", tags:["Programação","IA","Sistemas"] },
+  "Ciência de Dados":                 { area:"tecnologia",desc:"Análise e interpretação de grandes volumes de dados para decisões.", carreiras:"Cientista de dados, engenheiro de ML, analista de BI.", notaUSP:"790–830", sal:"R$ 5.000–18.000", emp:"Muito Alta", dem:"Crescendo", dur:"4 anos", tags:["Dados","Machine Learning","Análise"] },
+  "Ciências da Natureza":             { area:"ambiental",desc:"Física, química e biologia integradas em sistemas naturais.", carreiras:"Pesquisador, professor, educador ambiental.", notaUSP:"680–720", sal:"R$ 3.800–7.500",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Natureza","Ciência","Educação"] },
+  "Ciências dos Alimentos":           { area:"exatas",   desc:"Propriedades, processamento, segurança e conservação de alimentos.", carreiras:"Pesquisador, tecnólogo de alimentos, analista de qualidade.", notaUSP:"720–760", sal:"R$ 4.200–8.500",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Alimentos","Qualidade","Segurança"] },
+  "Ciências Sociais":                 { area:"humanas",  desc:"Análise de sociedades humanas, culturas e dinâmicas sociais.", carreiras:"Pesquisador, consultor social, analista de políticas, professor.", notaUSP:"670–710", sal:"R$ 3.200–7.000",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Sociedade","Cultura","Pesquisa"] },
+  "Design":                           { area:"artes",    desc:"Soluções visuais e funcionais para produtos, marcas e interfaces.", carreiras:"Designer gráfico, UX/UI designer, diretor de arte.", notaUSP:"710–750", sal:"R$ 3.500–9.000",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["UI/UX","Visual","Branding"] },
+  "Direito":                          { area:"humanas",  desc:"Leis, justiça, advocacia e regulação da vida social.", carreiras:"Advogado, juiz, promotor, defensor público, consultor jurídico.", notaUSP:"790–830", sal:"R$ 3.000–20.000", emp:"Alta",  dem:"Competitiva", dur:"5 anos", tags:["Leis","Justiça","Advocacia"] },
+  "Economia":                         { area:"negocios", desc:"Produção, distribuição e consumo: micro e macro.", carreiras:"Economista, analista de mercado, pesquisador, consultor.", notaUSP:"750–790", sal:"R$ 5.000–12.000", emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Mercado","Análise","Política Econômica"] },
+  "Editoração":                       { area:"artes",    desc:"Edição, produção e publicação de livros, revistas e conteúdo digital.", carreiras:"Editor, diagramador, revisor, produtor editorial.", notaUSP:"660–700", sal:"R$ 2.800–6.500",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Edição","Publicação","Texto"] },
+  "Educação Física e Esporte":        { area:"saude",    desc:"Promoção da saúde e desempenho por meio de atividades físicas.", carreiras:"Professor, personal trainer, preparador físico, gestor esportivo.", notaUSP:"680–720", sal:"R$ 2.800–7.000",  emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Esporte","Saúde","Movimento"] },
+  "Educomunicação":                   { area:"humanas",  desc:"Interface entre educação e comunicação em processos de aprendizagem.", carreiras:"Educador, produtor de conteúdo, consultor educacional.", notaUSP:"650–690", sal:"R$ 3.000–6.800",  emp:"Média", dem:"Crescendo", dur:"4 anos", tags:["Educação","Mídia","Comunicação"] },
+  "Enfermagem":                       { area:"saude",    desc:"Cuidado integral à saúde humana em diferentes níveis de atenção.", carreiras:"Enfermeiro, gestor hospitalar, educador em saúde, pesquisador.", notaUSP:"730–770", sal:"R$ 3.500–8.000",  emp:"Muito Alta", dem:"Crescendo", dur:"5 anos", tags:["Cuidado","Hospital","Saúde Coletiva"] },
+  "Engenharia Aeronáutica":           { area:"exatas",   desc:"Projeto, construção e manutenção de aeronaves e sistemas aeroespaciais.", carreiras:"Engenheiro aeronáutico, projetista, analista de sistemas.", notaUSP:"790–830", sal:"R$ 6.000–15.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Aviação","Aeroespacial","Projetos"] },
+  "Engenharia Agronômica":            { area:"exatas",   desc:"Produção agrícola com base em princípios de engenharia e ciências da terra.", carreiras:"Engenheiro agrônomo, gestor rural, consultor agrícola.", notaUSP:"720–760", sal:"R$ 4.500–10.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Agricultura","Produção","Gestão Rural"] },
+  "Engenharia Ambiental":             { area:"exatas",   desc:"Soluções tecnológicas para preservação ambiental e sustentabilidade.", carreiras:"Engenheiro ambiental, consultor, gestor de recursos naturais.", notaUSP:"740–780", sal:"R$ 4.800–9.500",  emp:"Alta",  dem:"Crescendo", dur:"5 anos", tags:["Meio Ambiente","Sustentabilidade","Tecnologia"] },
+  "Engenharia Bioquímica":            { area:"exatas",   desc:"Processos bioquímicos aplicados à escala industrial.", carreiras:"Engenheiro bioquímico, pesquisador, gestor de produção.", notaUSP:"760–800", sal:"R$ 5.200–11.000", emp:"Alta",  dem:"Crescendo", dur:"5 anos", tags:["Bioquímica","Indústria","Inovação"] },
+  "Engenharia Civil":                 { area:"exatas",   desc:"Projetos, construção e manutenção de edificações e infraestrutura.", carreiras:"Engenheiro civil, projetista, fiscal de obras, gestor de projetos.", notaUSP:"750–790", sal:"R$ 5.000–12.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Construção","Infraestrutura","Cálculo"] },
+  "Engenharia de Alimentos":          { area:"exatas",   desc:"Processamento, conservação e desenvolvimento de produtos alimentícios.", carreiras:"Engenheiro de alimentos, pesquisador, gestor de qualidade.", notaUSP:"740–780", sal:"R$ 4.500–9.000",  emp:"Alta",  dem:"Crescendo", dur:"5 anos", tags:["Alimentos","Processamento","Indústria"] },
+  "Engenharia de Computação":         { area:"tecnologia",desc:"Hardware, firmware e software integrados em sistemas computacionais.", carreiras:"Engenheiro de computação, desenvolvedor embarcado, arquiteto de sistemas.", notaUSP:"780–820", sal:"R$ 4.500–14.000", emp:"Muito Alta", dem:"Crescendo", dur:"5 anos", tags:["Hardware","Software","Sistemas Embarcados"] },
+  "Engenharia de Materiais":          { area:"exatas",   desc:"Desenvolvimento, processamento e aplicação de materiais inovadores.", carreiras:"Engenheiro de materiais, pesquisador, desenvolvedor de produtos.", notaUSP:"750–790", sal:"R$ 5.000–11.000", emp:"Alta",  dem:"Crescendo", dur:"5 anos", tags:["Materiais","Inovação","Pesquisa"] },
+  "Engenharia de Minas":              { area:"exatas",   desc:"Exploração, extração e beneficiamento de recursos minerais.", carreiras:"Engenheiro de minas, gestor de projetos, pesquisador mineral.", notaUSP:"730–770", sal:"R$ 6.000–13.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Mineração","Recursos","Extração"] },
+  "Engenharia de Petróleo":           { area:"exatas",   desc:"Exploração, produção e refino de petróleo e gás natural.", carreiras:"Engenheiro de petróleo, gestor de campo, consultor.", notaUSP:"770–810", sal:"R$ 7.000–16.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Petróleo","Energia","Exploração"] },
+  "Engenharia de Produção":           { area:"exatas",   desc:"Otimização de sistemas produtivos, logística e processos industriais.", carreiras:"Engenheiro de produção, consultor, gestor industrial.", notaUSP:"760–800", sal:"R$ 5.500–12.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Produção","Otimização","Logística"] },
+  "Engenharia Elétrica":              { area:"exatas",   desc:"Projeto e desenvolvimento de sistemas elétricos e eletrônicos.", carreiras:"Engenheiro eletricista, projetista, gestor de energia.", notaUSP:"770–810", sal:"R$ 5.000–12.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Eletricidade","Energia","Sistemas"] },
+  "Engenharia Física":                { area:"exatas",   desc:"Princípios físicos aplicados ao desenvolvimento de novas tecnologias.", carreiras:"Engenheiro físico, pesquisador, desenvolvedor tecnológico.", notaUSP:"760–800", sal:"R$ 5.500–12.000", emp:"Alta",  dem:"Crescendo", dur:"5 anos", tags:["Física","Tecnologia","Pesquisa Aplicada"] },
+  "Engenharia Florestal":             { area:"exatas",   desc:"Manejo sustentável de florestas, recursos madeireiros e biodiversidade.", carreiras:"Engenheiro florestal, gestor ambiental, pesquisador.", notaUSP:"700–740", sal:"R$ 4.200–8.500",  emp:"Média", dem:"Estável",  dur:"5 anos",  tags:["Floresta","Sustentabilidade","Manejo"] },
+  "Engenharia Mecânica":              { area:"exatas",   desc:"Projeto, análise e manutenção de sistemas e componentes mecânicos.", carreiras:"Engenheiro mecânico, projetista, gestor de manufatura.", notaUSP:"770–810", sal:"R$ 5.000–12.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Mecânica","Projetos","Indústria"] },
+  "Engenharia Mecatrônica":           { area:"exatas",   desc:"Mecânica, eletrônica e computação integradas em sistemas automatizados.", carreiras:"Engenheiro mecatrônico, desenvolvedor de robótica, automação.", notaUSP:"780–820", sal:"R$ 5.000–13.000", emp:"Alta",  dem:"Crescendo", dur:"5 anos", tags:["Robótica","Automação","IoT"] },
+  "Engenharia Metalúrgica":           { area:"exatas",   desc:"Processamento e transformação de metais e ligas.", carreiras:"Engenheiro metalúrgico, gestor de produção, pesquisador.", notaUSP:"730–770", sal:"R$ 5.000–11.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Metais","Processos","Indústria"] },
+  "Engenharia Naval":                 { area:"exatas",   desc:"Projeto, construção e manutenção de embarcações e estruturas offshore.", carreiras:"Engenheiro naval, projetista, gestor de estaleiros.", notaUSP:"750–790", sal:"R$ 5.500–12.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Navios","Offshore","Projetos"] },
+  "Engenharia Química":               { area:"exatas",   desc:"Processos químicos industriais e desenvolvimento de novos produtos.", carreiras:"Engenheiro químico, gestor de processos, pesquisador.", notaUSP:"770–810", sal:"R$ 5.500–12.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Química","Processos","Petroquímica"] },
+  "Estatística":                      { area:"exatas",   desc:"Coleta, análise e interpretação de dados para tomada de decisão.", carreiras:"Estatístico, analista de dados, pesquisador, consultor.", notaUSP:"740–780", sal:"R$ 4.500–10.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Dados","Análise","Probabilidade"] },
+  "Farmácia":                         { area:"saude",    desc:"Desenvolvimento, produção e controle de medicamentos e cosméticos.", carreiras:"Farmacêutico, pesquisador, gestor de farmácia hospitalar.", notaUSP:"750–790", sal:"R$ 3.800–9.000",  emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Medicamentos","Saúde","Laboratório"] },
+  "Filosofia":                        { area:"humanas",  desc:"Reflexão crítica sobre existência, ética, conhecimento e política.", carreiras:"Filósofo, professor, pesquisador, consultor, redator.", notaUSP:"630–670", sal:"R$ 2.800–6.000",  emp:"Baixa", dem:"Competitiva", dur:"4 anos", tags:["Pensamento","Ética","Crítica"] },
+  "Física":                           { area:"exatas",   desc:"Leis fundamentais que regem matéria, energia, espaço e tempo.", carreiras:"Físico, pesquisador, professor, desenvolvedor tecnológico.", notaUSP:"750–790", sal:"R$ 6.000–15.000", emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Pesquisa","Universo","Fundamentos"] },
+  "Física Computacional":             { area:"tecnologia",desc:"Computação aplicada à solução de problemas físicos complexos.", carreiras:"Pesquisador, desenvolvedor de simulações, analista computacional.", notaUSP:"760–800", sal:"R$ 5.500–13.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Simulação","Física","Computação"] },
+  "Física Médica":                    { area:"saude",    desc:"Princípios físicos aplicados a diagnóstico e tratamento médico.", carreiras:"Físico médico, pesquisador, desenvolvedor de equipamentos.", notaUSP:"770–810", sal:"R$ 6.500–14.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Física","Medicina","Diagnóstico"] },
+  "Fisioterapia":                     { area:"saude",    desc:"Prevenção e tratamento de disfunções do movimento corporal.", carreiras:"Fisioterapeuta, pesquisador, gestor de clínica.", notaUSP:"740–780", sal:"R$ 3.200–8.500",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Reabilitação","Movimento","Saúde"] },
+  "Fonoaudiologia":                   { area:"saude",    desc:"Avaliação e tratamento de distúrbios da comunicação e deglutição.", carreiras:"Fonoaudiólogo, pesquisador, professor, consultor.", notaUSP:"730–770", sal:"R$ 3.500–8.000",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Fala","Audição","Terapia"] },
+  "Geociências e Educação Ambiental": { area:"ambiental",desc:"Ciências da Terra integradas à educação e sustentabilidade.", carreiras:"Geocientista, educador ambiental, pesquisador.", notaUSP:"680–720", sal:"R$ 3.800–7.500",  emp:"Média", dem:"Crescendo", dur:"4 anos", tags:["Terra","Educação","Ambiente"] },
+  "Geofísica":                        { area:"exatas",   desc:"Estudo da Terra por métodos físicos e matemáticos.", carreiras:"Geofísico, pesquisador, consultor em exploração.", notaUSP:"730–770", sal:"R$ 5.500–12.000", emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Terra","Exploração","Física"] },
+  "Geografia":                        { area:"humanas",  desc:"Espaço geográfico e relações sociedade-natureza.", carreiras:"Geógrafo, professor, planejador territorial, pesquisador.", notaUSP:"670–710", sal:"R$ 3.200–7.000",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Território","Espaço","Planejamento"] },
+  "Geologia":                         { area:"exatas",   desc:"Composição, estrutura e história da Terra.", carreiras:"Geólogo, consultor em mineração, pesquisador de petróleo.", notaUSP:"720–760", sal:"R$ 5.800–13.000", emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Rochas","Recursos Naturais","Exploração"] },
+  "Gerontologia":                     { area:"saude",    desc:"Envelhecimento humano e cuidado com a população idosa.", carreiras:"Gerontólogo, gestor de instituições, pesquisador.", notaUSP:"650–690", sal:"R$ 3.500–7.500",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Envelhecimento","Cuidado","Saúde"] },
+  "Gestão Ambiental":                 { area:"ambiental",desc:"Planejamento e gestão de recursos naturais com foco em sustentabilidade.", carreiras:"Gestor ambiental, consultor, analista de sustentabilidade.", notaUSP:"690–730", sal:"R$ 3.800–8.000",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Sustentabilidade","Recursos","Políticas"] },
+  "Gestão de Políticas Públicas":     { area:"humanas",  desc:"Formulação, implementação e avaliação de políticas governamentais.", carreiras:"Gestor público, analista de políticas, consultor governamental.", notaUSP:"700–740", sal:"R$ 4.000–9.000",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Governo","Políticas","Gestão"] },
+  "História":                         { area:"humanas",  desc:"Processos históricos, culturas e transformações das sociedades.", carreiras:"Historiador, professor, pesquisador, curador, museólogo.", notaUSP:"660–700", sal:"R$ 2.800–6.500",  emp:"Média", dem:"Competitiva", dur:"4 anos", tags:["Passado","Cultura","Pesquisa"] },
+  "Informática Biomédica":            { area:"tecnologia",desc:"Computação aplicada a soluções para saúde e medicina.", carreiras:"Analista de sistemas de saúde, pesquisador, desenvolvedor.", notaUSP:"750–790", sal:"R$ 5.000–11.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Saúde","TI","Computação"] },
+  "Jornalismo":                       { area:"artes",    desc:"Apuração, produção e disseminação de informações jornalísticas.", carreiras:"Jornalista, editor, repórter, produtor de conteúdo.", notaUSP:"710–750", sal:"R$ 2.800–7.500",  emp:"Média", dem:"Competitiva", dur:"4 anos", tags:["Notícias","Mídia","Comunicação"] },
+  "Lazer e Turismo":                  { area:"humanas",  desc:"Planejamento e gestão de atividades de lazer e serviços turísticos.", carreiras:"Gestor de turismo, planejador, consultor, empreendedor.", notaUSP:"650–690", sal:"R$ 2.800–6.500",  emp:"Média", dem:"Crescendo", dur:"4 anos", tags:["Turismo","Hospitalidade","Lazer"] },
+  "Letras":                           { area:"humanas",  desc:"Línguas, literaturas e manifestações culturais do mundo.", carreiras:"Professor, tradutor, revisor, pesquisador linguístico, escritor.", notaUSP:"640–680", sal:"R$ 2.800–6.000",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Línguas","Literatura","Cultura"] },
+  "Marketing":                        { area:"negocios", desc:"Estratégias de mercado, comunicação e relacionamento com consumidores.", carreiras:"Profissional de marketing, gestor de marcas, analista de mercado.", notaUSP:"710–750", sal:"R$ 3.500–10.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Mercado","Branding","Digital"] },
+  "Matemática":                       { area:"exatas",   desc:"Estruturas abstratas, padrões e relações quantitativas.", carreiras:"Matemático, professor, pesquisador, analista quantitativo.", notaUSP:"730–770", sal:"R$ 5.000–12.000", emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Números","Lógica","Abstração"] },
+  "Matemática Aplicada":              { area:"exatas",   desc:"Métodos matemáticos na solução de problemas práticos e interdisciplinares.", carreiras:"Matemático aplicado, pesquisador, analista quantitativo.", notaUSP:"740–780", sal:"R$ 5.200–11.000", emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Matemática","Modelagem","Aplicação"] },
+  "Matemática Aplicada e Computação Científica": { area:"tecnologia", desc:"Algoritmos e modelos computacionais para ciência e engenharia.", carreiras:"Pesquisador, desenvolvedor de algoritmos, analista computacional.", notaUSP:"760–800", sal:"R$ 5.500–12.000", emp:"Alta", dem:"Crescendo", dur:"4 anos", tags:["Matemática","Computação","Ciência"] },
+  "Medicina":                         { area:"saude",    desc:"Diagnóstico, tratamento e prevenção de doenças. A graduação mais longa e competitiva.", carreiras:"Médico generalista, especialista, pesquisador, professor.", notaUSP:"820–860", sal:"R$ 8.000–25.000", emp:"Muito Alta", dem:"Alta",   dur:"6 anos",  tags:["Medicina","Diagnóstico","Pesquisa Clínica"] },
+  "Medicina Veterinária":             { area:"saude",    desc:"Saúde animal, clínica, cirurgia e saúde pública veterinária.", carreiras:"Médico veterinário, pesquisador, inspetor sanitário.", notaUSP:"750–790", sal:"R$ 4.000–9.500",  emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Animais","Clínica","Saúde Pública"] },
+  "Meteorologia":                     { area:"exatas",   desc:"Atmosfera, clima e previsão do tempo.", carreiras:"Meteorologista, pesquisador, analista climático, consultor.", notaUSP:"720–760", sal:"R$ 5.000–10.000", emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Clima","Atmosfera","Previsão"] },
+  "Música":                           { area:"artes",    desc:"Teoria, composição e execução musical em múltiplos gêneros.", carreiras:"Músico, compositor, professor, regente, produtor musical.", notaUSP:"660–700", sal:"R$ 2.500–7.000",  emp:"Baixa", dem:"Competitiva", dur:"4 anos", tags:["Som","Composição","Performance"] },
+  "Nutrição":                         { area:"saude",    desc:"Alimentação, nutrição clínica e saúde humana.", carreiras:"Nutricionista, pesquisador, consultor alimentar, gestor de UAN.", notaUSP:"730–770", sal:"R$ 2.800–7.000",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Alimentação","Saúde","Clínica"] },
+  "Obstetrícia":                      { area:"saude",    desc:"Cuidado especializado na saúde da mulher, gestação e parto.", carreiras:"Obstetra, enfermeiro obstétrico, educador perinatal.", notaUSP:"720–760", sal:"R$ 4.000–9.000",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Gestação","Parto","Saúde da Mulher"] },
+  "Oceanografia":                     { area:"ambiental",desc:"Oceanos, mares, zonas costeiras e seus ecossistemas.", carreiras:"Oceanógrafo, pesquisador, consultor ambiental.", notaUSP:"710–750", sal:"R$ 4.500–9.500",  emp:"Média", dem:"Crescendo", dur:"4 anos", tags:["Oceanos","Ecossistemas","Pesquisa"] },
+  "Odontologia":                      { area:"saude",    desc:"Prevenção, diagnóstico e tratamento de doenças bucais.", carreiras:"Cirurgião-dentista, especialista, pesquisador, professor.", notaUSP:"780–820", sal:"R$ 4.000–15.000", emp:"Alta",  dem:"Estável",  dur:"5 anos",  tags:["Saúde Bucal","Clínica","Cirurgia"] },
+  "Pedagogia":                        { area:"humanas",  desc:"Processos de ensino e aprendizagem em contextos formais e informais.", carreiras:"Pedagogo, professor, gestor educacional, orientador.", notaUSP:"650–690", sal:"R$ 2.500–6.000",  emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Educação","Ensino","Aprendizagem"] },
+  "Psicologia":                       { area:"saude",    desc:"Comportamento humano, processos mentais e saúde psicológica.", carreiras:"Psicólogo clínico, organizacional, escolar, pesquisador.", notaUSP:"780–820", sal:"R$ 3.000–9.000",  emp:"Alta",  dem:"Crescendo", dur:"5 anos", tags:["Saúde Mental","Comportamento","Terapia"] },
+  "Publicidade e Propaganda":         { area:"artes",    desc:"Criação e gestão de campanhas publicitárias e comunicação mercadológica.", carreiras:"Publicitário, diretor de criação, planejador, gestor de contas.", notaUSP:"710–750", sal:"R$ 3.200–9.000",  emp:"Média", dem:"Competitiva", dur:"4 anos", tags:["Publicidade","Criatividade","Mídia"] },
+  "Química":                          { area:"exatas",   desc:"Matéria, suas transformações, propriedades e aplicações.", carreiras:"Químico, pesquisador, professor, analista laboratorial.", notaUSP:"720–760", sal:"R$ 4.000–9.000",  emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Matéria","Laboratório","Síntese"] },
+  "Relações Internacionais":          { area:"humanas",  desc:"Relações entre Estados, organizações e atores globais.", carreiras:"Diplomata, analista internacional, gestor de projetos globais.", notaUSP:"740–780", sal:"R$ 4.000–10.000", emp:"Média", dem:"Competitiva", dur:"4 anos", tags:["Diplomacia","Global","Política"] },
+  "Relações Públicas":                { area:"artes",    desc:"Gestão da comunicação e imagem entre organizações e seus públicos.", carreiras:"Relações públicas, assessor de imprensa, gestor de comunicação.", notaUSP:"680–720", sal:"R$ 3.200–8.000",  emp:"Média", dem:"Estável",  dur:"4 anos",  tags:["Comunicação","Imagem","Gestão"] },
+  "Saúde Pública":                    { area:"saude",    desc:"Promoção, proteção e recuperação da saúde em nível populacional.", carreiras:"Sanitarista, gestor em saúde, pesquisador, educador.", notaUSP:"700–740", sal:"R$ 4.000–9.000",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Saúde Coletiva","Políticas","Prevenção"] },
+  "Sistemas de Informação":           { area:"tecnologia",desc:"Gestão e desenvolvimento de sistemas de informação organizacionais.", carreiras:"Analista de sistemas, gestor de TI, desenvolvedor, consultor.", notaUSP:"730–770", sal:"R$ 4.000–12.000", emp:"Muito Alta", dem:"Crescendo", dur:"4 anos", tags:["Sistemas","TI","Desenvolvimento"] },
+  "Terapia Ocupacional":              { area:"saude",    desc:"Atividades terapêuticas na reabilitação, inclusão e autonomia.", carreiras:"Terapeuta ocupacional, pesquisador, gestor em saúde.", notaUSP:"710–750", sal:"R$ 3.200–7.500",  emp:"Alta",  dem:"Crescendo", dur:"4 anos", tags:["Reabilitação","Inclusão","Autonomia"] },
+  "Têxtil e Moda":                    { area:"artes",    desc:"Criação, produção e gestão no universo têxtil e de moda.", carreiras:"Estilista, gestor de produção têxtil, consultor de moda.", notaUSP:"670–710", sal:"R$ 2.800–7.000",  emp:"Média", dem:"Competitiva", dur:"4 anos", tags:["Moda","Design","Têxtil"] },
+  "Turismo":                          { area:"humanas",  desc:"Planejamento, organização e gestão de produtos e serviços turísticos.", carreiras:"Gestor de turismo, agente de viagens, planejador.", notaUSP:"640–680", sal:"R$ 2.500–6.500",  emp:"Média", dem:"Crescendo", dur:"4 anos", tags:["Viagens","Hospitalidade","Gestão"] },
+  "Zootecnia":                        { area:"ambiental",desc:"Produção, manejo e conservação de animais domésticos e silvestres.", carreiras:"Zootecnista, gestor de produção animal, pesquisador.", notaUSP:"690–730", sal:"R$ 3.800–8.000",  emp:"Alta",  dem:"Estável",  dur:"4 anos",  tags:["Animais","Produção","Manejo"] }
 };
 
-        // ======================
-        // SISTEMA DE PESOS AVANÇADO
-        // ======================
+/* ---- SCORING SYSTEM ---- */
+// Area weights per answer
+const AREA_SCORE = {
+  saude:       { saude:35, tecnologia:2, exatas:5,  negocios:2,  artes:2,  humanas:5, ambiental:8 },
+  tecnologia:  { saude:2,  tecnologia:35, exatas:20, negocios:5, artes:5,  humanas:2, ambiental:2 },
+  exatas:      { saude:5,  tecnologia:18, exatas:35, negocios:5, artes:2,  humanas:2, ambiental:8 },
+  negocios:    { saude:2,  tecnologia:8,  exatas:8,  negocios:35, artes:8, humanas:10, ambiental:2 },
+  artes:       { saude:2,  tecnologia:5,  exatas:2,  negocios:8,  artes:35, humanas:12, ambiental:2 },
+  humanas:     { saude:5,  tecnologia:2,  exatas:2,  negocios:10, artes:10, humanas:35, ambiental:5 },
+  ambiental:   { saude:5,  tecnologia:5,  exatas:18, negocios:2,  artes:2,  humanas:5, ambiental:35 }
+};
 
-        const questionWeights = {
-            0: 2.0,  // Área de interesse - MAIS IMPORTANTE
-            1: 1.5,  // Talentos naturais
-            2: 1.3,  // Objetivo profissional
-            3: 1.0,  // Estilo de trabalho
-            4: 1.4,  // Conforto com matemática
-            5: 1.2,  // Interesse por tecnologia
-            6: 1.1,  // Ambiente de trabalho
-            7: 0.9,  // Horário preferido
-            8: 0.8,  // Importância do salário
-            9: 0.7   // Tempo de formação
-        };
+// Talent modifiers
+const TALENT_BOOST = {
+  analitico:  { exatas:12, tecnologia:10, negocios:6, saude:3, humanas:1, artes:1, ambiental:4 },
+  criativo:   { artes:14, humanas:5, negocios:6, saude:2, tecnologia:4, exatas:1, ambiental:2 },
+  social:     { humanas:10, saude:10, artes:6, negocios:6, ambiental:3, tecnologia:2, exatas:1 },
+  pratico:    { exatas:10, saude:8, ambiental:8, negocios:4, artes:3, humanas:3, tecnologia:5 },
+  cientifico: { exatas:14, ambiental:12, saude:10, tecnologia:8, humanas:4, artes:1, negocios:2 }
+};
 
-        // ======================
-        // MATRIZ DE COMPATIBILIDADE DETALHADA
-        // ======================
+// Objective modifiers
+const OBJECTIVE_BOOST = {
+  "impacto-social":  { saude:12, humanas:10, ambiental:6, negocios:2, artes:3, tecnologia:3, exatas:2 },
+  "inovacao":        { tecnologia:14, exatas:10, artes:6, negocios:4, saude:3, humanas:2, ambiental:4 },
+  "estabilidade":    { negocios:10, exatas:8, saude:8, humanas:6, artes:2, tecnologia:5, ambiental:3 },
+  "liberdade":       { artes:14, humanas:6, tecnologia:8, saude:2, negocios:4, exatas:2, ambiental:4 },
+  "pesquisa":        { exatas:14, ambiental:12, saude:8, tecnologia:8, humanas:6, artes:3, negocios:2 }
+};
 
-        const compatibilityMatrix = {
-            // PERGUNTA 1: Área de interesse
-            'saude': {
-                cursos: {
-                    'Medicina': 25, 'Enfermagem': 22, 'Psicologia': 20, 'Odontologia': 23,
-                    'Farmácia': 21, 'Fisioterapia': 19, 'Nutrição': 17
-                }
-            },
-            'tecnologia': {
-                cursos: {
-                    'Ciências da Computação': 25, 'Engenharia de Computação': 24, 'Sistemas de Informação': 22,
-                    'Ciência de Dados': 23, 'Engenharia Mecatrônica': 21
-                }
-            },
-            'exatas': {
-                cursos: {
-                    'Engenharia Civil': 22, 'Engenharia Elétrica': 23, 'Engenharia Mecânica': 22,
-                    'Matemática': 21, 'Física': 22, 'Biotecnologia': 19
-                }
-            },
-            'negocios': {
-                cursos: {
-                    'Administração': 24, 'Economia': 22, 'Ciências Contábeis': 21,
-                    'Marketing': 20, 'Finanças e Negócios': 22
-                }
-            },
-            'artes': {
-                cursos: {
-                    'Design': 23, 'Arquitetura e urbanismo': 22, 'Publicidade e Propaganda': 21,
-                    'Jornalismo': 20, 'Artes Visuais': 19, 'Audiovisual': 19
-                }
-            },
-            'humanas': {
-                cursos: {
-                    'Direito': 23, 'Pedagogia': 20, 'História': 19, 'Letras': 18,
-                    'Filosofia': 17, 'Relações Internacionais': 19
-                }
-            },
-            'ambiental': {
-                cursos: {
-                    'Ciências Biológicas': 22, 'Gestão Ambiental': 21, 'Oceanografia': 20,
-                    'Engenharia Ambiental': 21, 'Engenharia Florestal': 18
-                }
-            },
+// Math comfort — penalizes/rewards by area
+const MATH_BOOST = {
+  "alto-mat":    { exatas:15, tecnologia:12, negocios:5, saude:3, ambiental:5, humanas:0, artes:0 },
+  "medio-mat":   { exatas:5,  tecnologia:6,  negocios:6, saude:5, ambiental:4, humanas:3, artes:3 },
+  "basico-mat":  { exatas:-8, tecnologia:-5, negocios:2, saude:4, ambiental:1, humanas:7, artes:8 },
+  "nenhum-mat":  { exatas:-15,tecnologia:-10,negocios:-2,saude:2, ambiental:-2,humanas:10,artes:12}
+};
 
-            // PERGUNTA 2: Talentos naturais
-            'analitico': {
-                cursos: {
-                    'Matemática': 15, 'Estatística': 16, 'Física': 15,
-                    'Engenharia Civil': 14, 'Ciência de Dados': 18,
-                    'Economia': 13, 'Ciências da Computação': 16
-                }
-            },
-            'criativo': {
-                cursos: {
-                    'Design': 16, 'Arquitetura e urbanismo': 15, 'Publicidade e Propaganda': 16,
-                    'Artes Visuais': 17, 'Jornalismo': 14, 'Audiovisual': 14
-                }
-            },
-            'social': {
-                cursos: {
-                    'Psicologia': 16, 'Pedagogia': 15, 'Medicina': 14, 'Enfermagem': 13,
-                    'Relações Internacionais': 12, 'Direito': 13, 'Marketing': 12
-                }
-            },
-            'pratico': {
-                cursos: {
-                    'Engenharia Civil': 14, 'Engenharia Mecânica': 15, 'Medicina Veterinária': 13,
-                    'Odontologia': 12, 'Farmácia': 11, 'Engenharia de Alimentos': 13
-                }
-            },
-            'cientifico': {
-                cursos: {
-                    'Medicina': 14, 'Ciências Biológicas': 15, 'Física': 16, 'Química': 15,
-                    'Engenharia Química': 14, 'Farmácia': 13, 'Biotecnologia': 16
-                }
-            },
+// Tech interest
+const TECH_BOOST = {
+  "tech-muito-alto": { tecnologia:15, exatas:8,  negocios:4, artes:3, saude:2, humanas:1, ambiental:3 },
+  "tech-alto":       { tecnologia:10, exatas:6,  negocios:5, artes:4, saude:3, humanas:2, ambiental:2 },
+  "tech-moderado":   { tecnologia:4,  exatas:3,  negocios:4, artes:3, saude:3, humanas:3, ambiental:3 },
+  "tech-baixo":      { tecnologia:-5, exatas:0,  negocios:2, artes:6, saude:3, humanas:8, ambiental:4 }
+};
 
-            // PERGUNTA 3: Objetivo profissional
-            'impacto-social': {
-                cursos: {
-                    'Medicina': 12, 'Enfermagem': 13, 'Psicologia': 14, 'Pedagogia': 15,
-                    'Serviço Social': 16, 'Saúde Pública': 14
-                }
-            },
-            'inovacao': {
-                cursos: {
-                    'Engenharias': 12, 'Ciências da Computação': 14, 'Design': 13,
-                    'Biotecnologia': 15, 'Engenharia de Computação': 14, 'Ciência de Dados': 13
-                }
-            },
-            'estabilidade': {
-                cursos: {
-                    'Medicina': 10, 'Direito': 11, 'Engenharia Civil': 9, 'Administração': 10,
-                    'Ciências Contábeis': 12, 'Odontologia': 9
-                }
-            },
-            'liberdade': {
-                cursos: {
-                    'Design': 13, 'Artes': 14, 'Jornalismo': 12, 'Publicidade e Propaganda': 11,
-                    'Música': 15, 'Arquitetura e urbanismo': 10
-                }
-            },
-            'pesquisa': {
-                cursos: {
-                    'Ciências Biológicas': 15, 'Física': 16, 'Química': 15, 'Matemática': 14,
-                    'Astronomia': 17, 'Geologia': 13, 'Oceanografia': 14
-                }
-            },
+// Work environment
+const ENV_BOOST = {
+  "amb-escritorio": { negocios:8, humanas:5, artes:4, tecnologia:6, saude:2, exatas:3, ambiental:1 },
+  "amb-lab":        { exatas:10, saude:10, ambiental:8, tecnologia:6, negocios:1, humanas:1, artes:1 },
+  "amb-campo":      { ambiental:14, exatas:6, saude:4, humanas:3, artes:2, negocios:1, tecnologia:1 },
+  "amb-clinica":    { saude:16, humanas:4, artes:1, negocios:1, tecnologia:2, exatas:3, ambiental:2 },
+  "amb-remoto":     { tecnologia:12, artes:8, negocios:5, humanas:4, exatas:4, saude:1, ambiental:2 },
+  "amb-sala":       { humanas:12, saude:5, artes:5, negocios:3, exatas:4, tecnologia:3, ambiental:4 }
+};
 
-            // PERGUNTA 4: Estilo de trabalho
-            'equipe': {
-                cursos: {
-                    'Medicina': 8, 'Enfermagem': 9, 'Administração': 8, 'Psicologia': 7,
-                    'Engenharia de Produção': 6, 'Publicidade e Propaganda': 7
-                }
-            },
-            'sozinho': {
-                cursosEspecificos: {
-                    'Ciências da Computação': 7, 'Matemática': 8, 'Estatística': 7,
-                    'Letras': 9, 'Filosofia': 8, 'História': 7
-                }
-            },
-            'dinamico': {
-                cursos: {
-                    'Jornalismo': 9, 'Marketing': 8, 'Publicidade e Propaganda': 7,
-                    'Medicina': 6, 'Engenharias': 5
-                }
-            },
-            'publico': {
-                cursos: {
-                    'Direito': 9, 'Psicologia': 8, 'Medicina': 7, 'Pedagogia': 9,
-                    'Relações Públicas': 10, 'Turismo': 8
-                }
-            },
+// Salary importance — minor adjustments
+const SAL_BOOST = {
+  "sal-muito":      { negocios:6, exatas:5, saude:5, tecnologia:5, artes:-2, humanas:-2, ambiental:0 },
+  "sal-importante": { negocios:4, exatas:3, saude:4, tecnologia:4, artes:1,  humanas:1,  ambiental:1 },
+  "sal-moderado":   { negocios:0, exatas:0, saude:2, tecnologia:2, artes:4,  humanas:4,  ambiental:3 },
+  "sal-pouco":      { negocios:-2,exatas:0, saude:2, tecnologia:0, artes:6,  humanas:6,  ambiental:6 }
+};
 
-            // PERGUNTA 5: Conforto com matemática
-            'alto-matematica': {
-                cursos: {
-                    'Engenharias': 12, 'Matemática': 15, 'Física': 14, 'Estatística': 13,
-                    'Ciências Atuariais': 14, 'Economia': 11, 'Ciência de Dados': 12
-                }
-            },
-            'medio-matematica': {
-                cursos: {
-                    'Administração': 8, 'Economia': 7, 'Ciências Contábeis': 9,
-                    'Engenharias': 6, 'Estatística': 5, 'Farmácia': 4
-                }
-            },
-            'basico-matematica': {
-                cursosEspecificos: {
-                    'Psicologia': 8, 'Letras': 9, 'História': 10, 'Artes': 11,
-                    'Pedagogia': 8, 'Filosofia': 10, 'Jornalismo': 7
-                }
-            },
-            'nenhum-matematica': {
-                cursosEspecificos: {
-                    'Letras': 15, 'História': 14, 'Artes': 13, 'Filosofia': 14,
-                    'Pedagogia': 12, 'Jornalismo': 11, 'Psicologia': 10
-                }
-            }
-        };
+function computeScores(answers) {
+  const areaScores = {};
+  Object.keys(COURSES).forEach(n => areaScores[n] = 0);
 
-        // ======================
-        // FATORES CONTEXTUAIS ADICIONAIS
-        // ======================
+  const boostMaps = [
+    answers[0] ? AREA_SCORE[answers[0]] : null,
+    answers[1] ? TALENT_BOOST[answers[1]] : null,
+    answers[2] ? OBJECTIVE_BOOST[answers[2]] : null,
+    null, // work style — handled later
+    answers[4] ? MATH_BOOST[answers[4]] : null,
+    answers[5] ? TECH_BOOST[answers[5]] : null,
+    answers[6] ? ENV_BOOST[answers[6]] : null,
+    null, // schedule — minimal impact
+    answers[8] ? SAL_BOOST[answers[8]] : null,
+  ];
 
-        const contextualFactors = {
-            // Compatibilidade com tecnologia
-            techCompatibility: {
-                'muito-alto-tech': ['Ciências da Computação', 'Engenharia de Computação', 'Sistemas de Informação', 'Ciência de Dados', 'Engenharia Mecatrônica'],
-                'alto-tech': ['Engenharia Elétrica', 'Design', 'Arquitetura e urbanismo', 'Engenharia de Produção', 'Engenharia Mecânica'],
-                'moderado-tech': ['Administração', 'Economia', 'Marketing', 'Medicina', 'Jornalismo'],
-                'baixo-tech': ['Letras', 'História', 'Filosofia', 'Artes', 'Pedagogia', 'Serviço Social']
-            },
-            
-            // Ambiente de trabalho preferido
-            workEnvironment: {
-                'escritorio': ['Administração', 'Economia', 'Direito', 'Marketing', 'Ciências Contábeis'],
-                'laboratorio': ['Ciências Biológicas', 'Química', 'Farmácia', 'Biotecnologia', 'Engenharia Química'],
-                'campo': ['Geologia', 'Engenharia Florestal', 'Agronomia', 'Oceanografia', 'Zootecnia'],
-                'clinica': ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Fisioterapia'],
-                'remoto': ['Ciências da Computação', 'Design', 'Jornalismo', 'Tradução', 'Programação'],
-                'sala-aula': ['Pedagogia', 'Letras', 'História', 'Matemática', 'Física']
-            },
-            
-            // Potencial salarial (baseado em pesquisas de mercado)
-            salaryPotential: {
-                'alto': ['Medicina', 'Engenharia de Petróleo', 'Direito', 'Ciências da Computação', 'Odontologia'],
-                'medio-alto': ['Engenharias', 'Economia', 'Farmácia', 'Psicologia', 'Medicina Veterinária'],
-                'medio': ['Administração', 'Enfermagem', 'Design', 'Jornalismo', 'Arquitetura e urbanismo'],
-                'medio-baixo': ['Pedagogia', 'Letras', 'História', 'Artes', 'Serviço Social']
-            }
-        };
+  const weights = [2.5, 1.4, 1.2, 0, 1.3, 1.1, 1.0, 0, 0.7];
 
-        // ======================
-        // MAPEAMENTO GENÉRICO POR ÁREA - GARANTIR COBERTURA COMPLETA
-        // ======================
+  boostMaps.forEach((boostMap, i) => {
+    if (!boostMap) return;
+    const w = weights[i];
+    Object.keys(COURSES).forEach(name => {
+      const area = COURSES[name].area;
+      const bonus = boostMap[area] || 0;
+      areaScores[name] += bonus * w;
+    });
+  });
 
-        const genericAreaMapping = {
-            'saude': {
-                weight: 25,
-                courses: ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Farmácia', 
-                         'Fisioterapia', 'Fonoaudiologia', 'Medicina Veterinária', 'Nutrição',
-                         'Obstetrícia', 'Terapia Ocupacional', 'Gerontologia', 'Saúde Pública',
-                         'Educação Física e Esporte']
-            },
-            'tecnologia': {
-                weight: 30,
-                courses: ['Ciências da Computação', 'Engenharia de Computação', 'Sistemas de Informação',
-                         'Ciência de Dados', 'Engenharia Mecatrônica', 'Informática Biomédica',
-                         'Física Computacional', 'Matemática Aplicada e Computação Científica']
-            },
-            'exatas': {
-                weight: 28,
-                courses: ['Engenharia Civil', 'Engenharia Elétrica', 'Engenharia Mecânica', 
-                         'Matemática', 'Física', 'Química', 'Estatística', 'Engenharia Química',
-                         'Engenharia de Produção', 'Ciências Atuariais', 'Engenharia Aeronáutica',
-                         'Engenharia Agronômica', 'Engenharia Ambiental', 'Engenharia Bioquímica',
-                         'Engenharia de Alimentos', 'Engenharia de Biossistemas', 'Engenharia de Materiais',
-                         'Engenharia de Minas', 'Engenharia de Petróleo', 'Engenharia Física',
-                         'Engenharia Florestal', 'Engenharia Metalúrgica', 'Engenharia Naval',
-                         'Astronomia', 'Biotecnologia', 'Ciências dos Alimentos', 'Geofísica',
-                         'Geologia', 'Meteorologia']
-            },
-            'negocios': {
-                weight: 26,
-                courses: ['Administração', 'Economia', 'Ciências Contábeis', 'Marketing', 
-                         'Finanças e Negócios', 'Gestão de Políticas Públicas']
-            },
-            'artes': {
-                weight: 24,
-                courses: ['Design', 'Arquitetura e urbanismo', 'Publicidade e Propaganda', 
-                         'Jornalismo', 'Artes Visuais', 'Artes Cênicas', 'Música', 'Audiovisual', 
-                         'Editoração', 'Relações Públicas', 'Têxtil e Moda']
-            },
-            'humanas': {
-                weight: 22,
-                courses: ['Direito', 'Pedagogia', 'História', 'Letras', 'Filosofia', 
-                         'Relações Internacionais', 'Ciências Sociais', 'Geografia', 
-                         'Relações Públicas', 'Turismo', 'Lazer e Turismo', 'Educomunicação', 
-                         'Biblioteconomia', 'Gestão de Políticas Públicas']
-            },
-            'ambiental': {
-                weight: 23,
-                courses: ['Ciências Biológicas', 'Gestão Ambiental', 'Oceanografia', 'Zootecnia', 
-                         'Engenharia Ambiental', 'Engenharia Florestal', 'Geologia', 
-                         'Ciências Agrárias', 'Ciências da Natureza', 'Geociências e Educação Ambiental', 
-                         'Geofísica']
-            }
-        };
+  // Work style nuance (Q3)
+  const ws = answers[3];
+  if (ws === "publico") {
+    ["Medicina","Direito","Psicologia","Pedagogia","Relações Públicas","Jornalismo","Odontologia","Fisioterapia","Fonoaudiologia"].forEach(n => { if (areaScores[n] !== undefined) areaScores[n] += 6; });
+  } else if (ws === "sozinho") {
+    ["Matemática","Estatística","Física","Letras","Filosofia","História","Ciência de Dados"].forEach(n => { if (areaScores[n] !== undefined) areaScores[n] += 5; });
+  } else if (ws === "equipe") {
+    ["Administração","Enfermagem","Engenharia de Produção","Marketing","Medicina"].forEach(n => { if (areaScores[n] !== undefined) areaScores[n] += 4; });
+  }
 
-        // ======================
-        // ALGORITMO DE PONTUAÇÃO MELHORADO
-        // ======================
+  // Duration preference (Q9)
+  const dur = answers[9];
+  Object.keys(COURSES).forEach(name => {
+    const d = COURSES[name].dur;
+    const years = parseInt(d);
+    if (dur === "dur-curto" && years >= 6) areaScores[name] -= 10;
+    if (dur === "dur-longo" && years <= 4) areaScores[name] += 2;
+  });
 
-        function calculateAdvancedScores() {
-            allCoursesWithScores = Object.keys(courses).map(courseName => {
-                let totalScore = 0;
-                const course = courses[courseName];
-                
-                // Calcular pontuação baseada em cada resposta
-                answers.forEach((answer, questionIndex) => {
-                    const weight = questionWeights[questionIndex] || 1.0;
-                    
-                    if (compatibilityMatrix[answer]) {
-                        // Verificar pontuação específica para o curso
-                        if (compatibilityMatrix[answer].cursos && compatibilityMatrix[answer].cursos[courseName]) {
-                            totalScore += compatibilityMatrix[answer].cursos[courseName] * weight;
-                        }
-                        
-                        // Verificar pontuação para categorias de cursos específicos
-                        if (compatibilityMatrix[answer].cursosEspecificos && compatibilityMatrix[answer].cursosEspecificos[courseName]) {
-                            totalScore += compatibilityMatrix[answer].cursosEspecificos[courseName] * weight;
-                        }
-                    }
-                });
-                
-                // Fatores contextuais adicionais
-                totalScore += calculateContextualFactors(courseName);
-                
-                // Ajuste baseado na área do curso
-                totalScore += calculateAreaBonus(course.area, answers[0]);
-                
-                // Normalizar para 0-100
-                const normalizedScore = Math.min(100, Math.max(0, totalScore));
-                
-                return {
-                    name: courseName,
-                    ...course,
-                    score: Math.round(normalizedScore),
-                    rawScore: Math.round(totalScore)
-                };
-            });
-            
-            // Ordenar por pontuação
-            allCoursesWithScores.sort((a, b) => b.score - a.score);
-        }
+  // Normalize to 0-100
+  const vals = Object.values(areaScores);
+  const min = Math.min(...vals);
+  const max = Math.max(...vals);
+  const range = max - min || 1;
 
-        function calculateContextualFactors(courseName) {
-            let bonus = 0;
-            
-            // Compatibilidade tecnológica (pergunta 6)
-            const techAnswer = answers[5];
-            if (contextualFactors.techCompatibility[techAnswer]?.includes(courseName)) {
-                bonus += techAnswer === 'muito-alto-tech' ? 10 : 
-                         techAnswer === 'alto-tech' ? 7 :
-                         techAnswer === 'moderado-tech' ? 4 : 0;
-            }
-            
-            // Ambiente de trabalho (pergunta 7)
-            const environmentAnswer = answers[6];
-            if (contextualFactors.workEnvironment[environmentAnswer]?.includes(courseName)) {
-                bonus += 6;
-            }
-            
-            // Importância do salário (pergunta 9)
-            const salaryAnswer = answers[8];
-            if (salaryAnswer === 'muito-importante' && contextualFactors.salaryPotential.alto.includes(courseName)) {
-                bonus += 10;
-            } else if (salaryAnswer === 'importante' && contextualFactors.salaryPotential['medio-alto'].includes(courseName)) {
-                bonus += 6;
-            }
-            
-            return bonus;
-        }
+  return Object.keys(COURSES).map(name => ({
+    name,
+    ...COURSES[name],
+    score: Math.round(((areaScores[name] - min) / range) * 100)
+  })).sort((a,b) => b.score - a.score);
+}
 
-        function calculateAreaBonus(courseArea, userAreaInterest) {
-            // Bônus extra se a área do curso corresponder à área de interesse principal
-            const areaMapping = {
-                'saude': ['Medicina', 'Enfermagem', 'Psicologia', 'Odontologia', 'Farmácia', 'Fisioterapia', 'Fonoaudiologia', 'Medicina Veterinária', 'Nutrição', 'Obstetrícia', 'Terapia Ocupacional', 'Gerontologia', 'Saúde Pública', 'Educação Física e Esporte'],
-                'tecnologia': ['Ciências da Computação', 'Engenharia de Computação', 'Sistemas de Informação', 'Ciência de Dados', 'Engenharia Mecatrônica', 'Informática Biomédica', 'Física Computacional', 'Matemática Aplicada e Computação Científica'],
-                'exatas': ['Engenharia Civil', 'Engenharia Elétrica', 'Engenharia Mecânica', 'Matemática', 'Física', 'Química', 'Estatística', 'Engenharia Química', 'Engenharia de Produção', 'Ciências Atuariais', 'Engenharia Aeronáutica', 'Engenharia Agronômica', 'Engenharia Ambiental', 'Engenharia Bioquímica', 'Engenharia de Alimentos', 'Engenharia de Biossistemas', 'Engenharia de Materiais', 'Engenharia de Minas', 'Engenharia de Petróleo', 'Engenharia Física', 'Engenharia Florestal', 'Engenharia Metalúrgica', 'Engenharia Naval', 'Engenharia Mecatrônica'],
-                'negocios': ['Administração', 'Economia', 'Ciências Contábeis', 'Marketing', 'Finanças e Negócios', 'Gestão de Políticas Públicas'],
-                'artes': ['Design', 'Arquitetura e urbanismo', 'Publicidade e Propaganda', 'Jornalismo', 'Artes Visuais', 'Artes Cênicas', 'Música', 'Audiovisual', 'Editoração', 'Relações Públicas', 'Têxtil e Moda'],
-                'humanas': ['Direito', 'Pedagogia', 'História', 'Letras', 'Filosofia', 'Relações Internacionais', 'Ciências Sociais', 'Geografia', 'Relações Públicas', 'Turismo', 'Lazer e Turismo', 'Educomunicação', 'Biblioteconomia'],
-                'ambiental': ['Ciências Biológicas', 'Gestão Ambiental', 'Oceanografia', 'Zootecnia', 'Engenharia Ambiental', 'Engenharia Florestal', 'Geologia', 'Ciências Agrárias', 'Ciências da Natureza', 'Geociências e Educação Ambiental', 'Geofísica']
-            };
-            
-            // Verificar se o curso está na lista da área de interesse do usuário
-            if (areaMapping[userAreaInterest]?.includes(courseArea)) {
-                return 15; // Bônus significativo por compatibilidade de área principal
-            }
-            
-            return 0;
-        }
+function buildProfileSummary(answers) {
+  const areaLabels = { saude:"Ciências da Saúde", tecnologia:"Tecnologia", exatas:"Exatas/Engenharias", negocios:"Negócios", artes:"Artes e Comunicação", humanas:"Humanas", ambiental:"Ciências Ambientais" };
+  const talentLabels = { analitico:"analítico", criativo:"criativo", social:"voltado a pessoas", pratico:"prático", cientifico:"científico" };
+  const objLabels = { "impacto-social":"impacto social", inovacao:"inovação tecnológica", estabilidade:"estabilidade financeira", liberdade:"expressão criativa", pesquisa:"pesquisa científica" };
 
-        // ======================
-        // FUNÇÃO PARA GARANTIR QUE TODOS OS CURSOS TENHAM PONTUAÇÃO
-        // ======================
+  const area = areaLabels[answers[0]] || "—";
+  const talent = talentLabels[answers[1]] || "—";
+  const obj = objLabels[answers[2]] || "—";
 
-        function ensureAllCoursesHaveScores() {
-            const allCourseNames = Object.keys(courses);
-            
-            // Para cada curso que não foi pontuado no sistema principal
-            allCourseNames.forEach(courseName => {
-                const existingScore = allCoursesWithScores.find(c => c.name === courseName);
-                
-                if (!existingScore) {
-                    // Criar pontuação base para cursos não mapeados
-                    const course = courses[courseName];
-                    let baseScore = 0;
-                    
-                    // Pontuação base por área
-                    const areaScores = {
-                        'saude': 25, 'tecnologia': 30, 'exatas': 28, 
-                        'negocios': 26, 'artes': 24, 'humanas': 22, 'ambiental': 23
-                    };
-                    
-                    baseScore = areaScores[course.area] || 20;
-                    
-                    // Adicionar variação aleatória controlada
-                    const randomVariation = Math.random() * 15;
-                    baseScore += randomVariation;
-                    
-                    allCoursesWithScores.push({
-                        name: courseName,
-                        ...course,
-                        score: Math.min(85, Math.round(baseScore)),
-                        rawScore: Math.round(baseScore)
-                    });
-                }
-            });
-        }
+  return `Seu perfil combina interesse em <strong>${area}</strong>, um perfil natural <strong>${talent}</strong> e objetivo de <strong>${obj}</strong>. As recomendações abaixo refletem toda a análise das suas 10 respostas.`;
+}
 
-        // ======================
-        // ELEMENTOS DA DOM E ESTADO
-        // ======================
+/* =============================================
+   STATE
+============================================= */
+let state = {
+  screen: "start",
+  q: 0,
+  answers: [],
+  results: [],
+  filter: "all",
+  search: "",
+  showAll: false,
+  favorites: []
+};
 
-        const startScreen = document.getElementById('start-screen');
-        const questionScreen = document.getElementById('question-screen');
-        const loadingScreen = document.getElementById('loading-screen');
-        const resultScreen = document.getElementById('result-screen');
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const nextBtn = document.getElementById('next-btn');
-        const startBtn = document.getElementById('start-btn');
-        const restartBtn = document.getElementById('restart-btn');
-        const progressBar = document.getElementById('progress');
-        const questionCounter = document.getElementById('question-counter');
-        const resultsContainer = document.getElementById('results-container');
-        const searchInput = document.getElementById('search-input');
-        const resultsCount = document.getElementById('results-count');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const viewAllBtn = document.getElementById('view-all-btn');
-        const themeToggle = document.getElementById('theme-toggle');
-        const favoritesSection = document.getElementById('favorites-section');
-        const favoritesContainer = document.getElementById('favorites-container');
-        const clearFavoritesBtn = document.getElementById('clear-favorites');
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("um_state") || "{}");
+    if (saved.answers) state.answers = saved.answers;
+    if (saved.q !== undefined && saved.answers.length > 0) {
+      state.q = saved.q;
+      state.screen = "question";
+    }
+    if (saved.favorites) state.favorites = saved.favorites;
+    if (saved.theme) {
+      if (saved.theme === "light") document.body.classList.add("light");
+    }
+  } catch(e) {}
+}
 
-        // Estado do questionário
-        let currentQuestion = 0;
-        let answers = [];
-        let selectedOption = null;
-        let allCoursesWithScores = [];
-        let currentFilter = 'all';
-        let currentSearch = '';
-        let favorites = JSON.parse(localStorage.getItem('unimatch_favorites')) || [];
+function saveState() {
+  try {
+    localStorage.setItem("um_state", JSON.stringify({
+      answers: state.answers,
+      q: state.q,
+      favorites: state.favorites,
+      theme: document.body.classList.contains("light") ? "light" : "dark"
+    }));
+  } catch(e) {}
+}
 
-        // ======================
-        // NOVAS FUNCIONALIDADES
-        // ======================
+/* =============================================
+   RENDER
+============================================= */
+const $ = id => document.getElementById(id);
 
-        // Sistema de Modo Escuro
-        function initTheme() {
-            const savedTheme = localStorage.getItem('unimatch_theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                themeToggle.textContent = '☀️';
-            }
-        }
+function showScreen(name) {
+  ["start-screen","question-screen","loading-screen","result-screen"].forEach(id => {
+    const el = $(id);
+    if (el) el.classList.add("hidden");
+  });
+  const target = $(name === "result" ? "result-screen" : name + "-screen");
+  if (target) target.classList.remove("hidden");
+  state.screen = name;
+}
 
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('unimatch_theme', 'dark');
-                themeToggle.textContent = '☀️';
-            } else {
-                localStorage.setItem('unimatch_theme', 'light');
-                themeToggle.textContent = '🌙';
-            }
-        }
+function updateProgress() {
+  const total = QUESTIONS.length;
+  const done = state.q;
+  const pct = state.screen === "start" ? 0 : Math.round((done / total) * 100);
+  $("progress-fill").style.width = pct + "%";
+  $("progress-pct").textContent = pct + "%";
+  if (state.screen === "question") {
+    $("progress-label").textContent = `Pergunta ${state.q + 1} de ${total}`;
+  } else if (state.screen === "result") {
+    $("progress-label").textContent = "Concluído ✓";
+    $("progress-fill").style.width = "100%";
+    $("progress-pct").textContent = "100%";
+  } else {
+    $("progress-label").textContent = "Início";
+  }
+}
 
-        // Sistema de Favoritos
-        function toggleFavorite(courseName) {
-            const index = favorites.indexOf(courseName);
-            if (index === -1) {
-                favorites.push(courseName);
-            } else {
-                favorites.splice(index, 1);
-            }
-            localStorage.setItem('unimatch_favorites', JSON.stringify(favorites));
-            displayRecommendations();
-            displayFavorites();
-        }
+function renderQuestion() {
+  const q = QUESTIONS[state.q];
+  $("question-num").textContent = `Pergunta ${state.q + 1} de ${QUESTIONS.length}`;
+  $("question-text").textContent = q.q;
 
-        function isFavorited(courseName) {
-            return favorites.includes(courseName);
-        }
+  const grid = $("options-grid");
+  grid.innerHTML = "";
+  const prev = state.answers[state.q];
 
-        function displayFavorites() {
-            favoritesContainer.innerHTML = '';
-            
-            if (favorites.length === 0) {
-                favoritesContainer.innerHTML = `
-                    <div style="text-align: center; padding: 20px; color: var(--text-light);">
-                        <p>Nenhum curso favoritado ainda.</p>
-                        <p>Clique no ❤️ dos cursos para adicioná-los aos favoritos!</p>
-                    </div>
-                `;
-                favoritesSection.classList.add('hidden');
-                return;
-            }
-            
-            favoritesSection.classList.remove('hidden');
-            
-            favorites.forEach(courseName => {
-                const course = allCoursesWithScores.find(c => c.name === courseName);
-                if (course) {
-                    const favoriteElement = createCourseElement(course, true);
-                    favoritesContainer.appendChild(favoriteElement);
-                }
-            });
-        }
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn" + (prev === opt.v ? " selected" : "");
+    btn.setAttribute("role", "option");
+    btn.setAttribute("aria-selected", prev === opt.v ? "true" : "false");
+    btn.setAttribute("tabindex", "0");
+    btn.innerHTML = `
+      <span class="option-emoji">${opt.e}</span>
+      <span class="option-text">${opt.t}</span>
+      <span class="option-check">✓</span>
+    `;
+    btn.addEventListener("click", () => selectOption(opt.v, btn));
+    btn.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectOption(opt.v, btn); }});
+    grid.appendChild(btn);
+  });
 
-        function clearFavorites() {
-            if (confirm('Tem certeza que deseja limpar todos os favoritos?')) {
-                favorites = [];
-                localStorage.setItem('unimatch_favorites', JSON.stringify(favorites));
-                displayFavorites();
-            }
-        }
+  $("next-btn").disabled = !prev;
+  $("back-btn").style.display = state.q === 0 ? "none" : "inline-flex";
 
-        // ======================
-        // FUNÇÕES PRINCIPAIS
-        // ======================
+  // Animate
+  grid.style.opacity = "0";
+  grid.style.transform = "translateY(10px)";
+  requestAnimationFrame(() => {
+    grid.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+    grid.style.opacity = "1";
+    grid.style.transform = "translateY(0)";
+  });
+}
 
-        // Inicialização
-        startBtn.addEventListener('click', startQuiz);
-        nextBtn.addEventListener('click', nextQuestion);
-        restartBtn.addEventListener('click', restartQuiz);
-        themeToggle.addEventListener('click', toggleTheme);
-        clearFavoritesBtn.addEventListener('click', clearFavorites);
+let selectedVal = null;
 
-        function startQuiz() {
-            startScreen.classList.add('hidden');
-            questionScreen.classList.remove('hidden');
-            showQuestion();
-        }
+function selectOption(val, btn) {
+  document.querySelectorAll(".option-btn").forEach(b => {
+    b.classList.remove("selected");
+    b.setAttribute("aria-selected", "false");
+  });
+  btn.classList.add("selected");
+  btn.setAttribute("aria-selected", "true");
+  selectedVal = val;
+  $("next-btn").disabled = false;
+}
 
-        function showQuestion() {
-            const question = questions[currentQuestion];
-            questionText.textContent = question.question;
-            optionsContainer.innerHTML = '';
-            
-            // Atualizar contador e barra de progresso
-            questionCounter.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
-            progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-            
-            // Criar opções
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                optionElement.innerHTML = `
-                    <span class="emoji">${option.emoji}</span>
-                    <span>${option.text}</span>
-                `;
-                
-                optionElement.addEventListener('click', () => selectOption(optionElement, index));
-                optionsContainer.appendChild(optionElement);
-            });
-            
-            // Resetar seleção e botão
-            selectedOption = null;
-            nextBtn.disabled = true;
-        }
+/* =============================================
+   RESULTS RENDER
+============================================= */
+function renderResults() {
+  // Profile
+  $("profile-summary").innerHTML = buildProfileSummary(state.answers);
 
-        function selectOption(optionElement, index) {
-            // Remover seleção anterior
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            // Selecionar nova opção
-            optionElement.classList.add('selected');
-            selectedOption = index;
-            nextBtn.disabled = false;
-        }
+  // Update progress
+  updateProgress();
 
-        function nextQuestion() {
-            if (selectedOption === null) return;
-            
-            // Salvar resposta
-            answers.push(questions[currentQuestion].options[selectedOption].value);
-            
-            // Avançar para próxima pergunta ou mostrar resultados
-            currentQuestion++;
-            
-            if (currentQuestion < questions.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
-        }
+  renderCourseList();
+  renderFavorites();
+}
 
-        function showResults() {
-            questionScreen.classList.add('hidden');
-            loadingScreen.classList.remove('hidden');
-            
-            setTimeout(() => {
-                loadingScreen.classList.add('hidden');
-                resultScreen.classList.remove('hidden');
-                calculateCourseScores();
-                displayRecommendations();
-                displayFavorites();
-            }, 1500);
-        }
+function getFilteredCourses() {
+  let list = [...state.results];
 
-        function calculateCourseScores() {
-            calculateAdvancedScores();
-            ensureAllCoursesHaveScores(); // GARANTIR QUE TODOS OS CURSOS TENHAM PONTUAÇÃO
-            
-            // Ordenar novamente após adicionar todos os cursos
-            allCoursesWithScores.sort((a, b) => b.score - a.score);
-            
-            // Debug: mostrar total de cursos pontuados
-            console.log("Total de cursos pontuados:", allCoursesWithScores.length);
-            console.log("Top 5 cursos:");
-            allCoursesWithScores.slice(0, 5).forEach(course => {
-                console.log(`${course.name}: ${course.score}% (raw: ${course.rawScore})`);
-            });
-        }
+  if (state.search) {
+    const q = state.search.toLowerCase();
+    list = list.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      c.desc.toLowerCase().includes(q) ||
+      c.tags.some(t => t.toLowerCase().includes(q)) ||
+      c.carreiras.toLowerCase().includes(q)
+    );
+  }
 
-        function displayRecommendations() {
-            resultsContainer.innerHTML = '';
-            
-            const filteredCourses = filterAndSearchCourses();
-            const displayedCourses = currentFilter === 'all' ? 
-                filteredCourses.slice(0, 8) : filteredCourses;
-            
-            if (filteredCourses.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: var(--text-light);">
-                        <h3>Nenhum curso encontrado</h3>
-                        <p>Tente alterar os filtros ou termos da pesquisa.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            displayedCourses.forEach(course => {
-                const courseElement = createCourseElement(course, false);
-                resultsContainer.appendChild(courseElement);
-            });
-            
-            // Atualizar contador
-            resultsCount.textContent = `${filteredCourses.length} cursos encontrados`;
-            
-            // Mostrar botão "Ver Todos" se necessário
-            viewAllBtn.style.display = filteredCourses.length > 8 && currentFilter === 'all' ? 
-                'block' : 'none';
-        }
+  if (state.filter === "high")   list = list.filter(c => c.score >= 70);
+  if (state.filter === "medium") list = list.filter(c => c.score >= 40 && c.score < 70);
+  if (state.filter === "notes")  list = [...list].sort((a,b) => {
+    return parseInt(b.notaUSP) - parseInt(a.notaUSP);
+  });
 
-        function createCourseElement(course, isFavoriteView) {
-            const courseElement = document.createElement('div');
-            courseElement.className = 'course-card';
-            
-            const compatibilityText = course.score >= 70 ? 'Alta' : 
-                                    course.score >= 50 ? 'Média' : 'Baixa';
-            const compatibilityClass = course.score >= 70 ? 'high' : 
-                                     course.score >= 50 ? 'medium' : 'low';
-            
-            // Botão de favorito
-            const favoriteBtn = document.createElement('button');
-            favoriteBtn.className = `favorite-btn ${isFavorited(course.name) ? 'favorited' : ''}`;
-            favoriteBtn.innerHTML = isFavorited(course.name) ? '❤️' : '🤍';
-            favoriteBtn.title = isFavorited(course.name) ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
-            favoriteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleFavorite(course.name);
-            });
+  return list;
+}
 
-            courseElement.innerHTML = `
-                <div class="course-header">
-                    <div class="course-title">
-                        ${course.name}
-                        <div class="compatibility-score ${compatibilityClass}">
-                            ${compatibilityText} Compatibilidade (${course.score}%)
-                        </div>
-                    </div>
-                </div>
-                <div class="course-info">
-                    <strong>Descrição:</strong> ${course.descricao}
-                </div>
-                <div class="course-info">
-                    <strong>Carreiras:</strong> ${course.carreiras}
-                </div>
-                
-                <!-- NOVO: Informações de Mercado -->
-                <div class="market-info">
-                    <div class="market-item">
-                        <span class="market-label">Salário Médio</span>
-                        <span class="market-value">${course.salarioMedio}</span>
-                    </div>
-                    <div class="market-item">
-                        <span class="market-label">Empregabilidade</span>
-                        <span class="market-value">${course.empregabilidade}</span>
-                    </div>
-                    <div class="market-item">
-                        <span class="market-label">Demanda</span>
-                        <span class="market-value">${course.demanda}</span>
-                    </div>
-                </div>
-                
-                <div class="course-info">
-                    <strong>Nota de Corte Média USP:</strong> ${course.notaCorte} pontos
-                </div>
-                <div class="course-tags">
-                    ${course.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                </div>
-            `;
-            
-            courseElement.appendChild(favoriteBtn);
-            return courseElement;
-        }
+function renderCourseList() {
+  const filtered = getFilteredCourses();
+  const limit = state.showAll ? filtered.length : 8;
+  const shown = filtered.slice(0, limit);
 
-        function filterAndSearchCourses() {
-            let filtered = allCoursesWithScores;
-            
-            // Aplicar busca
-            if (currentSearch) {
-                filtered = filtered.filter(course => 
-                    course.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
-                    course.descricao.toLowerCase().includes(currentSearch.toLowerCase()) ||
-                    course.tags.some(tag => tag.toLowerCase().includes(currentSearch.toLowerCase()))
-                );
-            }
-            
-            // Aplicar filtros
-            switch (currentFilter) {
-                case 'high':
-                    filtered = filtered.filter(course => course.score >= 70);
-                    break;
-                case 'medium':
-                    filtered = filtered.filter(course => course.score >= 50 && course.score < 70);
-                    break;
-                case 'notes':
-                    filtered = [...filtered].sort((a, b) => {
-                        const noteA = parseInt(a.notaCorte.split('-')[0]);
-                        const noteB = parseInt(b.notaCorte.split('-')[0]);
-                        return noteB - noteA;
-                    });
-                    break;
-            }
-            
-            return filtered;
-        }
+  $("results-count").innerHTML = `<strong>${filtered.length}</strong> cursos encontrados`;
 
-        // Event Listeners para novos elementos
-        searchInput.addEventListener('input', (e) => {
-            currentSearch = e.target.value;
-            displayRecommendations();
-        });
+  const container = $("course-list");
+  container.innerHTML = "";
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                displayRecommendations();
-            });
-        });
+  if (shown.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-dim);">Nenhum curso encontrado para essa busca.</div>`;
+  }
 
-        viewAllBtn.addEventListener('click', () => {
-            const filteredCourses = filterAndSearchCourses();
-            resultsContainer.innerHTML = '';
-            filteredCourses.forEach(course => {
-                const courseElement = createCourseElement(course, false);
-                resultsContainer.appendChild(courseElement);
-            });
-            viewAllBtn.style.display = 'none';
-        });
+  shown.forEach((course, idx) => {
+    container.appendChild(createCourseCard(course, idx, false));
+  });
 
-        function restartQuiz() {
-            currentQuestion = 0;
-            answers = [];
-            selectedOption = null;
-            allCoursesWithScores = [];
-            currentFilter = 'all';
-            currentSearch = '';
-            searchInput.value = '';
-            
-            resultScreen.classList.add('hidden');
-            startScreen.classList.remove('hidden');
-        }
+  const showMoreWrap = $("show-more-wrap");
+  if (filtered.length > 8 && !state.showAll) {
+    showMoreWrap.classList.remove("hidden");
+    $("show-more-btn").textContent = `Ver todos os ${filtered.length} cursos ↓`;
+  } else {
+    showMoreWrap.classList.add("hidden");
+  }
+}
 
-        // Inicializar tema ao carregar a página
-        initTheme();
-    </script>
+function createCourseCard(course, idx, isFavView) {
+  const score = course.score;
+  const compatClass = score >= 70 ? "high" : score >= 40 ? "medium" : "low";
+  const compatLabel = score >= 70 ? "Alta" : score >= 40 ? "Média" : "Baixa";
+  const isTop = idx < 3 && !isFavView;
+  const isFav = state.favorites.includes(course.name);
+
+  const card = document.createElement("div");
+  card.className = "course-card";
+  card.setAttribute("data-name", course.name);
+  if (idx !== undefined) card.style.animationDelay = Math.min(idx * 0.04, 0.4) + "s";
+
+  // Emp badge class
+  const empClass = course.emp.toLowerCase().replace(" ", "-").replace("á","a").replace("é","e");
+  const demClass = course.dem.toLowerCase().replace("á","a").replace("é","e");
+
+  // Score explanation
+  const areaLabel = { saude:"Saúde", tecnologia:"Tecnologia", exatas:"Exatas", negocios:"Negócios", artes:"Artes", humanas:"Humanas", ambiental:"Ambiental" };
+  const explain = `Compatibilidade calculada com base na sua área de interesse, talentos, objetivos, ambiente de trabalho e preferências declaradas. Score: <strong>${score}/100</strong>.`;
+
+  card.innerHTML = `
+    <div class="course-card-header">
+      <div class="course-rank ${isTop ? "top" : ""}">${String(idx !== undefined ? idx+1 : "★").padStart(2,"0")}</div>
+      <div class="course-main">
+        <div class="course-name">${course.name}</div>
+        <div class="course-meta-row">
+          <span class="compat-badge ${compatClass}">${compatLabel} compatibilidade</span>
+          <span class="course-area-tag">${areaLabel[course.area] || course.area} · ${course.dur}</span>
+        </div>
+      </div>
+      <div class="course-actions">
+        <button class="fav-btn ${isFav ? "favorited" : ""}" aria-label="${isFav ? "Remover dos favoritos" : "Adicionar aos favoritos"}" title="Favoritar">${isFav ? "❤️" : "🤍"}</button>
+        <button class="expand-btn" aria-label="Ver detalhes" title="Expandir">▾</button>
+      </div>
+    </div>
+    <div class="score-bar-wrap">
+      <div class="score-bar-track">
+        <div class="score-bar-fill" style="width:0%" data-target="${score}%"></div>
+      </div>
+    </div>
+    <div class="course-body">
+      <div class="course-body-inner">
+        <div class="score-explain">
+          <div class="score-explain-title">🎯 Por que este curso aparece aqui?</div>
+          ${explain}
+        </div>
+        <p class="desc-text">${course.desc}</p>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Salário Médio</div>
+            <div class="info-value">${course.sal}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Empregabilidade</div>
+            <div class="info-value"><span class="emp-badge ${empClass}">${course.emp}</span></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Demanda de Mercado</div>
+            <div class="info-value"><span class="dem-${demClass.split(' ')[0]}">${course.dem}</span></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Nota de Corte USP</div>
+            <div class="info-value">${course.notaUSP} pts</div>
+          </div>
+          <div class="info-item full">
+            <div class="info-label">Carreiras comuns</div>
+            <div class="info-value" style="font-weight:400;font-size:0.85rem;color:var(--text-muted)">${course.carreiras}</div>
+          </div>
+        </div>
+        <div class="tags-row">
+          ${course.tags.map(t => `<span class="tag">${t}</span>`).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Expand
+  const expandBtn = card.querySelector(".expand-btn");
+  const body = card.querySelector(".course-body");
+  const bar = card.querySelector(".score-bar-fill");
+  let expanded = false;
+
+  expandBtn.addEventListener("click", () => {
+    expanded = !expanded;
+    body.classList.toggle("open", expanded);
+    expandBtn.classList.toggle("open", expanded);
+    if (expanded) {
+      // Animate bar
+      setTimeout(() => { bar.style.width = bar.dataset.target; }, 100);
+    } else {
+      bar.style.width = "0%";
+    }
+  });
+
+  // Fav
+  const favBtn = card.querySelector(".fav-btn");
+  favBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    toggleFavorite(course.name);
+  });
+
+  // Make header clickable to expand too
+  card.querySelector(".course-card-header").addEventListener("click", (e) => {
+    if (e.target.closest(".fav-btn")) return;
+    expandBtn.click();
+  });
+
+  return card;
+}
+
+function renderFavorites() {
+  const sec = $("favorites-section");
+  const list = $("fav-list");
+  const count = $("fav-count");
+
+  if (state.favorites.length === 0) {
+    sec.classList.add("hidden");
+    return;
+  }
+
+  sec.classList.remove("hidden");
+  count.textContent = state.favorites.length;
+  list.innerHTML = "";
+
+  state.favorites.forEach((name, idx) => {
+    const course = state.results.find(c => c.name === name);
+    if (course) list.appendChild(createCourseCard(course, idx, true));
+  });
+}
+
+function toggleFavorite(name) {
+  const idx = state.favorites.indexOf(name);
+  if (idx === -1) {
+    state.favorites.push(name);
+    showToast("❤️ Adicionado aos favoritos");
+  } else {
+    state.favorites.splice(idx, 1);
+    showToast("🤍 Removido dos favoritos");
+  }
+  saveState();
+  renderCourseList();
+  renderFavorites();
+}
+
+/* =============================================
+   LOADING ANIMATION
+============================================= */
+function runLoadingAnimation(callback) {
+  const steps = [0,1,2,3];
+  let current = 0;
+
+  function nextStep() {
+    if (current > 0) {
+      const prev = $(`step-${current-1}`);
+      if (prev) { prev.classList.remove("active"); prev.classList.add("done"); }
+    }
+    const s = $(`step-${current}`);
+    if (s) s.classList.add("active");
+    current++;
+    if (current <= steps.length) {
+      setTimeout(nextStep, 400);
+    } else {
+      setTimeout(callback, 300);
+    }
+  }
+
+  // Reset
+  steps.forEach(i => {
+    const el = $(`step-${i}`);
+    if (el) { el.classList.remove("active","done"); }
+  });
+
+  setTimeout(nextStep, 100);
+}
+
+/* =============================================
+   TOAST
+============================================= */
+let toastTimer;
+function showToast(msg) {
+  const wrap = $("toast-wrap");
+  $("toast-msg").textContent = msg;
+  wrap.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => wrap.classList.remove("show"), 2200);
+}
+
+/* =============================================
+   FLOW
+============================================= */
+function startQuiz() {
+  state.screen = "question";
+  if (state.answers.length === 0) state.q = 0;
+  showScreen("question");
+  renderQuestion();
+  updateProgress();
+}
+
+function goNext() {
+  if (!selectedVal && !state.answers[state.q]) return;
+  const val = selectedVal || state.answers[state.q];
+  state.answers[state.q] = val;
+  selectedVal = null;
+  saveState();
+
+  if (state.q < QUESTIONS.length - 1) {
+    state.q++;
+    showScreen("question");
+    renderQuestion();
+    updateProgress();
+  } else {
+    // Done
+    showScreen("loading");
+    updateProgress();
+    runLoadingAnimation(() => {
+      state.results = computeScores(state.answers);
+      showScreen("result");
+      updateProgress();
+      renderResults();
+    });
+  }
+}
+
+function goBack() {
+  if (state.q === 0) return;
+  selectedVal = null;
+  state.q--;
+  showScreen("question");
+  renderQuestion();
+  updateProgress();
+}
+
+function restartQuiz() {
+  state.q = 0;
+  state.answers = [];
+  state.results = [];
+  state.filter = "all";
+  state.search = "";
+  state.showAll = false;
+  selectedVal = null;
+  // Reset filters UI
+  document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+  document.querySelector(".filter-chip[data-filter='all']").classList.add("active");
+  $("search-input").value = "";
+  // Reset loading steps
+  [0,1,2,3].forEach(i => {
+    const el = $(`step-${i}`);
+    if (el) { el.classList.remove("active","done"); }
+  });
+  saveState();
+  showScreen("start");
+  updateProgress();
+}
+
+/* =============================================
+   EVENT LISTENERS
+============================================= */
+$("start-btn").addEventListener("click", startQuiz);
+$("next-btn").addEventListener("click", goNext);
+$("back-btn").addEventListener("click", goBack);
+$("restart-btn").addEventListener("click", restartQuiz);
+
+$("theme-btn").addEventListener("click", () => {
+  document.body.classList.toggle("light");
+  $("theme-btn").textContent = document.body.classList.contains("light") ? "🌙" : "☀️";
+  saveState();
+});
+
+$("search-input").addEventListener("input", e => {
+  state.search = e.target.value;
+  state.showAll = false;
+  renderCourseList();
+});
+
+document.querySelectorAll(".filter-chip").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-chip").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    state.filter = btn.dataset.filter;
+    state.showAll = false;
+    renderCourseList();
+  });
+});
+
+$("show-more-btn").addEventListener("click", () => {
+  state.showAll = true;
+  renderCourseList();
+});
+
+$("clear-fav-btn").addEventListener("click", () => {
+  if (confirm("Limpar todos os favoritos?")) {
+    state.favorites = [];
+    saveState();
+    renderFavorites();
+    renderCourseList();
+    showToast("✓ Favoritos limpos");
+  }
+});
+
+// Keyboard: Enter on next
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && state.screen === "question" && !$("next-btn").disabled) {
+    goNext();
+  }
+});
+
+/* =============================================
+   INIT
+============================================= */
+loadState();
+
+// Apply saved theme
+if (!document.body.classList.contains("light")) {
+  $("theme-btn").textContent = "☀️";
+} else {
+  $("theme-btn").textContent = "🌙";
+}
+
+// Resume or start fresh
+if (state.screen === "question" && state.answers.length > 0) {
+  showScreen("question");
+  renderQuestion();
+  showToast("✓ Continuando de onde parou");
+} else {
+  showScreen("start");
+}
+
+updateProgress();
+</script>
 </body>
 </html>
