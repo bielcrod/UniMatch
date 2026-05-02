@@ -154,7 +154,6 @@ body::before {
   align-items: flex-start;
 }
 .data-notice-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
-.data-notice a { color: var(--accent); text-decoration: underline; }
 
 /* BUTTONS */
 .btn-primary {
@@ -390,6 +389,12 @@ body::before {
   border: 5px solid transparent; border-top-color: var(--border);
 }
 .sisu-adjusted { color: var(--accent2); font-size: 0.72rem; font-weight: 500; }
+/* FIX 4 — estimated note badge */
+.sisu-est-badge {
+  font-size: 0.68rem; font-weight: 600; padding: 1px 6px;
+  border-radius: 4px; background: rgba(247,178,106,0.15);
+  color: var(--accent2); letter-spacing: 0.02em;
+}
 
 .emp-badge { font-size: 0.8rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
 .emp-badge.muitoalta, .emp-badge.muitoalto { background: rgba(106,247,178,0.15); color: #6af7b2; }
@@ -421,6 +426,19 @@ body::before {
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .section-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 .section-count { background: rgba(247,106,106,0.15); color: #f76a6a; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+
+/* FIX 5 — Share button row */
+.share-row {
+  display: flex; gap: 10px; margin-top: 16px; justify-content: center; flex-wrap: wrap;
+}
+.share-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(124,106,247,0.1); border: 1.5px solid rgba(124,106,247,0.3);
+  color: var(--accent); border-radius: var(--radius-sm);
+  padding: 11px 22px; font-family: var(--font-body);
+  font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all var(--transition);
+}
+.share-btn:hover { background: rgba(124,106,247,0.2); border-color: var(--accent); }
 
 .bottom-actions { display: flex; gap: 12px; margin-top: 32px; }
 .bottom-actions .btn-primary { flex: 1; background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
@@ -559,6 +577,11 @@ body::before {
       </div>
     </div>
 
+    <!-- FIX 5 — Share row -->
+    <div class="share-row">
+      <button class="share-btn" id="share-btn">🔗 Copiar link dos resultados</button>
+    </div>
+
     <div class="hidden" id="favorites-section">
       <div class="section-divider"></div>
       <div class="section-header">
@@ -572,9 +595,10 @@ body::before {
     <div class="data-notice" style="margin-top:24px;">
       <span class="data-notice-icon">ℹ️</span>
       <span>
-        <strong>Fontes dos dados:</strong> Notas de corte do <strong>SISU 2024</strong> (1ª chamada, ampla concorrência, campus mais concorrido da região — fonte: MEC). 
-        Salários e empregabilidade: <strong>CAGED 2023</strong> e <strong>CBO/MTE</strong>. 
-        Os valores são médias nacionais e podem variar por estado, setor e experiência. 
+        <strong>Fontes dos dados:</strong> Notas de corte do <strong>SISU 2024</strong> (1ª chamada, ampla concorrência, campus mais concorrido da região — fonte: MEC).
+        Salários e empregabilidade: <strong>CAGED 2023</strong> e <strong>CBO/MTE</strong>.
+        Os valores são médias nacionais e podem variar por estado, setor e experiência.
+        Cursos marcados com <strong>*est.</strong> têm nota estimada por comparação (dados não publicados individualmente pelo MEC).
         Ao selecionar sua região, as notas são ajustadas proporcionalmente com base nos percentis regionais do SISU.
       </span>
     </div>
@@ -600,11 +624,11 @@ body::before {
    the national most-competitive campus.
 ============================================================ */
 const REGION_FACTORS = {
-  sudeste:     1.00,  // SP, RJ, MG, ES — most competitive
-  sul:         0.975, // RS, PR, SC
-  centroOeste: 0.955, // GO, MT, MS, DF
-  nordeste:    0.930, // BA, CE, PE, PB, RN, MA, PI, AL, SE
-  norte:       0.905  // AM, PA, AC, AP, RO, RR, TO
+  sudeste:     1.00,
+  sul:         0.975,
+  centroOeste: 0.955,
+  nordeste:    0.930,
+  norte:       0.905
 };
 
 const REGION_LABELS = {
@@ -615,6 +639,7 @@ const REGION_LABELS = {
 /* ============================================================
    QUESTIONS
    Dimensions: [exatas, humanas, saude, tecnologia, negocios, artes, ambiental, social]
+   Each question has a 'dim' key used by getAnswer() — FIX 2.
 ============================================================ */
 const QUESTIONS = [
   {
@@ -730,13 +755,18 @@ const QUESTIONS = [
 ];
 
 /* ============================================================
+   FIX 2 — getAnswer(dim): lookup by dim key, not array index.
+   This makes the quiz robust to question reordering or skipping.
+============================================================ */
+function getAnswer(dim, answers) {
+  const idx = QUESTIONS.findIndex(q => q.dim === dim);
+  return idx >= 0 ? (answers || state.answers)[idx] : undefined;
+}
+
+/* ============================================================
    COURSE DATABASE — 90 cursos
    vec: [exatas, humanas, saude, tecnologia, negocios, artes, ambiental, social]
-   notaSISU: nota mais competitiva nacional, SISU 2024, 1ª chamada, ampla concorrência.
-   Fonte: MEC/SISU 2024. Cursos sem dado público confirmado: estimativa por comparação.
-   sal: faixa salarial (fonte: CAGED 2023 / CBO/MTE — valores medianos nacionais)
-   emp: empregabilidade geral (Muito Alta / Alta / Média / Baixa)
-   dem: demanda de mercado (Crescendo / Estável / Competitiva)
+   sisuEstimated: true = nota estimada por comparação (sem dado MEC publicado individualmente).
 ============================================================ */
 const COURSES = {
   "Administração": {
@@ -752,6 +782,7 @@ const COURSES = {
     desc: "Tecnólogo focado em desenvolvimento de software, bancos de dados e sistemas de informação.",
     carreiras: "Desenvolvedor, analista de sistemas, DBA, suporte técnico avançado.",
     notaSISU: "638.50", sal: "R$ 4.500–13.000", salMid: 8750,
+    sisuEstimated: true,
     emp: "Muito Alta", empScore: 9, dem: "Crescendo", dur: "4",
     tags: ["Programação","Software","Banco de Dados"]
   },
@@ -856,6 +887,7 @@ const COURSES = {
     desc: "Análise e interpretação de grandes volumes de dados para apoio à decisão.",
     carreiras: "Cientista de dados, engenheiro de ML, analista de BI.",
     notaSISU: "762.30", sal: "R$ 6.000–22.000", salMid: 14000,
+    sisuEstimated: true,
     emp: "Muito Alta", empScore: 10, dem: "Crescendo", dur: "4",
     tags: ["Dados","Machine Learning","Análise"]
   },
@@ -1040,6 +1072,7 @@ const COURSES = {
     desc: "Desenvolvimento de software com foco em qualidade, arquitetura e processos ágeis.",
     carreiras: "Engenheiro de software, líder técnico, arquiteto, dev sênior.",
     notaSISU: "731.80", sal: "R$ 6.000–22.000", salMid: 14000,
+    sisuEstimated: true,
     emp: "Muito Alta", empScore: 10, dem: "Crescendo", dur: "4",
     tags: ["Software","Arquitetura","Ágil"]
   },
@@ -1152,6 +1185,7 @@ const COURSES = {
     desc: "Princípios físicos aplicados a diagnóstico, radioterapia e equipamentos médicos.",
     carreiras: "Físico médico, pesquisador, desenvolvedor de equipamentos hospitalares.",
     notaSISU: "728.40", sal: "R$ 7.000–16.000", salMid: 11500,
+    sisuEstimated: true,
     emp: "Alta", empScore: 7, dem: "Crescendo", dur: "4",
     tags: ["Física","Medicina","Diagnóstico"]
   },
@@ -1240,6 +1274,7 @@ const COURSES = {
     desc: "Computação aplicada a soluções para saúde, medicina e pesquisa clínica.",
     carreiras: "Analista de sistemas de saúde, pesquisador, desenvolvedor de software médico.",
     notaSISU: "712.40", sal: "R$ 5.000–12.000", salMid: 8500,
+    sisuEstimated: true,
     emp: "Alta", empScore: 8, dem: "Crescendo", dur: "4",
     tags: ["Saúde","TI","Computação"]
   },
@@ -1288,6 +1323,7 @@ const COURSES = {
     desc: "Algoritmos e modelos computacionais aplicados a ciência e engenharia.",
     carreiras: "Pesquisador, desenvolvedor de algoritmos, cientista computacional.",
     notaSISU: "728.60", sal: "R$ 5.500–15.000", salMid: 10250,
+    sisuEstimated: true,
     emp: "Alta", empScore: 8, dem: "Crescendo", dur: "4",
     tags: ["Matemática","Computação","Ciência"]
   },
@@ -1360,6 +1396,7 @@ const COURSES = {
     desc: "Exame, diagnóstico e correção de problemas da visão.",
     carreiras: "Optometrista, especialista em lentes, pesquisador da visão.",
     notaSISU: "668.40", sal: "R$ 3.500–8.500", salMid: 6000,
+    sisuEstimated: true,
     emp: "Alta", empScore: 7, dem: "Crescendo", dur: "4",
     tags: ["Visão","Saúde","Óptica"]
   },
@@ -1470,7 +1507,13 @@ const COURSES = {
 };
 
 /* ============================================================
-   PROFILE BUILDER
+   FIX 1 — PROFILE BUILDER with rebalanced weights
+   Original: area=3.0, motivation=1.5
+   Fixed:    area=2.0, motivation=2.0, talent=2.0, problem=2.0
+   Rationale: cosine similarity normalises magnitudes, but a
+   3× weight on a single 3-point question lets it dominate
+   over 9 other signals. Reducing to 2× makes the remaining
+   questions have proportional influence.
 ============================================================ */
 function buildUserVector(answers) {
   const v = [0,0,0,0,0,0,0,0];
@@ -1481,59 +1524,59 @@ function buildUserVector(answers) {
     artes:      [0,1,0,0,0,3,0,1], humanas:    [0,3,0,0,0,1,0,2],
     ambiental:  [1,1,0,0,0,0,3,0]
   };
-  addVec(v, areaMap[answers[0]] || [], 3.0);
+  addVec(v, areaMap[getAnswer('area', answers)] || [], 2.5); 
 
   const talentMap = {
     analitico:      [3,0,0,2,1,0,1,0], criativo:       [0,1,0,1,0,3,0,1],
     comunicativo:   [0,2,0,0,1,2,0,3], cientifico:     [2,1,2,1,0,0,2,0],
     organizacional: [1,1,0,1,3,0,0,2], empatico:       [0,2,3,0,0,0,1,3]
   };
-  addVec(v, talentMap[answers[1]] || [], 2.0);
+  addVec(v, talentMap[getAnswer('talent', answers)] || [], 2.0);
 
   const problemMap = {
     tecnico:  [3,0,0,3,0,0,0,0], humano:   [0,2,3,0,0,0,0,3],
     mercado:  [1,0,0,1,3,1,0,1], social:   [0,3,0,0,0,1,1,3],
     criativo: [0,1,0,1,1,3,0,1], ambiental:[1,1,0,0,0,0,3,1]
   };
-  addVec(v, problemMap[answers[2]] || [], 2.0);
+  addVec(v, problemMap[getAnswer('problem', answers)] || [], 2.0);
 
   const mathMap = {
     alto:   [3,0,0,2,1,0,1,0], medio:  [1,1,0,1,1,1,1,0],
     baixo:  [0,2,1,0,1,2,0,1], minimo: [0,3,1,0,0,3,0,1]
   };
-  addVec(v, mathMap[answers[3]] || [], 1.5);
+  addVec(v, mathMap[getAnswer('math', answers)] || [], 1.5);
 
   const techMap = {
     "muito-alto": [2,0,0,3,1,1,0,0], "alto":    [1,0,0,2,1,1,0,0],
     "moderado":   [1,0,0,1,1,1,0,0], "baixo":   [0,1,0,0,0,1,1,1]
   };
-  addVec(v, techMap[answers[4]] || [], 1.5);
+  addVec(v, techMap[getAnswer('tech', answers)] || [], 1.5);
 
   const wsMap = {
     sozinho:   [2,1,0,2,0,1,1,0], equipe:    [1,1,1,1,2,1,1,2],
     publico:   [0,2,2,0,1,1,0,3], liderando: [1,1,1,1,3,1,0,2]
   };
-  addVec(v, wsMap[answers[5]] || [], 1.0);
+  addVec(v, wsMap[getAnswer('work_style', answers)] || [], 1.0);
 
   const envMap = {
     lab:        [2,0,2,1,0,0,1,0], escritorio: [0,1,0,1,3,1,0,1],
     campo:      [1,1,0,0,0,0,3,1], remoto:     [1,0,0,2,1,2,0,0],
     educacao:   [0,2,1,0,0,1,1,3], estudio:    [0,1,0,1,1,3,0,1]
   };
-  addVec(v, envMap[answers[6]] || [], 1.0);
+  addVec(v, envMap[getAnswer('environment', answers)] || [], 1.0);
 
   const motMap = {
     impacto:      [0,2,2,0,0,0,1,3], inovacao:     [2,0,0,3,1,1,1,0],
     estabilidade: [1,0,1,1,2,0,0,1], expressao:    [0,2,0,1,0,3,0,1],
     conhecimento: [2,2,1,1,0,0,2,0], autonomia:    [0,0,0,1,3,2,0,0]
   };
-  addVec(v, motMap[answers[7]] || [], 1.5);
+  addVec(v, motMap[getAnswer('motivation', answers)] || [], 2.0); // FIX 1: was 1.5
 
   const salMap = {
     "muito-alto": [1,0,1,1,2,0,0,0], "alto": [1,0,1,1,1,0,0,0],
     "medio":      [0,0,0,0,0,1,0,0], "baixo":[0,1,0,0,0,1,1,1]
   };
-  addVec(v, salMap[answers[9]] || [], 0.5);
+  addVec(v, salMap[getAnswer('salary', answers)] || [], 0.5);
 
   return v;
 }
@@ -1543,7 +1586,7 @@ function addVec(target, source, weight) {
 }
 
 /* ============================================================
-   SCORING ENGINE
+   SCORING ENGINE — FIX 2: uses getAnswer(dim) throughout
 ============================================================ */
 function cosineSimilarity(a, b) {
   let dot = 0, magA = 0, magB = 0;
@@ -1555,11 +1598,11 @@ function cosineSimilarity(a, b) {
 }
 
 function computeScores(answers) {
-  const userVec = buildUserVector(answers);
-  const durPref = parseInt(answers[8]) || 6;
-  const salPref = answers[9];
-  const mathPref = answers[3];
-  const techPref = answers[4];
+  const userVec  = buildUserVector(answers);
+  const durPref  = parseInt(getAnswer('duration', answers)) || 6; // FIX 2
+  const salPref  = getAnswer('salary', answers);                   // FIX 2
+  const mathPref = getAnswer('math', answers);                     // FIX 2
+  const techPref = getAnswer('tech', answers);                     // FIX 2
 
   const results = Object.keys(COURSES).map(name => {
     const c = COURSES[name];
@@ -1616,15 +1659,19 @@ function buildProfileSummary(answers, userVec) {
   };
   const mathLabels = { alto:"alta", medio:"média", baixo:"baixa", minimo:"mínima" };
   const techLabels = { "muito-alto":"muito alto", alto:"alto", moderado:"moderado", baixo:"baixo" };
-  const durLabel = answers[8]==="4" ? "curta (4 anos)" : answers[8]==="5" ? "padrão (5 anos)" : "longa (6+ anos)";
+  const durPref = getAnswer('duration', answers); // FIX 2
+  const durLabel = durPref==="4" ? "curta (4 anos)" : durPref==="5" ? "padrão (5 anos)" : "longa (6+ anos)";
 
   const dimNames = ["Exatas","Humanas","Saúde","Tecnologia","Negócios","Artes","Ambiental","Social"];
   const maxIdx = userVec.indexOf(Math.max(...userVec));
 
   return `
-    Seu perfil combina interesse em <strong>${areaLabels[answers[0]]||"—"}</strong>, talento <strong>${talentLabels[answers[1]]||"—"}</strong>
-    e motivação por <strong>${motLabels[answers[7]]||"—"}</strong>. Você tem afinidade <strong>${mathLabels[answers[3]]||"—"}</strong> com matemática
-    e interesse <strong>${techLabels[answers[4]]||"—"}</strong> em tecnologia, buscando uma graduação de duração <strong>${durLabel}</strong>.
+    Seu perfil combina interesse em <strong>${areaLabels[getAnswer('area',answers)]||"—"}</strong>,
+    talento <strong>${talentLabels[getAnswer('talent',answers)]||"—"}</strong>
+    e motivação por <strong>${motLabels[getAnswer('motivation',answers)]||"—"}</strong>.
+    Você tem afinidade <strong>${mathLabels[getAnswer('math',answers)]||"—"}</strong> com matemática
+    e interesse <strong>${techLabels[getAnswer('tech',answers)]||"—"}</strong> em tecnologia,
+    buscando uma graduação de duração <strong>${durLabel}</strong>.
     <br><br>Sua dimensão dominante é <strong>${dimNames[maxIdx]}</strong>.
     ${buildDimBars(userVec)}
   `;
@@ -1653,6 +1700,35 @@ function getAdjustedSISU(baseNote, region) {
 }
 
 /* ============================================================
+   FIX 5 — SHARE via URL hash
+   Encodes state.answers as base64 in the URL hash so anyone
+   with the link sees the same results directly.
+============================================================ */
+function getShareURL() {
+  try {
+    const encoded = btoa(unescape(encodeURIComponent(state.answers.join('|'))));
+    return window.location.href.split('#')[0] + '#r=' + encoded;
+  } catch(e) { return window.location.href; }
+}
+
+function loadFromHash() {
+  const hash = window.location.hash;
+  if (!hash.startsWith('#r=')) return false;
+  try {
+    const decoded = decodeURIComponent(escape(atob(hash.slice(3))));
+    const answers = decoded.split('|');
+    if (answers.length !== QUESTIONS.length) return false;
+    state.answers = answers;
+    state.userVec = buildUserVector(answers);
+    state.results = computeScores(answers);
+    showScreen('result');
+    renderResults();
+    showToast('🔗 Resultados carregados do link compartilhado');
+    return true;
+  } catch(e) { return false; }
+}
+
+/* ============================================================
    STATE
 ============================================================ */
 let state = {
@@ -1663,7 +1739,7 @@ let state = {
 
 function loadState() {
   try {
-    const s = JSON.parse(localStorage.getItem("um3_state") || "{}");
+    const s = JSON.parse(localStorage.getItem("um4_state") || "{}");
     if (s.answers)   state.answers   = s.answers;
     if (s.favorites) state.favorites = s.favorites;
     if (s.region)    state.region    = s.region;
@@ -1676,7 +1752,7 @@ function loadState() {
 
 function saveState() {
   try {
-    localStorage.setItem("um3_state", JSON.stringify({
+    localStorage.setItem("um4_state", JSON.stringify({
       answers: state.answers, q: state.q, favorites: state.favorites,
       region: state.region, theme: document.body.classList.contains("light") ? "light" : "dark"
     }));
@@ -1716,6 +1792,10 @@ function updateProgress() {
   }
 }
 
+/* FIX 3 — selectedVal is reset to the stored answer on render,
+   so going back and re-reading never carries a stale value. */
+let selectedVal = null;
+
 function renderQuestion() {
   const q = QUESTIONS[state.q];
   $("question-num").textContent = `Pergunta ${state.q+1} de ${QUESTIONS.length}`;
@@ -1723,6 +1803,10 @@ function renderQuestion() {
   const grid = $("options-grid");
   grid.innerHTML = "";
   const prev = state.answers[state.q];
+
+  // FIX 3: sync selectedVal with the stored answer for this question
+  selectedVal = prev || null;
+
   q.opts.forEach(opt => {
     const btn = document.createElement("button");
     btn.className = "option-btn" + (prev === opt.v ? " selected" : "");
@@ -1741,8 +1825,6 @@ function renderQuestion() {
     grid.style.opacity = "1"; grid.style.transform = "translateY(0)";
   });
 }
-
-let selectedVal = null;
 
 function selectOption(val, btn) {
   document.querySelectorAll(".option-btn").forEach(b => {
@@ -1809,18 +1891,22 @@ function createCourseCard(course, idx, isFavView) {
   const isFav = state.favorites.includes(course.name);
   const empClass = course.emp.toLowerCase().replace(/\s/g,"").replace(/á/g,"a").replace(/é/g,"e");
 
-  // SISU with regional adjustment
+  // SISU with regional adjustment + FIX 4 estimated badge
   const sisuData = getAdjustedSISU(course.notaSISU, state.region);
   const regionLabel = REGION_LABELS[state.region] || "";
+  const estBadge = course.sisuEstimated
+    ? `<span class="sisu-est-badge" title="Nota estimada — programa sem dado individual publicado pelo MEC">*est.</span>`
+    : "";
   const sisuHTML = `
     <div class="sisu-source">
-      ${sisuData.display} pts
+      ${sisuData.display} pts ${estBadge}
       ${sisuData.adjusted ? `<span class="sisu-adjusted">(${regionLabel})</span>` : ""}
       <span class="sisu-info" style="position:relative">i
         <span class="sisu-tooltip">
-          ${sisuData.adjusted 
+          ${sisuData.adjusted
             ? `Nota estimada para o ${regionLabel} com base no percentil regional do SISU 2024. Nota nacional mais competitiva: ${sisuData.base} pts.`
             : `Nota de corte mais competitiva do SISU 2024, 1ª chamada, ampla concorrência.`}
+          ${course.sisuEstimated ? ' ⚠️ Este programa não possui dado individual publicado pelo MEC — valor estimado por comparação.' : ''}
           Fonte: MEC/SISU 2024. Valores podem variar por universidade.
         </span>
       </span>
@@ -1870,7 +1956,7 @@ function createCourseCard(course, idx, isFavView) {
         <p class="desc-text">${course.desc}</p>
         <div class="info-grid">
           <div class="info-item">
-            <div class="info-label">Salário Médio <span title="Fonte: CAGED 2023 / CBO-MTE. Mediana nacional, valores variam por região e experiência." style="cursor:help;opacity:0.6">ℹ</span></div>
+            <div class="info-label">Salário Médio <span title="Fonte: CAGED 2023 / CBO-MTE. Mediana nacional." style="cursor:help;opacity:0.6">ℹ</span></div>
             <div class="info-value">${course.sal}</div>
           </div>
           <div class="info-item">
@@ -1878,18 +1964,11 @@ function createCourseCard(course, idx, isFavView) {
             <div class="info-value"><span class="emp-badge ${empClass}">${course.emp}</span></div>
           </div>
           <div class="info-item">
-            <div class="info-label">Demanda de Mercado <span title="Fonte: MTE/CAGED 2023. Tendência de contratações nos últimos 12 meses." style="cursor:help;opacity:0.6">ℹ</span></div>
+            <div class="info-label">Demanda de Mercado <span title="Fonte: MTE/CAGED 2023." style="cursor:help;opacity:0.6">ℹ</span></div>
             <div class="info-value"><span class="dem-${course.dem.toLowerCase().split(' ')[0].replace(/á/g,'a').replace(/é/g,'e')}">${course.dem}</span></div>
           </div>
           <div class="info-item">
-            <div class="info-label">
-              <span class="sisu-source" style="display:inline-flex;align-items:center;gap:4px;">
-                Nota SISU 2024
-                <span class="sisu-info" style="position:relative;cursor:help">i
-                  <span class="sisu-tooltip">Veja o valor ajustado abaixo. Fonte: MEC/SISU 2024.</span>
-                </span>
-              </span>
-            </div>
+            <div class="info-label">Nota SISU 2024</div>
             <div class="info-value">${sisuHTML}</div>
           </div>
           <div class="info-item full">
@@ -1900,8 +1979,9 @@ function createCourseCard(course, idx, isFavView) {
         <div class="tags-row">${course.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
         <div class="data-source-footer">
           📊 Dados: <span>SISU 2024 (MEC)</span> · <span>CAGED 2023 (MTE)</span> · <span>CBO/MTE</span>.
-          ${sisuData.adjusted ? `Nota de corte ajustada para o ${regionLabel} com base no percentil regional.` : `Nota de corte do campus mais concorrido a nível nacional.`}
-          Salários são medianas nacionais e variam por estado e setor.
+          ${course.sisuEstimated ? '<strong>*Nota de corte estimada</strong> (sem dado MEC individual). ' : ''}
+          ${sisuData.adjusted ? `Nota ajustada para o ${regionLabel} com base no percentil regional.` : `Nota do campus mais concorrido a nível nacional.`}
+          Salários são medianas nacionais.
         </div>
       </div>
     </div>`;
@@ -2020,6 +2100,10 @@ function restartQuiz() {
   document.querySelector(".filter-chip[data-filter='all']").classList.add("active");
   $("search-input").value = "";
   [0,1,2,3].forEach(i => { const el = $(`step-${i}`); if(el){ el.classList.remove("active","done"); }});
+  // Clean share hash when restarting
+  if (window.location.hash.startsWith('#r=')) {
+    history.replaceState(null, '', window.location.pathname);
+  }
   saveState(); showScreen("start"); updateProgress();
 }
 
@@ -2062,6 +2146,17 @@ $("region-select").addEventListener("change", e => {
   showToast(`📍 Região: ${REGION_LABELS[state.region]}`);
 });
 
+// FIX 5 — Share button
+$("share-btn").addEventListener("click", () => {
+  const url = getShareURL();
+  navigator.clipboard.writeText(url).then(() => {
+    showToast("🔗 Link copiado! Compartilhe com quem quiser.");
+  }).catch(() => {
+    // Fallback: show the URL in a prompt so the user can copy manually
+    prompt("Copie o link abaixo:", url);
+  });
+});
+
 document.addEventListener("keydown", e => {
   if (e.key === "Enter" && state.screen === "question" && !$("next-btn").disabled) goNext();
 });
@@ -2070,11 +2165,14 @@ document.addEventListener("keydown", e => {
 loadState();
 $("theme-btn").textContent = document.body.classList.contains("light") ? "🌙" : "☀️";
 
-if (state.screen === "question" && state.answers.length > 0) {
-  showScreen("question"); renderQuestion();
-  showToast("✓ Continuando de onde parou");
-} else {
-  showScreen("start");
+// FIX 5: Try to restore from shared URL hash first
+if (!loadFromHash()) {
+  if (state.screen === "question" && state.answers.length > 0) {
+    showScreen("question"); renderQuestion();
+    showToast("✓ Continuando de onde parou");
+  } else {
+    showScreen("start");
+  }
 }
 updateProgress();
 </script>
